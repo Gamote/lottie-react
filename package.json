@@ -1,0 +1,74 @@
+{
+	"name": "@lottie-web/react",
+	"version": "0.0.1",
+	"description": "Lottie wrapper for React",
+	"author": "David Gamote",
+	"bugs": {
+		"url": "https://github.com/Gamote/lottie-react/issues"
+	},
+	"homepage": "https://github.com/Gamote/lottie-react",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Gamote/lottie-react.git"
+	},
+	"license": "MIT",
+	"keywords": [
+		"lottie",
+		"web",
+		"animation",
+		"react",
+		"component",
+		"hook"
+	],
+	"main": "build/index.js",
+	"browser": "build/index.umd.js",
+	"module": "build/index.es.js",
+	"style": "build/index.css",
+	"files": [
+		"/build"
+	],
+	"scripts": {
+		"rollup:compile": "rollup -c",
+		"rollup:compile:watch": "rollup -c -w",
+		"docz:dev": "docz dev",
+		"docz:build": "docz build",
+		"docz:serve": "docz build && docz serve",
+		"postbuild": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz",
+		"prepublishOnly": "rm -rf build && npm run rollup:compile"
+	},
+	"peerDependencies": {
+		"react": "^16.8.0",
+		"react-dom": "^16.8.0"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.9.0",
+		"@babel/preset-env": "^7.9.0",
+		"@babel/preset-react": "^7.9.4",
+		"@rollup/plugin-commonjs": "^11.0.2",
+		"@rollup/plugin-node-resolve": "^7.1.1",
+		"autoprefixer": "^9.7.5",
+		"babel-loader": "^8.1.0",
+		"docz": "^2.2.0",
+		"eslint": "^6.8.0",
+		"eslint-config-airbnb": "^18.0.1",
+		"eslint-config-prettier": "^6.10.0",
+		"eslint-plugin-import": "^2.20.1",
+		"eslint-plugin-jsx-a11y": "^6.2.3",
+		"eslint-plugin-prettier": "^3.1.2",
+		"eslint-plugin-react": "^7.18.3",
+		"eslint-plugin-react-hooks": "^1.7.0",
+		"node-sass": "^4.13.1",
+		"prettier": "^1.19.1",
+		"react": "^16.8.0",
+		"react-dom": "^16.8.0",
+		"rollup": "^2.2.0",
+		"rollup-plugin-babel": "^4.4.0",
+		"rollup-plugin-peer-deps-external": "^2.2.2",
+		"rollup-plugin-postcss": "^2.5.0",
+		"rollup-plugin-terser": "^5.3.0",
+		"rollup-plugin-uglify": "^6.0.4"
+	},
+	"dependencies": {
+		"lottie-web": "5.6.6"
+	}
+}

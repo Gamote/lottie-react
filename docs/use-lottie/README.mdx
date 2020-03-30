@@ -1,0 +1,40 @@
+---
+name: useLottie
+route: /use-lottie
+---
+
+import { Playground } from "docz";
+import BasicUsage from "./BasicUsage";
+
+# useLottie
+
+## Basic usage
+
+<BasicUsage />
+
+```jsx
+import { useLottie } from "@lottie-web/react";
+import gemAnimation from "./gem.json";
+
+const style = {
+	height: 300,
+};
+
+const Component = () => {
+	// Animation settings (a subset of the bodymovin options)
+	const options = {
+		animationData: gemAnimation,
+		renderer: "svg",
+		loop: true,
+		autoplay: true,
+	};
+
+	// Create the Lottie hook
+	const { View } = useLottie(options, style);
+
+	// Use the returned view
+	return <>{View}</>;
+};
+
+export default Component;
+```
