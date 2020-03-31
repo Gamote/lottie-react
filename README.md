@@ -29,11 +29,22 @@ https://gamote.github.io/lottie-react
 -   Explanation on how to export a lottie file from After Effects
 -   Support for React components not only hooks
 -   Support for all the methods that are defined in the `lottie-web` package
--   Improve documentation
+-   Improved documentation
 -   Tests
+
+## Projects to check out
+
+- [lottie-web](https://github.com/airbnb/lottie-web) - Lottie implementation for Web. Our project is based on it and you should check it because it will help you understand what's behind this package and it will give you a better understanding on what features should you expect to have in the future
+- [lottie-android](https://github.com/airbnb/lottie-android) - Lottie implementation for Android
+- [lottie-ios](https://github.com/airbnb/lottie-ios) - Lottie implementation for Android
+- [lottie-react-native](https://github.com/react-native-community/lottie-react-native) - Lottie implementation for React Native
+
+## Contribution
+
+Let us know if you have any suggestions or contributions. This package has the mission to help developers, so if have any features that you think we should prioritize, reach out to us.
 
 ## License
 
 MIT
 
-Thanks to [Emir Geçir](https://lottiefiles.com/user/249884) for the animation used in the example.
+Thanks to [Emir Geçir](https://lottiefiles.com/user/249884) for the animation used in the examples.
