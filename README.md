@@ -6,14 +6,15 @@ This project is meant to give developers full control over **[Lottie](https://ai
 
 ## Installation
 
-Install **react** and **react-dom** if you don’t have them already:
+Install **react** _(>=16.8.0)_ and **react-dom** _(>=16.8.0)_ if you don’t have them already:
+
+_**Note:** This library is using React hooks so the minimum version required for both react and react-dom is 16.8.0._
 
 ```
-npm i -s react react-dom
+npm i -s react@^16.8.0 react-dom@^16.8.0
 ```
 
 Install **@lottie-web/react** using npm:
-
 ```
 npm i -s @lottie-web/react
 ```
