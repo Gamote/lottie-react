@@ -5,18 +5,13 @@ const useLottie = (props, style = {}) => {
 	const animationInstanceRef = useRef(null);
 	const animationContainer = useRef(null);
 
-	// Initialize on mount
+	// Initialize Lottie
 	useEffect(() => {
-		// Instantiate Lottie
 		animationInstanceRef.current = lottie.loadAnimation({
 			...props,
 			container: animationContainer.current,
 		});
-
-		// Destroy the Lottie instance on unmount
-		return () => {
-			animationInstanceRef.current.destroy();
-		};
+		
 		// eslint-disable-next-line
 	}, []);
 
