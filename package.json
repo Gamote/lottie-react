@@ -1,7 +1,7 @@
 {
 	"name": "@lottie-web/react",
 	"version": "1.0.2",
-	"description": "Lottie wrapper for React",
+	"description": "Lottie for React",
 	"author": "David Gamote",
 	"bugs": {
 		"url": "https://github.com/Gamote/lottie-react/issues"

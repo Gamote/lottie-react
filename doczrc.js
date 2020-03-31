@@ -4,7 +4,7 @@ export default {
 	dest: "docs-dist",
 	base: "/lottie-react/", // GitHub Pages sub-path
 	ignore: ["README.md"],
-	title: "Lottie wrapper for React",
+	title: "Lottie for React",
 	themeConfig: {
 		initialColorMode: "dark",
 	},
