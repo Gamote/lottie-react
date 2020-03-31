@@ -15,23 +15,6 @@ const useLottie = (props, style = {}) => {
 			container: animationContainer.current,
 		});
 
-		// FIX for https://github.com/airbnb/lottie-web/issues/2064#issue-588704630
-		// TODO: this can be removed when the issue will be fixed
-		animationInstanceRef.current.addEventListener("DOMLoaded", () => {
-			if (
-				props.initialSegment &&
-				!Number.isNaN(props.initialSegment[0]) > 0 &&
-				!Number.isNaN(props.initialSegment[1])
-			) {
-				animationInstanceRef.current.totalFrames = Math.floor(
-					props.initialSegment[1] - props.initialSegment[0],
-				);
-				animationInstanceRef.current.firstFrame = Math.round(
-					props.initialSegment[0],
-				);
-			}
-		});
-
 		// Destroy the Lottie instance on unmount
 		return () => {
 			animationInstanceRef.current.destroy();

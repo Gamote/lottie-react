@@ -69,6 +69,6 @@
 		"rollup-plugin-uglify": "^6.0.4"
 	},
 	"dependencies": {
-		"lottie-web": "5.6.6"
+		"lottie-web": "^5.6.7"
 	}
 }
