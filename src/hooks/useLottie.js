@@ -136,8 +136,10 @@ const useLottie = (props, style = {}) => {
 	 */
 	const getDuration = inFrames => {
 		if (animationInstanceRef.current) {
-			animationInstanceRef.current.getDuration(inFrames);
+			return animationInstanceRef.current.getDuration(inFrames);
 		}
+		
+		return undefined;
 	};
 
 	// Build the animation view
