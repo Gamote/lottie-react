@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import lottie from "lottie-web";
 
-const useLottie = (props, style = {}) => {
+const useAnimator = (props, style = {}) => {
 	const animationInstanceRef = useRef(null);
 	const animationContainer = useRef(null);
 
@@ -156,4 +156,4 @@ const useLottie = (props, style = {}) => {
 	};
 };
 
-export default useLottie;
+export default useAnimator;

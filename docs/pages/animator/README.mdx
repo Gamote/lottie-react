@@ -1,0 +1,40 @@
+---
+name: Animator
+route: /animator
+---
+
+import { Playground } from "docz";
+import GemAnimation from "./GemAnimation";
+
+# Animator
+
+## Basic usage
+
+<GemAnimation />
+
+```jsx
+import { Animator } from "@lottie-web/react";
+import gemAnimation from "./gem.json";
+
+const style = {
+	height: 300,
+};
+
+const GemAnimation = () => {
+	// Animation settings (a subset of the bodymovin options)
+	const options = {
+		animationData: gemAnimation,
+		renderer: "svg",
+		loop: true,
+		autoplay: true,
+	};
+
+	return (
+		<>
+			<Animator options={options} style={style} />
+		</>
+	);
+};
+
+export default GemAnimation;
+```

@@ -1,26 +1,26 @@
 ---
-name: useLottie
-route: /use-lottie
+name: useAnimator
+route: /use-animator
 ---
 
 import { Playground } from "docz";
-import BasicUsage from "./BasicUsage";
+import GemAnimation from "./GemAnimation";
 
 # useLottie
 
 ## Basic usage
 
-<BasicUsage />
+<GemAnimation />
 
 ```jsx
-import { useLottie } from "@lottie-web/react";
+import { useAnimator } from "@lottie-web/react";
 import gemAnimation from "./gem.json";
 
 const style = {
 	height: 300,
 };
 
-const Component = () => {
+const GemAnimation = () => {
 	// Animation settings (a subset of the bodymovin options)
 	const options = {
 		animationData: gemAnimation,
@@ -30,11 +30,11 @@ const Component = () => {
 	};
 
 	// Create the Lottie hook
-	const { View } = useLottie(options, style);
+	const { View } = useAnimator(options, style);
 
 	// Use the returned view
 	return <>{View}</>;
 };
 
-export default Component;
+export default GemAnimation;
 ```

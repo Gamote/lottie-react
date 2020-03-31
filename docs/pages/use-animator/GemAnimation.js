@@ -1,12 +1,12 @@
 import React from "react";
-import useLottie from "../../src/hooks/useLottie";
-import gemAnimation from "./assets/gem.json";
+import useAnimator from "../../../src/hooks/useAnimator";
+import gemAnimation from "../../assets/gem.json";
 
 const style = {
 	height: 300,
 };
 
-const BasicUsage = () => {
+const GemAnimation = () => {
 	const options = {
 		animationData: gemAnimation,
 		renderer: "svg",
@@ -14,7 +14,7 @@ const BasicUsage = () => {
 		autoplay: true,
 	};
 	
-	const Lottie = useLottie(options, style);
+	const Lottie = useAnimator(options, style);
 
 	// TODO: methods to describe in the documentation
 	// useEffect(() => {
@@ -37,4 +37,4 @@ const BasicUsage = () => {
 	return <>{Lottie.View}</>;
 };
 
-export default BasicUsage;
+export default GemAnimation;
