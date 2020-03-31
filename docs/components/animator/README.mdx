@@ -1,19 +1,20 @@
 ---
-name: useAnimator
-route: /use-animator
+name: Animator
+menu: Components
+route: /components/animator
 ---
 
 import { Playground } from "docz";
 import GemAnimation from "./GemAnimation";
 
-# useLottie
+# Animator
 
 ## Basic usage
 
 <GemAnimation />
 
 ```jsx
-import { useAnimator } from "@lottie-web/react";
+import { Animator } from "@lottie-web/react";
 import gemAnimation from "./gem.json";
 
 const style = {
@@ -29,11 +30,11 @@ const GemAnimation = () => {
 		autoplay: true,
 	};
 
-	// Create the Lottie hook
-	const { View } = useAnimator(options, style);
-
-	// Use the returned view
-	return <>{View}</>;
+	return (
+		<>
+			<Animator options={options} style={style} />
+		</>
+	);
 };
 
 export default GemAnimation;
