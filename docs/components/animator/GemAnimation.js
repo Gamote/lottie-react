@@ -9,7 +9,6 @@ const style = {
 const GemAnimation = () => {
 	const options = {
 		animationData: gemAnimation,
-		renderer: "svg",
 		loop: true,
 		autoplay: true,
 	};
