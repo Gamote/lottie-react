@@ -50,7 +50,7 @@ const Animator = forwardRef((props, ref) => {
 	// 	// }
 	// }, [loop]);
 
-	return <div style={style} ref={animationContainer} />;
+	return <div ref={animationContainer} style={style} />;
 });
 
 Animator.propTypes = {

@@ -44,6 +44,6 @@ Let us know if you have any suggestions or contributions. This package has the m
 
 ## License
 
-MIT
+[MIT](https://github.com/Gamote/lottie-react/blob/master/LICENSE)
 
 Thanks to [Emir Geçir](https://lottiefiles.com/user/249884) for the animation used in the examples.
