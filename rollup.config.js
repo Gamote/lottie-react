@@ -59,6 +59,7 @@ const exports = {
 			name: "lottie-react",
 			globals: {
 				react: "React",
+				"prop-types": "PropTypes",
 			},
 		},
 		plugins: [
@@ -81,6 +82,7 @@ const exports = {
 			name: "lottie-react",
 			globals: {
 				react: "React",
+				"prop-types": "PropTypes",
 			},
 		},
 		plugins: [
