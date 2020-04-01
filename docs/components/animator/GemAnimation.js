@@ -14,7 +14,7 @@ const styles = {
 
 const GemAnimation = () => {
 	const [animationData, setAnimationData] = useState(gemAnimation);
-	const [loop, setLoop] = useState(3);
+	const [loop, setLoop] = useState(true);
 	const [autoplay, setAutoplay] = useState(true);
 	const [initialSegment, setInitialSegment] = useState(null);
 	const [style, setStyle] = useState(styles.animation);
