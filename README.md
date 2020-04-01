@@ -27,7 +27,6 @@ https://gamote.github.io/lottie-react
 
 -   A brief description about lottie player and lottie files
 -   Explanation on how to export a lottie file from After Effects
--   Support for React components not only hooks
 -   Support for all the methods that are defined in the `lottie-web` package
 -   Improved documentation
 -   Tests
