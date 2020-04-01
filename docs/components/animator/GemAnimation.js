@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Animator from "../../../src/components/Animator";
 import gemAnimation from "../../assets/gem.json";
 // import likeButtonAnimation from "../../assets/likeButton.json";
@@ -13,6 +13,7 @@ const styles = {
 };
 
 const GemAnimation = () => {
+	const ref = useRef({});
 	const [animationData, setAnimationData] = useState(gemAnimation);
 	const [loop, setLoop] = useState(true);
 	const [autoplay, setAutoplay] = useState(true);
@@ -20,6 +21,12 @@ const GemAnimation = () => {
 	const [style, setStyle] = useState(styles.animation);
 
 	useEffect(() => {
+		// // Test ref
+		// setTimeout(() => {
+		// 	console.log("Info: ref current value", ref.current);
+		// 	ref.current.pause();
+		// }, 4000);
+		//
 		// Test animationData
 		// setTimeout(() => {
 		// 	console.log("Info: animationData changed in", likeButtonAnimation);
@@ -67,6 +74,7 @@ const GemAnimation = () => {
 
 	return (
 		<Animator
+			ref={ref}
 			animationData={animationData}
 			loop={loop} // TODO: allow numbers
 			autoplay={autoplay}

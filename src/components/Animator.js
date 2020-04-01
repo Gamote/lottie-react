@@ -1,17 +1,22 @@
-import React, { useEffect, useRef } from "react";
+import React, { forwardRef, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import lottie from "lottie-web";
 
-const Animator = props => {
+const Animator = forwardRef((props, ref) => {
 	const { animationData, loop, autoplay, initialSegment, style } = props;
 	const animationContainer = useRef(null);
 	const animationInstanceRef = useRef(null);
+	const parentRef = ref || useRef();
 
 	// Helper that load a new animation, and if it's the case, destroy the previous one
 	const loadAnimation = (forceOptions = {}) => {
 		if (animationInstanceRef.current) {
 			animationInstanceRef.current.destroy();
 		}
+
+		// props.ref.current = {
+		// 	fsad: 124231,
+		// };
 
 		const config = {
 			animationData: animationData || null,
@@ -24,6 +29,11 @@ const Animator = props => {
 		};
 
 		animationInstanceRef.current = lottie.loadAnimation(config);
+
+		// Share lottie instance to the parent
+		if (parentRef) {
+			parentRef.current = animationInstanceRef.current;
+		}
 	};
 
 	// Initialize and listen for changes that need to reinitialize Lottie
@@ -45,7 +55,7 @@ const Animator = props => {
 	// }, [loop]);
 
 	return <div style={style} ref={animationContainer} />;
-};
+});
 
 Animator.propTypes = {
 	animationData: PropTypes.shape(undefined).isRequired,
