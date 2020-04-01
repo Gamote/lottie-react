@@ -14,10 +14,6 @@ const Animator = forwardRef((props, ref) => {
 			animationInstanceRef.current.destroy();
 		}
 
-		// props.ref.current = {
-		// 	fsad: 124231,
-		// };
-
 		const config = {
 			animationData: animationData || null,
 			loop: !Number.isNaN(loop) ? loop : loop !== false,
