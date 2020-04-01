@@ -4,6 +4,9 @@ import gemAnimation from "../../assets/gem.json";
 
 const style = {
 	height: 300,
+	border: 3,
+	borderStyle: "solid",
+	borderRadius: 7,
 };
 
 const GemAnimation = () => {
@@ -12,7 +15,7 @@ const GemAnimation = () => {
 		loop: true,
 		autoplay: true,
 	};
-	
+
 	const Lottie = useAnimator(options, style);
 
 	// TODO: methods to describe in the documentation
@@ -32,7 +35,7 @@ const GemAnimation = () => {
 	// 		// console.log('Duration:', Lottie.getDuration());
 	// 	}, 2000);
 	// });
-	
+
 	return <>{Lottie.View}</>;
 };
 

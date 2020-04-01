@@ -4,12 +4,12 @@ menu: Components
 route: /components/animator
 ---
 
-import { Playground } from "docz";
+import { Playground, Props } from "docz";
 import GemAnimation from "./GemAnimation";
 
 # Animator
 
-## Basic usage
+## Getting Started
 
 <GemAnimation />
 
@@ -17,23 +17,8 @@ import GemAnimation from "./GemAnimation";
 import { Animator } from "@lottie-web/react";
 import gemAnimation from "./gem.json";
 
-const style = {
-	height: 300,
-};
-
 const GemAnimation = () => {
-	// Animation settings (a subset of the bodymovin options)
-	const options = {
-		animationData: gemAnimation,
-		loop: true,
-		autoplay: true,
-	};
-
-	return (
-		<>
-			<Animator options={options} style={style} />
-		</>
-	);
+	return <Animator animationData={animationData} />;
 };
 
 export default GemAnimation;
@@ -43,9 +28,8 @@ export default GemAnimation;
 
 Property | Type | Required | Default | Description
 --- | --- | --- | --- | ---
-options | Object | required | | Subset of the bodymovin options
-options.animationData | Object | required | | A JSON Object with the exported animation data
-options.loop | boolean\|number | optional | true | Set it to true for infinite amount of loops, or pass a number for a specific amount of loops
-options.autoplay | boolean | optional | true | If set to true, animation will play as soon as it's loaded
-options.initialSegment | array | optional | | Expects an array of length 2. First value is the initial frame, second value is the final frame. If this is set, the animation will start at this position in time instead of the exported value from AE
+animationData | Object | required | | A JSON Object with the exported animation data
+loop | boolean\|number | optional | true | Set it to true for infinite amount of loops, or pass a number for a specific amount of loops
+autoplay | boolean | optional | true | If set to true, animation will play as soon as it's loaded
+initialSegment | array | optional | | Expects an array of length 2. First value is the initial frame, second value is the final frame. If this is set, the animation will start at this position in time instead of the exported value from AE
 style | Object | optional | | Style object that applies to the animation wrapper (which is a `div`)

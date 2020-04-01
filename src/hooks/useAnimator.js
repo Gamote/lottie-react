@@ -11,7 +11,7 @@ const useAnimator = (props, style = {}) => {
 			...props,
 			container: animationContainer.current,
 		});
-		
+
 		// eslint-disable-next-line
 	}, []);
 
@@ -133,7 +133,7 @@ const useAnimator = (props, style = {}) => {
 		if (animationInstanceRef.current) {
 			return animationInstanceRef.current.getDuration(inFrames);
 		}
-		
+
 		return undefined;
 	};
 
