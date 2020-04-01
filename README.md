@@ -1,6 +1,6 @@
 # Lottie for React
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Gamote/lottie-react/blob/master/LICENSE) [![npm version](https://img.shields.io/npm/v/@lottie-web/react.svg?style=flat)](https://www.npmjs.com/package/@lottie-web/react) ![npm downloads/week](https://img.shields.io/npm/dw/@lottie-web/react)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Gamote/lottie-react/blob/master/LICENSE) [![npm downloads/week](https://img.shields.io/npm/dw/@lottie-web/react)](https://www.npmjs.com/package/@lottie-web/react)
 
 This project is meant to give developers full control over **[Lottie](https://airbnb.design/lottie/)** instance with minimal implementation by wrapping the **[lottie-web](https://github.com/airbnb/lottie-web)** to be used in **React** applications.
 
