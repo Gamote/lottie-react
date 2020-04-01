@@ -76,7 +76,7 @@ const GemAnimation = () => {
 		<Animator
 			ref={ref}
 			animationData={animationData}
-			loop={loop} // TODO: allow numbers
+			loop={loop}
 			autoplay={autoplay}
 			initialSegment={initialSegment}
 			style={style}
