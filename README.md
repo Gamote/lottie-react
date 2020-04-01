@@ -35,7 +35,7 @@ https://gamote.github.io/lottie-react
 
 - [lottie-web](https://github.com/airbnb/lottie-web) - Lottie implementation for Web. Our project is based on it and you should check it because it will help you understand what's behind this package and it will give you a better understanding on what features should you expect to have in the future
 - [lottie-android](https://github.com/airbnb/lottie-android) - Lottie implementation for Android
-- [lottie-ios](https://github.com/airbnb/lottie-ios) - Lottie implementation for Android
+- [lottie-ios](https://github.com/airbnb/lottie-ios) - Lottie implementation for iOS
 - [lottie-react-native](https://github.com/react-native-community/lottie-react-native) - Lottie implementation for React Native
 
 ## Contribution
