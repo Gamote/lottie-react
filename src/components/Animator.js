@@ -2,7 +2,7 @@ import React, { forwardRef, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import lottie from "lottie-web";
 
-const Animator = forwardRef((props, ref) => {
+const Animator = (props, ref) => {
 	const { animationData, loop, autoplay, initialSegment, style } = props;
 	const animationContainer = useRef(null);
 	const animationInstanceRef = useRef(null);
@@ -48,7 +48,7 @@ const Animator = forwardRef((props, ref) => {
 			animationInstanceRef.current.setSpeed(speed);
 		}
 	};
-	
+
 	/**
 	 * Got to frame and play
 	 * TODO: complete
@@ -191,7 +191,7 @@ const Animator = forwardRef((props, ref) => {
 	// }, [loop]);
 
 	return <div ref={animationContainer} style={style} />;
-});
+};
 
 Animator.propTypes = {
 	animationData: PropTypes.shape(undefined).isRequired,
@@ -210,4 +210,4 @@ Animator.defaultProps = {
 	style: null,
 };
 
-export default Animator;
+export default forwardRef(Animator);
