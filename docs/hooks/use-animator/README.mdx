@@ -5,26 +5,26 @@ route: /hooks/use-animator
 ---
 
 import { Playground } from "docz";
-import GemAnimation from "./GemAnimation";
+import UseAnimatorExamples from "./UseAnimatorExamples";
 
 # useAnimator
 
 ## Getting Started
 
-<GemAnimation />
+<UseAnimatorExamples />
 
 ```jsx
 import { useAnimator } from "@lottie-web/react";
-import gemAnimation from "./gem.json";
+import groovyWalkAnimation from "./groovyWalk.json";
 
 const style = {
 	height: 300,
 };
 
-const GemAnimation = () => {
+const AnimationExample = () => {
 	// Animation settings (a subset of the lottie-web options)
 	const options = {
-		animationData: gemAnimation,
+		animationData: groovyWalkAnimation,
 		loop: true,
 		autoplay: true,
 	};
@@ -36,7 +36,7 @@ const GemAnimation = () => {
 	return <>{View}</>;
 };
 
-export default GemAnimation;
+export default AnimationExample;
 ```
 
 ## Params

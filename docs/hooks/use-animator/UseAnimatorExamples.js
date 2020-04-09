@@ -9,7 +9,7 @@ const style = {
 	borderRadius: 7,
 };
 
-const GemAnimation = () => {
+const UseAnimatorExamples = () => {
 	const options = {
 		animationData: groovyWalkAnimation,
 		loop: true,
@@ -39,4 +39,4 @@ const GemAnimation = () => {
 	return <>{Lottie.View}</>;
 };
 
-export default GemAnimation;
+export default UseAnimatorExamples;

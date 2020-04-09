@@ -15,13 +15,13 @@ import AnimatorExamples from "./AnimatorExamples";
 
 ```jsx
 import { Animator } from "@lottie-web/react";
-import gemAnimation from "./gem.json";
+import groovyWalkAnimation from "./groovyWalk.json";
 
-const GemAnimation = () => {
-	return <Animator animationData={gemAnimation} />;
+const AnimationExample = () => {
+	return <Animator animationData={groovyWalkAnimation} />;
 };
 
-export default GemAnimation;
+export default AnimationExample;
 ```
 
 ## Props
@@ -33,3 +33,4 @@ loop | boolean\|number | optional | true | Set it to true for infinite amount of
 autoplay | boolean | optional | true | If set to true, animation will play as soon as it's loaded
 initialSegment | array | optional | | Expects an array of length 2. First value is the initial frame, second value is the final frame. If this is set, the animation will start at this position in time instead of the exported value from AE
 style | Object | optional | | Style object that applies to the animation wrapper (which is a `div`)
+ref | React.RefObject | optional | | Expects a React ref object in which methods to control the animation will be stored
