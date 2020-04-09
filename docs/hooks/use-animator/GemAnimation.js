@@ -1,6 +1,6 @@
 import React from "react";
 import useAnimator from "../../../src/hooks/useAnimator";
-import gemAnimation from "../../assets/gem.json";
+import groovyWalkAnimation from "../../assets/groovyWalk.json";
 
 const style = {
 	height: 300,
@@ -11,7 +11,7 @@ const style = {
 
 const GemAnimation = () => {
 	const options = {
-		animationData: gemAnimation,
+		animationData: groovyWalkAnimation,
 		loop: true,
 		autoplay: true,
 	};

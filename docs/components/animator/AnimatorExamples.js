@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Animator from "../../../src/components/Animator";
-import gemAnimation from "../../assets/gem.json";
+import groovyWalkAnimation from "../../assets/groovyWalk.json";
 // import likeButtonAnimation from "../../assets/likeButton.json";
 
 const styles = {
@@ -12,9 +12,9 @@ const styles = {
 	},
 };
 
-const GemAnimation = () => {
+const AnimatorExamples = () => {
 	const ref = useRef({});
-	const [animationData, setAnimationData] = useState(gemAnimation);
+	const [animationData, setAnimationData] = useState(groovyWalkAnimation);
 	const [loop, setLoop] = useState(true);
 	const [autoplay, setAutoplay] = useState(true);
 	const [initialSegment, setInitialSegment] = useState(null);
@@ -84,4 +84,4 @@ const GemAnimation = () => {
 	);
 };
 
-export default GemAnimation;
+export default AnimatorExamples;
