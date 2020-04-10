@@ -19,6 +19,7 @@ const exports = {
 			format: "cjs",
 			sourcemap: true,
 		},
+		external: ["lottie-web"],
 		plugins: [
 			postcss({
 				plugins: [autoprefixer],
@@ -37,6 +38,7 @@ const exports = {
 			file: minifyExtension(packageJSON.main),
 			format: "cjs",
 		},
+		external: ["lottie-web"],
 		plugins: [
 			postcss({
 				plugins: [autoprefixer],
@@ -62,6 +64,7 @@ const exports = {
 				"prop-types": "PropTypes",
 			},
 		},
+		external: ["lottie-web"],
 		plugins: [
 			postcss({
 				plugins: [autoprefixer],
@@ -85,6 +88,7 @@ const exports = {
 				"prop-types": "PropTypes",
 			},
 		},
+		external: ["lottie-web"],
 		plugins: [
 			postcss({
 				plugins: [autoprefixer],
@@ -106,6 +110,7 @@ const exports = {
 			sourcemap: true,
 			exports: "named",
 		},
+		external: ["lottie-web"],
 		plugins: [
 			postcss({
 				plugins: [autoprefixer],
@@ -125,6 +130,7 @@ const exports = {
 			format: "es",
 			exports: "named",
 		},
+		external: ["lottie-web"],
 		plugins: [
 			postcss({
 				plugins: [autoprefixer],
