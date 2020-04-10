@@ -13,7 +13,7 @@ const styles = {
 };
 
 const AnimatorExamples = () => {
-	const ref = useRef({});
+	const ref = useRef();
 	const [animationData, setAnimationData] = useState(groovyWalkAnimation);
 	const [loop, setLoop] = useState(true);
 	const [autoplay, setAutoplay] = useState(true);
