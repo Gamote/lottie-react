@@ -23,20 +23,13 @@ npm i -s @lottie-web/react
 
 https://gamote.github.io/lottie-react
 
-## Things to come
-
--   A brief description about lottie player and lottie files
--   Explanation on how to export a lottie file from After Effects
--   Support for all the methods that are defined in the `lottie-web` package
--   Improved documentation
--   Tests
-
 ## Projects to check out
 
 - [lottie-web](https://github.com/airbnb/lottie-web) - Lottie implementation for Web. Our project is based on it and you should check it because it will help you understand what's behind this package and it will give you a better understanding on what features should you expect to have in the future
 - [lottie-android](https://github.com/airbnb/lottie-android) - Lottie implementation for Android
 - [lottie-ios](https://github.com/airbnb/lottie-ios) - Lottie implementation for iOS
 - [lottie-react-native](https://github.com/react-native-community/lottie-react-native) - Lottie implementation for React Native
+- [LottieFiles](https://lottiefiles.com/) - Are you looking for animations? LottieFiles is the way to go!
 
 ## Contribution
 
