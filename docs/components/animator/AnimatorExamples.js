@@ -19,8 +19,18 @@ const AnimatorExamples = () => {
 	const [autoplay, setAutoplay] = useState(true);
 	const [initialSegment, setInitialSegment] = useState(null);
 	const [style, setStyle] = useState(styles.animation);
+	const [show, setShow] = useState(true);
 
 	useEffect(() => {
+		// Test the unmount hooks
+		// setTimeout(() => {
+		// 	setShow(false);
+		// }, 4000);
+		//
+		// setTimeout(() => {
+		// 	setShow(true);
+		// }, 8000);
+		//
 		// // Test ref
 		// setTimeout(() => {
 		// 	console.log("Info: ref current value", ref.current);
@@ -72,16 +82,48 @@ const AnimatorExamples = () => {
 		// }, 4000);
 	}, []);
 
-	return (
+	const animation = (
 		<Animator
 			ref={ref}
 			animationData={animationData}
 			loop={loop}
 			autoplay={autoplay}
 			initialSegment={initialSegment}
+			// onComplete={() => {
+			// 	console.log("Info: onComplete called");
+			// }}
+			// onLoopComplete={() => {
+			// 	console.log("Info: onLoopComplete called");
+			// }}
+			// onEnterFrame={() => {
+			// 	console.log("Info: onEnterFrame called");
+			// }}
+			// onSegmentStart={() => {
+			// 	console.log("Info: onSegmentStart called");
+			// }}
+			// onConfigReady={() => {
+			// 	console.log("Info: onConfigReady called");
+			// }}
+			// onDataReady={() => {
+			// 	console.log("Info: onDataReady called");
+			// }}
+			// onDataFailed={() => {
+			// 	console.log("Info: onDataFailed called");
+			// }}
+			// onLoadedImages={() => {
+			// 	console.log("Info: onLoadedImages called");
+			// }}
+			// onDOMLoaded={() => {
+			// 	console.log("Info: onDOMLoaded called");
+			// }}
+			// onDestroy={() => {
+			// 	console.log("Info: onDestroy called");
+			// }}
 			style={style}
 		/>
 	);
+
+	return show ? animation : "Animation is hidden";
 };
 
 export default AnimatorExamples;
