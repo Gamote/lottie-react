@@ -3,10 +3,32 @@ import PropTypes from "prop-types";
 import lottie from "lottie-web";
 
 const Animator = forwardRef((props, ref) => {
-	const { animationData, loop, autoplay, initialSegment, style } = props;
+	const {
+		animationData,
+		loop,
+		autoplay,
+		initialSegment,
+		onComplete,
+		onLoopComplete,
+		onEnterFrame,
+		onSegmentStart,
+		onConfigReady,
+		onDataReady,
+		onDataFailed,
+		onLoadedImages,
+		onDOMLoaded,
+		onDestroy,
+		style,
+	} = props;
 	const animationContainer = useRef(null);
 	const animationInstanceRef = useRef(null);
 	const parentRef = ref || useRef();
+
+	/*
+		======================================
+			INTERACTION METHODS
+		======================================
+	 */
 
 	/**
 	 * Play
@@ -130,9 +152,15 @@ const Animator = forwardRef((props, ref) => {
 		return undefined;
 	};
 
+	/*
+		======================================
+			LOTTIE
+		======================================
+	 */
+
 	/**
 	 * Load a new animation, and if it's the case, destroy the previous one
-	 * @param forceOptions
+	 * @param {Object} forceOptions
 	 */
 	const loadAnimation = (forceOptions = {}) => {
 		if (animationInstanceRef.current) {
@@ -174,6 +202,84 @@ const Animator = forwardRef((props, ref) => {
 		loadAnimation();
 	}, [animationData, loop, autoplay, initialSegment]);
 
+	/*
+		======================================
+			EVENTS
+		======================================
+	 */
+
+	/**
+	 * Handle the process of adding an event listener
+	 * @param {String} eventName
+	 * @param {Function} eventHandler
+	 * @param {Boolean} removePreviousListeners
+	 * @return {Function} Function that deregister the listener
+	 */
+	const addEventListenerHelper = (
+		eventName,
+		eventHandler,
+		removePreviousListeners = false,
+	) => {
+		if (animationInstanceRef.current) {
+			if (removePreviousListeners) {
+				animationInstanceRef.current.removeEventListener(eventName);
+			}
+
+			if (eventName && eventHandler) {
+				animationInstanceRef.current.addEventListener(
+					eventName,
+					eventHandler,
+				);
+
+				// Return a function to deregister the event
+				return () => {
+					// TODO: Should we remove all the listeners?
+					animationInstanceRef.current.removeEventListener(
+						eventName,
+						eventHandler,
+					);
+				};
+			}
+		}
+
+		return () => {};
+	};
+
+	useEffect(() => {
+		const listeners = [
+			{ name: "complete", handler: onComplete },
+			{ name: "loopComplete", handler: onLoopComplete },
+			{ name: "enterFrame", handler: onEnterFrame },
+			{ name: "segmentStart", handler: onSegmentStart },
+			{ name: "config_ready", handler: onConfigReady },
+			{ name: "data_ready", handler: onDataReady },
+			{ name: "data_failed", handler: onDataFailed },
+			{ name: "loaded_images", handler: onLoadedImages },
+			{ name: "DOMLoaded", handler: onDOMLoaded },
+			{ name: "destroy", handler: onDestroy },
+		];
+
+		const deregisterList = listeners.map(event =>
+			addEventListenerHelper(event.name, event.handler),
+		);
+
+		// Deregister events on unmount
+		return () => {
+			deregisterList.forEach(deregister => deregister());
+		};
+	}, [
+		onComplete,
+		onLoopComplete,
+		onEnterFrame,
+		onSegmentStart,
+		onConfigReady,
+		onDataReady,
+		onDataFailed,
+		onLoadedImages,
+		onDOMLoaded,
+		onDestroy,
+	]);
+
 	/**
 	 * ALPHA
 	 */
@@ -200,6 +306,16 @@ Animator.propTypes = {
 	initialSegment: PropTypes.arrayOf(
 		PropTypes.shape(PropTypes.number.isRequired),
 	),
+	onComplete: PropTypes.func,
+	onLoopComplete: PropTypes.func,
+	onEnterFrame: PropTypes.func,
+	onSegmentStart: PropTypes.func,
+	onConfigReady: PropTypes.func,
+	onDataReady: PropTypes.func,
+	onDataFailed: PropTypes.func,
+	onLoadedImages: PropTypes.func,
+	onDOMLoaded: PropTypes.func,
+	onDestroy: PropTypes.func,
 	style: PropTypes.shape(undefined),
 };
 
@@ -207,6 +323,16 @@ Animator.defaultProps = {
 	loop: true,
 	autoplay: true,
 	initialSegment: null,
+	onComplete: null,
+	onLoopComplete: null,
+	onEnterFrame: null,
+	onSegmentStart: null,
+	onConfigReady: null,
+	onDataReady: null,
+	onDataFailed: null,
+	onLoadedImages: null,
+	onDOMLoaded: null,
+	onDestroy: null,
 	style: null,
 };
 
