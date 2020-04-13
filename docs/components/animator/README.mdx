@@ -34,6 +34,8 @@ Default: none
 Required: ☑
 ```
 
+----
+
 ### `loop`
 Set it to true for infinite amount of loops, or pass a number for a specific amount of loops
 ```yaml
@@ -41,6 +43,8 @@ Type: Boolean | Number
 Default: true
 Required: ☐
 ```
+
+----
 
 ### `autoplay`
 If set to true, animation will play as soon as it's loaded
@@ -50,6 +54,8 @@ Default: true
 Required: ☐
 ```
 
+----
+
 ### `initialSegment`
 Expects an array of length 2. First value is the initial frame, second value is the final frame. If this is set, the animation will start at this position in time instead of the exported value from AE
 ```yaml
@@ -58,18 +64,49 @@ Default: none
 Required: ☐
 ```
 
-### onComplete
-### onLoopComplete
-### onEnterFrame
-### onSegmentStart
-### onConfigReady
-### onDataReady
-### onDataFailed
-### onLoadedImages
-### onDOMLoaded
-### onDestroy
+----
 
-### style
+### `onComplete`
+
+----
+
+### `onLoopComplete`
+
+----
+
+### `onEnterFrame`
+
+----
+
+### `onSegmentStart`
+
+----
+
+### `onConfigReady`
+
+----
+
+### `onDataReady`
+
+----
+
+### `onDataFailed`
+
+----
+
+### `onLoadedImages`
+
+----
+
+### `onDOMLoaded`
+
+----
+
+### `onDestroy`
+
+----
+
+### `style`
 Style object that applies to the animation wrapper (which is a div)
 ```yaml
 Type: Object
@@ -77,7 +114,9 @@ Default: none
 Required: ☐
 ```
 
-### ref
+----
+
+### `ref`
 Expects a React ref object in which interaction methods will be stored
 ```yaml
 Type: React.RefObject
@@ -87,17 +126,72 @@ Required: ☐
 
 ## Interaction methods
 These methods are designed to give you more control over the Lottie animation, and fill in the gaps left by the props:
-- play
-- stop
-- pause
-- setSpeed
-- goToAndPlay
-- goToAndStop
-- setDirection
-- playSegments
-- setSubframe
-- destroy
-- getDuration
+
+### `play()`
+
+----
+
+### `stop()`
+
+----
+
+### `pause()`
+
+----
+
+### `setSpeed(speed)`
+```yaml
+speed: 1 is normal speed
+```
+
+----
+
+### `goToAndPlay(value, isFrame)`
+```yaml
+value: numeric value.
+isFrame: defines if first argument is a time based value or a frame based (default false).
+```
+
+----
+
+### `goToAndStop(value, isFrame)`
+```yaml
+value: numeric value.
+isFrame: defines if first argument is a time based value or a frame based (default false).
+```
+
+----
+
+### `setDirection(direction)`
+```yaml
+direction: 1 is forward, -1 is reverse.
+```
+
+----
+
+### `playSegments(segments, forceFlag)`
+```yaml
+segments: array. Can contain 2 numeric values that will be used as first and last frame of the animation. Or can contain a sequence of arrays each with 2 numeric values.
+forceFlag: boolean. If set to false, it will wait until the current segment is complete. If true, it will update values immediately.
+```
+
+----
+
+### `setSubframe(useSubFrames)`
+```yaml
+useSubFrames: If false, it will respect the original AE fps. If true, it will update on every requestAnimationFrame with intermediate values. Default is true.
+```
+
+----
+
+### `destroy()`
+
+----
+
+### `getDuration(inFrames)`
+```yaml
+inFrames: If true, returns duration in frames, if false, in seconds
+```
 
 ### Calling the methods
 To use the interaction methods listed above, pass a reference to the Animator in your component by using the ref prop (see the React documentation to learn more about [Ref](https://reactjs.org/docs/refs-and-the-dom.html) or [useRef](https://reactjs.org/docs/hooks-reference.html#useref) hook):
@@ -120,3 +214,6 @@ You can then use the interaction methods like this:
 ref.current.pause();
 ...
 ```
+
+## Examples
+Soon :)
