@@ -26,14 +26,64 @@ export default AnimationExample;
 
 ## Props
 
-Property | Type | Required | Default | Description
---- | --- | --- | --- | ---
-animationData | Object | required | | A JSON Object with the exported animation data
-loop | boolean\|number | optional | true | Set it to true for infinite amount of loops, or pass a number for a specific amount of loops
-autoplay | boolean | optional | true | If set to true, animation will play as soon as it's loaded
-initialSegment | array | optional | | Expects an array of length 2. First value is the initial frame, second value is the final frame. If this is set, the animation will start at this position in time instead of the exported value from AE
-style | Object | optional | | Style object that applies to the animation wrapper (which is a `div`)
-ref | React.RefObject | optional | | Expects a React ref object in which interaction methods will be stored
+### `animationData`
+A JSON Object with the exported animation data
+```yaml
+Type: Object
+Default: none
+Required: ☑
+```
+
+### `loop`
+Set it to true for infinite amount of loops, or pass a number for a specific amount of loops
+```yaml
+Type: Boolean | Number
+Default: true
+Required: ☐
+```
+
+### `autoplay`
+If set to true, animation will play as soon as it's loaded
+```yaml
+Type: Boolean
+Default: true
+Required: ☐
+```
+
+### `initialSegment`
+Expects an array of length 2. First value is the initial frame, second value is the final frame. If this is set, the animation will start at this position in time instead of the exported value from AE
+```yaml
+Type: Array
+Default: none
+Required: ☐
+```
+
+### onComplete
+### onLoopComplete
+### onEnterFrame
+### onSegmentStart
+### onConfigReady
+### onDataReady
+### onDataFailed
+### onLoadedImages
+### onDOMLoaded
+### onDestroy
+
+### style
+Style object that applies to the animation wrapper (which is a div)
+```yaml
+Type: Object
+Default: none
+Required: ☐
+```
+
+### ref
+Expects a React ref object in which interaction methods will be stored
+```yaml
+Type: React.RefObject
+Default: none
+Required: ☐
+```
 
 ## Interaction methods
 These methods are designed to give you more control over the Lottie animation, and fill in the gaps left by the props:
