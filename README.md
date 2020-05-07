@@ -11,12 +11,12 @@ Install **react**, **react-dom** and **prop-types** if you don’t have them alr
 _**Note:** This library is using React hooks so the minimum version required for both react and react-dom is 16.8.0._
 
 ```
-npm i -s react@^16.8.0 react-dom@^16.8.0 prop-types@^15.5.7
+npm i react@^16.8.0 react-dom@^16.8.0 prop-types@^15.5.7
 ```
 
 Install **lottie-react** using npm:
 ```
-npm i -s lottie-react
+npm i lottie-react
 ```
 
 ## Documentation and Examples

@@ -14,9 +14,11 @@
 	"license": "MIT",
 	"keywords": [
 		"lottie",
-		"web",
-		"animation",
 		"react",
+		"lottie react",
+		"react lottie",
+		"lottie web",
+		"animation",
 		"component",
 		"hook"
 	],
