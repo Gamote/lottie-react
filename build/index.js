@@ -421,4 +421,5 @@ var useAnimator = useLottie;
 exports.Animator = Animator;
 exports.default = Lottie;
 exports.useAnimator = useAnimator;
+exports.useLottie = useLottie;
 //# sourceMappingURL=index.js.map

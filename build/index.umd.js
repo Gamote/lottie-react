@@ -420,6 +420,7 @@
     exports.Animator = Animator;
     exports.default = Lottie;
     exports.useAnimator = useAnimator;
+    exports.useLottie = useLottie;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

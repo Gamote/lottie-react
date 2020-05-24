@@ -412,5 +412,5 @@ var Animator = Lottie;
 var useAnimator = useLottie;
 
 export default Lottie;
-export { Animator, useAnimator };
+export { Animator, useAnimator, useLottie };
 //# sourceMappingURL=index.es.js.map

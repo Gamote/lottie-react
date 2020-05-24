@@ -5,4 +5,6 @@ import useLottie from "./hooks/useLottie";
 export const Animator = Lottie;
 export const useAnimator = useLottie;
 
+export { useLottie };
+
 export default Lottie;
