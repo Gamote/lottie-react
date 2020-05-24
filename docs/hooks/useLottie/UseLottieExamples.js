@@ -1,5 +1,5 @@
 import React from "react";
-import useAnimator from "../../../src/hooks/useAnimator";
+import useLottie from "../../../src/hooks/useLottie";
 import groovyWalkAnimation from "../../assets/groovyWalk.json";
 
 const style = {
@@ -9,14 +9,14 @@ const style = {
 	borderRadius: 7,
 };
 
-const UseAnimatorExamples = () => {
+const UseLottieExamples = () => {
 	const options = {
 		animationData: groovyWalkAnimation,
 		loop: true,
 		autoplay: true,
 	};
 
-	const Lottie = useAnimator(options, style);
+	const Lottie = useLottie(options, style);
 
 	// TODO: methods to describe in the documentation
 	// useEffect(() => {
@@ -36,7 +36,7 @@ const UseAnimatorExamples = () => {
 	// 	}, 2000);
 	// });
 
-	return <>{Lottie.View}</>;
+	return Lottie.View;
 };
 
-export default UseAnimatorExamples;
+export default UseLottieExamples;

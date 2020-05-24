@@ -1,6 +1,8 @@
-import Animator from "./components/Animator";
-import useAnimator from "./hooks/useAnimator";
+import Lottie from "./components/Lottie";
+import useLottie from "./hooks/useLottie";
 
-export { Animator, useAnimator };
+// TODO: For backward compatibility, remove on v2
+export const Animator = Lottie;
+export const useAnimator = useLottie;
 
-export default Animator;
+export default Lottie;

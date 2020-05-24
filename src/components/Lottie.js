@@ -1,13 +1,13 @@
 import { forwardRef, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
-import useAnimator from "../hooks/useAnimator";
+import useLottie from "../hooks/useLottie";
 
-const Animator = forwardRef((props, ref) => {
+const Lottie = forwardRef((props, ref) => {
 	const { style, ...lottieProps } = props;
 	const parentRef = ref || useRef();
 
 	/**
-	 * Initialize the 'useLottieView' hook
+	 * Initialize the 'useLottie' hook
 	 */
 	const {
 		View,
@@ -22,7 +22,7 @@ const Animator = forwardRef((props, ref) => {
 		setSubframe,
 		destroy,
 		getDuration,
-	} = useAnimator(lottieProps, style);
+	} = useLottie(lottieProps, style);
 
 	/**
 	 * Share methods which control Lottie to the parent component
@@ -48,7 +48,7 @@ const Animator = forwardRef((props, ref) => {
 	return View;
 });
 
-Animator.propTypes = {
+Lottie.propTypes = {
 	animationData: PropTypes.shape(undefined).isRequired,
 	loop: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
 	autoplay: PropTypes.bool,
@@ -68,7 +68,7 @@ Animator.propTypes = {
 	style: PropTypes.shape(undefined),
 };
 
-Animator.defaultProps = {
+Lottie.defaultProps = {
 	loop: true,
 	autoplay: true,
 	initialSegment: null,
@@ -85,4 +85,4 @@ Animator.defaultProps = {
 	style: null,
 };
 
-export default Animator;
+export default Lottie;

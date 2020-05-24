@@ -1,13 +1,16 @@
 'use strict';
 
+Object.defineProperty(exports, '__esModule', { value: true });
+
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var React = require('react');
 var React__default = _interopDefault(React);
 var PropTypes = _interopDefault(require('prop-types'));
-var Lottie = _interopDefault(require('lottie-web'));
+var lottie = _interopDefault(require('lottie-web'));
 
-var Animator = React.forwardRef(function (props, ref) {
+var useLottie = function useLottie(props) {
+  var style = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   var animationData = props.animationData,
       loop = props.loop,
       autoplay = props.autoplay,
@@ -21,11 +24,9 @@ var Animator = React.forwardRef(function (props, ref) {
       onDataFailed = props.onDataFailed,
       onLoadedImages = props.onLoadedImages,
       onDOMLoaded = props.onDOMLoaded,
-      onDestroy = props.onDestroy,
-      style = props.style;
-  var animationContainer = React.useRef(null);
+      onDestroy = props.onDestroy;
   var animationInstanceRef = React.useRef(null);
-  var parentRef = ref || React.useRef();
+  var animationContainer = React.useRef(null);
   /*
       ======================================
           INTERACTION METHODS
@@ -191,24 +192,11 @@ var Animator = React.forwardRef(function (props, ref) {
     }, forceOptions), {
       container: animationContainer.current
     });
-    animationInstanceRef.current = Lottie.loadAnimation(config); // Share methods which control Lottie to the parent component
-
-    if (parentRef) {
-      parentRef.current = {
-        play: play,
-        stop: stop,
-        pause: pause,
-        setSpeed: setSpeed,
-        goToAndPlay: goToAndPlay,
-        goToAndStop: goToAndStop,
-        setDirection: setDirection,
-        playSegments: playSegments,
-        setSubframe: setSubframe,
-        destroy: destroy,
-        getDuration: getDuration
-      };
-    }
-  }; // Initialize and listen for changes that need to reinitialize Lottie
+    animationInstanceRef.current = lottie.loadAnimation(config);
+  };
+  /**
+   * Initialize and listen for changes that need to reinitialize Lottie
+   */
 
 
   React.useEffect(function () {
@@ -248,6 +236,10 @@ var Animator = React.forwardRef(function (props, ref) {
 
     return function () {};
   };
+  /**
+   * Reinitialize listener on change
+   */
+
 
   React.useEffect(function () {
     var listeners = [{
@@ -307,188 +299,9 @@ var Animator = React.forwardRef(function (props, ref) {
   // 	// }
   // }, [loop]);
 
-  return /*#__PURE__*/React__default.createElement("div", {
-    ref: animationContainer,
-    style: style
-  });
-});
-Animator.propTypes = {
-  animationData: PropTypes.shape(undefined).isRequired,
-  loop: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
-  autoplay: PropTypes.bool,
-  initialSegment: PropTypes.arrayOf(PropTypes.shape(PropTypes.number.isRequired)),
-  onComplete: PropTypes.func,
-  onLoopComplete: PropTypes.func,
-  onEnterFrame: PropTypes.func,
-  onSegmentStart: PropTypes.func,
-  onConfigReady: PropTypes.func,
-  onDataReady: PropTypes.func,
-  onDataFailed: PropTypes.func,
-  onLoadedImages: PropTypes.func,
-  onDOMLoaded: PropTypes.func,
-  onDestroy: PropTypes.func,
-  style: PropTypes.shape(undefined)
-};
-Animator.defaultProps = {
-  loop: true,
-  autoplay: true,
-  initialSegment: null,
-  onComplete: null,
-  onLoopComplete: null,
-  onEnterFrame: null,
-  onSegmentStart: null,
-  onConfigReady: null,
-  onDataReady: null,
-  onDataFailed: null,
-  onLoadedImages: null,
-  onDOMLoaded: null,
-  onDestroy: null,
-  style: null
-};
-
-var useAnimator = function useAnimator(props) {
-  var style = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  var animationInstanceRef = React.useRef(null);
-  var animationContainer = React.useRef(null); // Initialize Lottie
-
-  React.useEffect(function () {
-    animationInstanceRef.current = Lottie.loadAnimation(Object.assign(Object.assign({}, props), {
-      container: animationContainer.current
-    })); // eslint-disable-next-line
-  }, []);
   /**
-   * Play
-   * TODO: complete
+   * Build the animation view
    */
-
-  var play = function play() {
-    if (animationInstanceRef.current) {
-      animationInstanceRef.current.play();
-    }
-  };
-  /**
-   * Stop
-   * TODO: complete
-   */
-
-
-  var stop = function stop() {
-    if (animationInstanceRef.current) {
-      animationInstanceRef.current.stop();
-    }
-  };
-  /**
-   * Pause
-   * TODO: complete
-   */
-
-
-  var pause = function pause() {
-    if (animationInstanceRef.current) {
-      animationInstanceRef.current.pause();
-    }
-  };
-  /**
-   * Set animation speed
-   * TODO: complete
-   * @param speed
-   */
-
-
-  var setSpeed = function setSpeed(speed) {
-    if (animationInstanceRef.current) {
-      animationInstanceRef.current.setSpeed(speed);
-    }
-  };
-  /**
-   * Got to frame and stop
-   * TODO: complete
-   * @param value
-   * @param isFrame
-   */
-
-
-  var goToAndStop = function goToAndStop(value, isFrame) {
-    if (animationInstanceRef.current) {
-      animationInstanceRef.current.goToAndStop(value, isFrame);
-    }
-  };
-  /**
-   * Got to frame and play
-   * TODO: complete
-   * @param value
-   * @param isFrame
-   */
-
-
-  var goToAndPlay = function goToAndPlay(value, isFrame) {
-    if (animationInstanceRef.current) {
-      animationInstanceRef.current.goToAndPlay(value, isFrame);
-    }
-  };
-  /**
-   * Set animation direction
-   * TODO: complete
-   * @param direction
-   */
-
-
-  var setDirection = function setDirection(direction) {
-    if (animationInstanceRef.current) {
-      animationInstanceRef.current.setDirection(direction);
-    }
-  };
-  /**
-   * Play animation segments
-   * TODO: complete
-   * @param segment
-   * @param force
-   */
-
-
-  var playSegments = function playSegments(segment, force) {
-    if (animationInstanceRef.current) {
-      animationInstanceRef.current.playSegments(segment, force);
-    }
-  };
-  /**
-   * Set sub frames
-   * TODO: complete
-   * @param useSubFrames
-   */
-
-
-  var setSubframe = function setSubframe(useSubFrames) {
-    if (animationInstanceRef.current) {
-      animationInstanceRef.current.setSubframe(useSubFrames);
-    }
-  };
-  /**
-   * Destroy animation
-   * TODO: complete
-   */
-
-
-  var destroy = function destroy() {
-    if (animationInstanceRef.current) {
-      animationInstanceRef.current.destroy();
-    }
-  };
-  /**
-   * Get animation duration
-   * TODO: complete
-   * @param inFrames
-   */
-
-
-  var getDuration = function getDuration(inFrames) {
-    if (animationInstanceRef.current) {
-      return animationInstanceRef.current.getDuration(inFrames);
-    }
-
-    return undefined;
-  }; // Build the animation view
-
 
   var View = /*#__PURE__*/React__default.createElement("div", {
     style: style,
@@ -510,10 +323,102 @@ var useAnimator = function useAnimator(props) {
   };
 };
 
-var index = {
-  Animator: Animator,
-  useAnimator: useAnimator
+var __rest = undefined && undefined.__rest || function (s, e) {
+  var t = {};
+
+  for (var p in s) {
+    if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+  }
+
+  if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+    if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i])) t[p[i]] = s[p[i]];
+  }
+  return t;
+};
+var Lottie = React.forwardRef(function (props, ref) {
+  var style = props.style,
+      lottieProps = __rest(props, ["style"]);
+
+  var parentRef = ref || React.useRef();
+  /**
+   * Initialize the 'useLottie' hook
+   */
+
+  var _useLottie = useLottie(lottieProps, style),
+      View = _useLottie.View,
+      play = _useLottie.play,
+      stop = _useLottie.stop,
+      pause = _useLottie.pause,
+      setSpeed = _useLottie.setSpeed,
+      goToAndStop = _useLottie.goToAndStop,
+      goToAndPlay = _useLottie.goToAndPlay,
+      setDirection = _useLottie.setDirection,
+      playSegments = _useLottie.playSegments,
+      setSubframe = _useLottie.setSubframe,
+      destroy = _useLottie.destroy,
+      getDuration = _useLottie.getDuration;
+  /**
+   * Share methods which control Lottie to the parent component
+   */
+
+
+  React.useEffect(function () {
+    if (parentRef) {
+      parentRef.current = {
+        play: play,
+        stop: stop,
+        pause: pause,
+        setSpeed: setSpeed,
+        goToAndPlay: goToAndPlay,
+        goToAndStop: goToAndStop,
+        setDirection: setDirection,
+        playSegments: playSegments,
+        setSubframe: setSubframe,
+        destroy: destroy,
+        getDuration: getDuration
+      };
+    }
+  }, [parentRef.current]);
+  return View;
+});
+Lottie.propTypes = {
+  animationData: PropTypes.shape(undefined).isRequired,
+  loop: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
+  autoplay: PropTypes.bool,
+  initialSegment: PropTypes.arrayOf(PropTypes.shape(PropTypes.number.isRequired)),
+  onComplete: PropTypes.func,
+  onLoopComplete: PropTypes.func,
+  onEnterFrame: PropTypes.func,
+  onSegmentStart: PropTypes.func,
+  onConfigReady: PropTypes.func,
+  onDataReady: PropTypes.func,
+  onDataFailed: PropTypes.func,
+  onLoadedImages: PropTypes.func,
+  onDOMLoaded: PropTypes.func,
+  onDestroy: PropTypes.func,
+  style: PropTypes.shape(undefined)
+};
+Lottie.defaultProps = {
+  loop: true,
+  autoplay: true,
+  initialSegment: null,
+  onComplete: null,
+  onLoopComplete: null,
+  onEnterFrame: null,
+  onSegmentStart: null,
+  onConfigReady: null,
+  onDataReady: null,
+  onDataFailed: null,
+  onLoadedImages: null,
+  onDOMLoaded: null,
+  onDestroy: null,
+  style: null
 };
 
-module.exports = index;
+var Animator = Lottie;
+var useAnimator = useLottie;
+
+exports.Animator = Animator;
+exports.default = Lottie;
+exports.useAnimator = useAnimator;
 //# sourceMappingURL=index.js.map

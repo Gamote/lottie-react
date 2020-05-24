@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import Animator from "../../../src/components/Animator";
+import Lottie from "../../../src/components/Lottie";
 import groovyWalkAnimation from "../../assets/groovyWalk.json";
 // import likeButtonAnimation from "../../assets/likeButton.json";
 
@@ -12,7 +12,7 @@ const styles = {
 	},
 };
 
-const AnimatorExamples = () => {
+const LottieExamples = () => {
 	const ref = useRef();
 	const [animationData, setAnimationData] = useState(groovyWalkAnimation);
 	const [loop, setLoop] = useState(true);
@@ -83,7 +83,7 @@ const AnimatorExamples = () => {
 	}, []);
 
 	const animation = (
-		<Animator
+		<Lottie
 			ref={ref}
 			animationData={animationData}
 			loop={loop}
@@ -126,4 +126,4 @@ const AnimatorExamples = () => {
 	return show ? animation : "Animation is hidden";
 };
 
-export default AnimatorExamples;
+export default LottieExamples;
