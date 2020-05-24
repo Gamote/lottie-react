@@ -1,5 +1,5 @@
 /node_modules
 /.idea
-/build
+/build/compiled
 /.docz
 /docs-dist
