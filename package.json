@@ -30,13 +30,17 @@
 		"/build"
 	],
 	"scripts": {
+		"tsc:compile": "tsc",
+		"tsc:compile:watch": "tsc --watch",
 		"rollup:compile": "rollup -c",
 		"rollup:compile:watch": "rollup -c -w",
 		"docz:dev": "docz dev",
 		"docz:build": "docz build",
 		"docz:serve": "docz build && docz serve",
+		"build": "run-s tsc:compile rollup:compile",
+		"build:watch": "run-p tsc:compile:watch rollup:compile:watch",
 		"postbuild": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz",
-		"prepublishOnly": "rm -rf build && npm run rollup:compile"
+		"prepublishOnly": "rm -rf build && npm run build"
 	},
 	"peerDependencies": {
 		"react": "^16.8.0",
@@ -61,16 +65,18 @@
 		"eslint-plugin-react": "^7.20.0",
 		"eslint-plugin-react-hooks": "^4.0.2",
 		"node-sass": "^4.14.1",
+		"npm-run-all": "^4.1.5",
 		"prettier": "^2.0.5",
+		"prop-types": "^15.7.2",
 		"react": "^16.13.1",
 		"react-dom": "^16.13.1",
-		"prop-types": "^15.7.2",
 		"rollup": "^2.10.9",
 		"rollup-plugin-babel": "^4.4.0",
 		"rollup-plugin-peer-deps-external": "^2.2.2",
 		"rollup-plugin-postcss": "^3.1.1",
 		"rollup-plugin-terser": "^6.0.1",
-		"rollup-plugin-uglify": "^6.0.4"
+		"tslib": "^2.0.0",
+		"typescript": "^3.9.3"
 	},
 	"dependencies": {
 		"lottie-web": "^5.6.10"
