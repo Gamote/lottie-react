@@ -1,6 +1,6 @@
 import React, { forwardRef, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
-import lottie from "lottie-web";
+import Lottie from "lottie-web";
 
 const Animator = forwardRef((props, ref) => {
 	const {
@@ -144,7 +144,7 @@ const Animator = forwardRef((props, ref) => {
 	 * TODO: complete
 	 * @param inFrames
 	 */
-	const getDuration = inFrames => {
+	const getDuration = (inFrames) => {
 		if (animationInstanceRef.current) {
 			return animationInstanceRef.current.getDuration(inFrames);
 		}
@@ -177,7 +177,7 @@ const Animator = forwardRef((props, ref) => {
 			container: animationContainer.current,
 		};
 
-		animationInstanceRef.current = lottie.loadAnimation(config);
+		animationInstanceRef.current = Lottie.loadAnimation(config);
 
 		// Share methods which control Lottie to the parent component
 		if (parentRef) {

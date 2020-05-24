@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import lottie from "lottie-web";
+import Lottie from "lottie-web";
 
 const useAnimator = (props, style = {}) => {
 	const animationInstanceRef = useRef(null);
@@ -7,7 +7,7 @@ const useAnimator = (props, style = {}) => {
 
 	// Initialize Lottie
 	useEffect(() => {
-		animationInstanceRef.current = lottie.loadAnimation({
+		animationInstanceRef.current = Lottie.loadAnimation({
 			...props,
 			container: animationContainer.current,
 		});
