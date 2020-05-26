@@ -53,6 +53,7 @@ const exports = {
 			file: packageJSON.main,
 			format: "cjs",
 			sourcemap: true,
+			exports: "named",
 		},
 		external: ["lottie-web"],
 		plugins: reusablePluginList,
@@ -62,6 +63,7 @@ const exports = {
 		output: {
 			file: minifyExtension(packageJSON.main),
 			format: "cjs",
+			exports: "named",
 		},
 		external: ["lottie-web"],
 		plugins: [...reusablePluginList, terser()],
@@ -73,6 +75,7 @@ const exports = {
 			format: "umd",
 			sourcemap: true,
 			name: "lottie-react",
+			exports: "named",
 			globals: {
 				react: "React",
 				"prop-types": "PropTypes",
@@ -87,6 +90,7 @@ const exports = {
 		output: {
 			file: minifyExtension(packageJSON.browser),
 			format: "umd",
+			exports: "named",
 			name: "lottie-react",
 			globals: {
 				react: "React",
