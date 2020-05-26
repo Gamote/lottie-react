@@ -1,12 +1,11 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('react'), require('prop-types'), require('lottie-web')) :
-  typeof define === 'function' && define.amd ? define(['exports', 'react', 'prop-types', 'lottie-web'], factory) :
-  (global = global || self, factory(global['lottie-react'] = {}, global.React, global.PropTypes, global.Lottie));
-}(this, (function (exports, React, PropTypes, lottie) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('lottie-web'), require('react'), require('prop-types')) :
+  typeof define === 'function' && define.amd ? define(['exports', 'lottie-web', 'react', 'prop-types'], factory) :
+  (global = global || self, factory(global['lottie-react'] = {}, global.Lottie, global.React, global.PropTypes));
+}(this, (function (exports, lottie, React, PropTypes) { 'use strict';
 
-  var React__default = 'default' in React ? React['default'] : React;
-  PropTypes = PropTypes && Object.prototype.hasOwnProperty.call(PropTypes, 'default') ? PropTypes['default'] : PropTypes;
   lottie = lottie && Object.prototype.hasOwnProperty.call(lottie, 'default') ? lottie['default'] : lottie;
+  var React__default = 'default' in React ? React['default'] : React;
 
   function _defineProperty(obj, key, value) {
     if (key in obj) {
@@ -94,7 +93,7 @@
   }
 
   var useLottie = function useLottie(props) {
-    var style = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var style = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
     var animationData = props.animationData,
         loop = props.loop,
         autoplay = props.autoplay,
@@ -109,7 +108,7 @@
         onLoadedImages = props.onLoadedImages,
         onDOMLoaded = props.onDOMLoaded,
         onDestroy = props.onDestroy;
-    var animationInstanceRef = React.useRef(null);
+    var animationInstanceRef = React.useRef();
     var animationContainer = React.useRef(null);
     /*
         ======================================
@@ -257,25 +256,28 @@
 
     /**
      * Load a new animation, and if it's the case, destroy the previous one
-     * @param {Object} forceOptions
+     * @param {Object} forcedConfigs
      */
 
 
     var loadAnimation = function loadAnimation() {
-      var forceOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var forcedConfigs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+      // Return if the container ref is null
+      if (!animationContainer.current) {
+        return;
+      } // Destroy any previous instance
+
 
       if (animationInstanceRef.current) {
         animationInstanceRef.current.destroy();
-      }
+      } // Build the animation configuration
 
-      var config = _objectSpread2(_objectSpread2(_objectSpread2({
-        animationData: animationData || null,
-        loop: !Number.isNaN(loop) ? loop : loop !== false,
-        autoplay: autoplay !== false,
-        initialSegment: initialSegment || null
-      }, props), forceOptions), {}, {
+
+      var config = _objectSpread2(_objectSpread2(_objectSpread2({}, props), forcedConfigs), {}, {
         container: animationContainer.current
-      });
+      }); // Save the animation instance
+
 
       animationInstanceRef.current = lottie.loadAnimation(config);
     };
@@ -295,28 +297,20 @@
 
     /**
      * Handle the process of adding an event listener
-     * @param {String} eventName
-     * @param {Function} eventHandler
-     * @param {Boolean} removePreviousListeners
+     * @param {AnimationEventName} eventName
+     * @param {AnimationEventHandler} eventHandler
      * @return {Function} Function that deregister the listener
      */
 
     var addEventListenerHelper = function addEventListenerHelper(eventName, eventHandler) {
-      var removePreviousListeners = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+      if (animationInstanceRef.current && eventName && eventHandler) {
+        animationInstanceRef.current.addEventListener(eventName, eventHandler); // Return a function to deregister this listener
 
-      if (animationInstanceRef.current) {
-        if (removePreviousListeners) {
-          animationInstanceRef.current.removeEventListener(eventName);
-        }
+        return function () {
+          var _a;
 
-        if (eventName && eventHandler) {
-          animationInstanceRef.current.addEventListener(eventName, eventHandler); // Return a function to deregister the event
-
-          return function () {
-            // TODO: Should we remove all the listeners?
-            animationInstanceRef.current.removeEventListener(eventName, eventHandler);
-          };
-        }
+          (_a = animationInstanceRef.current) === null || _a === void 0 ? void 0 : _a.removeEventListener(eventName, eventHandler);
+        };
       }
 
       return function () {};
@@ -360,7 +354,7 @@
       }];
       var deregisterList = listeners.map(function (event) {
         return addEventListenerHelper(event.name, event.handler);
-      }); // Deregister events on unmount
+      }); // Deregister listeners on unmount
 
       return function () {
         deregisterList.forEach(function (deregister) {
@@ -369,26 +363,10 @@
       };
     }, [onComplete, onLoopComplete, onEnterFrame, onSegmentStart, onConfigReady, onDataReady, onDataFailed, onLoadedImages, onDOMLoaded, onDestroy]);
     /**
-     * ALPHA
-     */
-    // Detect changes of the loop param and change it without reloading the animation
-    // TODO: needs intensive testing
-    // useEffect(() => {
-    // 	if (animationInstanceRef.current.loop !== loop) {
-    // 		animationInstanceRef.current.loop = loop;
-    // 	}
-    //
-    // 	// // TODO: decide if this is a desired behavior
-    // 	// if (animationInstanceRef.current.isPaused) {
-    // 	// 	animationInstanceRef.current.play();
-    // 	// }
-    // }, [loop]);
-
-    /**
      * Build the animation view
      */
 
-    var View = /*#__PURE__*/React__default.createElement("div", {
+    var View = React__default.createElement("div", {
       style: style,
       ref: animationContainer
     });
@@ -410,9 +388,11 @@
 
   var Lottie = React.forwardRef(function (props, ref) {
     var style = props.style,
-        lottieProps = _objectWithoutProperties(props, ["style"]);
+        lottieProps = _objectWithoutProperties(props, ["style"]); // TODO: find a better was to specified the ref type
+    //  instead of redefining
 
-    var parentRef = ref || React.useRef();
+
+    var parentRef = ref;
     /**
      * Initialize the 'useLottie' hook
      */
@@ -458,7 +438,7 @@
     animationData: PropTypes.shape(undefined).isRequired,
     loop: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
     autoplay: PropTypes.bool,
-    initialSegment: PropTypes.arrayOf(PropTypes.shape(PropTypes.number.isRequired)),
+    initialSegment: PropTypes.arrayOf(PropTypes.number.isRequired),
     onComplete: PropTypes.func,
     onLoopComplete: PropTypes.func,
     onEnterFrame: PropTypes.func,
@@ -485,12 +465,13 @@
     onLoadedImages: null,
     onDOMLoaded: null,
     onDestroy: null,
-    style: null
+    style: undefined
   };
 
   var Animator = Lottie;
   var useAnimator = useLottie;
 
+  exports.LottieWebLibrary = lottie;
   exports.Animator = Animator;
   exports.default = Lottie;
   exports.useAnimator = useAnimator;

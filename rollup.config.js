@@ -9,7 +9,7 @@ import { terser } from "rollup-plugin-terser";
 import packageJSON from "./package.json";
 
 /**
- * We are using 'build/compiled/index.js' instead of 'src/index.ts'
+ * We are using 'build/compiled/index.js' instead of 'src/index.tsx'
  * because we need to compile the code first.
  *
  * We could've used the '@rollup/plugin-typescript' but that plugin

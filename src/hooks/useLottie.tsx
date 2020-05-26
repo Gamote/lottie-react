@@ -1,7 +1,20 @@
-import React, { useEffect, useRef } from "react";
-import lottie from "lottie-web";
+import React, {
+	AnimationEventHandler,
+	CSSProperties,
+	useEffect,
+	useRef,
+} from "react";
+import lottie, {
+	AnimationConfigWithData,
+	AnimationEventName,
+	AnimationItem,
+} from "lottie-web";
+import { LottieOptionsType } from "../types";
 
-const useLottie = (props, style = {}) => {
+const useLottie = (
+	props: LottieOptionsType,
+	style: CSSProperties | undefined = undefined,
+) => {
 	const {
 		animationData,
 		loop,
@@ -18,8 +31,9 @@ const useLottie = (props, style = {}) => {
 		onDOMLoaded,
 		onDestroy,
 	} = props;
-	const animationInstanceRef = useRef(null);
-	const animationContainer = useRef(null);
+
+	const animationInstanceRef = useRef<AnimationItem>();
+	const animationContainer = useRef<HTMLDivElement>(null);
 
 	/*
 		======================================
@@ -31,7 +45,7 @@ const useLottie = (props, style = {}) => {
 	 * Play
 	 * TODO: complete
 	 */
-	const play = () => {
+	const play = (): void => {
 		if (animationInstanceRef.current) {
 			animationInstanceRef.current.play();
 		}
@@ -41,7 +55,7 @@ const useLottie = (props, style = {}) => {
 	 * Stop
 	 * TODO: complete
 	 */
-	const stop = () => {
+	const stop = (): void => {
 		if (animationInstanceRef.current) {
 			animationInstanceRef.current.stop();
 		}
@@ -51,7 +65,7 @@ const useLottie = (props, style = {}) => {
 	 * Pause
 	 * TODO: complete
 	 */
-	const pause = () => {
+	const pause = (): void => {
 		if (animationInstanceRef.current) {
 			animationInstanceRef.current.pause();
 		}
@@ -62,7 +76,7 @@ const useLottie = (props, style = {}) => {
 	 * TODO: complete
 	 * @param speed
 	 */
-	const setSpeed = (speed) => {
+	const setSpeed = (speed: number): void => {
 		if (animationInstanceRef.current) {
 			animationInstanceRef.current.setSpeed(speed);
 		}
@@ -74,7 +88,7 @@ const useLottie = (props, style = {}) => {
 	 * @param value
 	 * @param isFrame
 	 */
-	const goToAndPlay = (value, isFrame) => {
+	const goToAndPlay = (value: number, isFrame: boolean): void => {
 		if (animationInstanceRef.current) {
 			animationInstanceRef.current.goToAndPlay(value, isFrame);
 		}
@@ -86,7 +100,7 @@ const useLottie = (props, style = {}) => {
 	 * @param value
 	 * @param isFrame
 	 */
-	const goToAndStop = (value, isFrame) => {
+	const goToAndStop = (value: number, isFrame: boolean): void => {
 		if (animationInstanceRef.current) {
 			animationInstanceRef.current.goToAndStop(value, isFrame);
 		}
@@ -97,7 +111,7 @@ const useLottie = (props, style = {}) => {
 	 * TODO: complete
 	 * @param direction
 	 */
-	const setDirection = (direction) => {
+	const setDirection = (direction: -1 | 1): void => {
 		if (animationInstanceRef.current) {
 			animationInstanceRef.current.setDirection(direction);
 		}
@@ -109,7 +123,10 @@ const useLottie = (props, style = {}) => {
 	 * @param segment
 	 * @param force
 	 */
-	const playSegments = (segment, force) => {
+	const playSegments = (
+		segment: [number, number] | [number, number][],
+		force: boolean,
+	): void => {
 		if (animationInstanceRef.current) {
 			animationInstanceRef.current.playSegments(segment, force);
 		}
@@ -120,7 +137,7 @@ const useLottie = (props, style = {}) => {
 	 * TODO: complete
 	 * @param useSubFrames
 	 */
-	const setSubframe = (useSubFrames) => {
+	const setSubframe = (useSubFrames: boolean): void => {
 		if (animationInstanceRef.current) {
 			animationInstanceRef.current.setSubframe(useSubFrames);
 		}
@@ -130,7 +147,7 @@ const useLottie = (props, style = {}) => {
 	 * Destroy animation
 	 * TODO: complete
 	 */
-	const destroy = () => {
+	const destroy = (): void => {
 		if (animationInstanceRef.current) {
 			animationInstanceRef.current.destroy();
 		}
@@ -141,7 +158,7 @@ const useLottie = (props, style = {}) => {
 	 * TODO: complete
 	 * @param inFrames
 	 */
-	const getDuration = (inFrames) => {
+	const getDuration = (inFrames: boolean): number | undefined => {
 		if (animationInstanceRef.current) {
 			return animationInstanceRef.current.getDuration(inFrames);
 		}
@@ -157,23 +174,27 @@ const useLottie = (props, style = {}) => {
 
 	/**
 	 * Load a new animation, and if it's the case, destroy the previous one
-	 * @param {Object} forceOptions
+	 * @param {Object} forcedConfigs
 	 */
-	const loadAnimation = (forceOptions = {}) => {
+	const loadAnimation = (forcedConfigs = {}) => {
+		// Return if the container ref is null
+		if (!animationContainer.current) {
+			return;
+		}
+
+		// Destroy any previous instance
 		if (animationInstanceRef.current) {
 			animationInstanceRef.current.destroy();
 		}
 
-		const config = {
-			animationData: animationData || null,
-			loop: !Number.isNaN(loop) ? loop : loop !== false,
-			autoplay: autoplay !== false,
-			initialSegment: initialSegment || null,
+		// Build the animation configuration
+		const config: AnimationConfigWithData = {
 			...props,
-			...forceOptions,
+			...forcedConfigs,
 			container: animationContainer.current,
 		};
 
+		// Save the animation instance
 		animationInstanceRef.current = lottie.loadAnimation(config);
 	};
 
@@ -192,36 +213,27 @@ const useLottie = (props, style = {}) => {
 
 	/**
 	 * Handle the process of adding an event listener
-	 * @param {String} eventName
-	 * @param {Function} eventHandler
-	 * @param {Boolean} removePreviousListeners
+	 * @param {AnimationEventName} eventName
+	 * @param {AnimationEventHandler} eventHandler
 	 * @return {Function} Function that deregister the listener
 	 */
 	const addEventListenerHelper = (
-		eventName,
-		eventHandler,
-		removePreviousListeners = false,
-	) => {
-		if (animationInstanceRef.current) {
-			if (removePreviousListeners) {
-				animationInstanceRef.current.removeEventListener(eventName);
-			}
+		eventName: AnimationEventName,
+		eventHandler: AnimationEventHandler,
+	): Function => {
+		if (animationInstanceRef.current && eventName && eventHandler) {
+			animationInstanceRef.current.addEventListener(
+				eventName,
+				eventHandler,
+			);
 
-			if (eventName && eventHandler) {
-				animationInstanceRef.current.addEventListener(
+			// Return a function to deregister this listener
+			return () => {
+				animationInstanceRef.current?.removeEventListener(
 					eventName,
 					eventHandler,
 				);
-
-				// Return a function to deregister the event
-				return () => {
-					// TODO: Should we remove all the listeners?
-					animationInstanceRef.current.removeEventListener(
-						eventName,
-						eventHandler,
-					);
-				};
-			}
+			};
 		}
 
 		return () => {};
@@ -231,7 +243,10 @@ const useLottie = (props, style = {}) => {
 	 * Reinitialize listener on change
 	 */
 	useEffect(() => {
-		const listeners = [
+		const listeners: {
+			name: AnimationEventName;
+			handler: AnimationEventHandler;
+		}[] = [
 			{ name: "complete", handler: onComplete },
 			{ name: "loopComplete", handler: onLoopComplete },
 			{ name: "enterFrame", handler: onEnterFrame },
@@ -248,7 +263,7 @@ const useLottie = (props, style = {}) => {
 			addEventListenerHelper(event.name, event.handler),
 		);
 
-		// Deregister events on unmount
+		// Deregister listeners on unmount
 		return () => {
 			deregisterList.forEach((deregister) => deregister());
 		};
@@ -264,22 +279,6 @@ const useLottie = (props, style = {}) => {
 		onDOMLoaded,
 		onDestroy,
 	]);
-
-	/**
-	 * ALPHA
-	 */
-	// Detect changes of the loop param and change it without reloading the animation
-	// TODO: needs intensive testing
-	// useEffect(() => {
-	// 	if (animationInstanceRef.current.loop !== loop) {
-	// 		animationInstanceRef.current.loop = loop;
-	// 	}
-	//
-	// 	// // TODO: decide if this is a desired behavior
-	// 	// if (animationInstanceRef.current.isPaused) {
-	// 	// 	animationInstanceRef.current.play();
-	// 	// }
-	// }, [loop]);
 
 	/**
 	 * Build the animation view
