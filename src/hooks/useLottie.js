@@ -169,7 +169,7 @@ const useLottie = (props, style = {}) => {
 			loop: !Number.isNaN(loop) ? loop : loop !== false,
 			autoplay: autoplay !== false,
 			initialSegment: initialSegment || null,
-			// ...props, // TODO: check if you should allow this
+			...props,
 			...forceOptions,
 			container: animationContainer.current,
 		};
