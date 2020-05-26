@@ -19,7 +19,7 @@ import packageJSON from "./package.json";
  *
  * @type {string}
  */
-const input = "./build/compiled/index.js";
+const input = "./compiled/index.js";
 
 /**
  * Get the extension for the minified files

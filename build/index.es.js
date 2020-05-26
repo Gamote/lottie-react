@@ -177,12 +177,12 @@ var useLottie = function useLottie(props) {
       animationInstanceRef.current.destroy();
     }
 
-    var config = Object.assign(Object.assign({
+    var config = Object.assign(Object.assign(Object.assign({
       animationData: animationData || null,
       loop: !Number.isNaN(loop) ? loop : loop !== false,
       autoplay: autoplay !== false,
       initialSegment: initialSegment || null
-    }, forceOptions), {
+    }, props), forceOptions), {
       container: animationContainer.current
     });
     animationInstanceRef.current = lottie.loadAnimation(config);

@@ -5,7 +5,7 @@
 		"allowJs": true /* Allow javascript files to be compiled. */,
 		// "declaration": true /* Generates corresponding '.d.ts' file. */,
 		// "sourceMap": true /* Generates corresponding '.map' file. */,
-		"outDir": "./build/compiled",
+		"outDir": "./compiled",
 		"strict": true /* Enable all strict type-checking options. */,
 		"moduleResolution": "node" /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
 	},
