@@ -1,4 +1,4 @@
-import LottieWebLibrary from "lottie-web";
+import LottiePlayer from "lottie-web";
 
 import Lottie from "./components/Lottie";
 import useLottie from "./hooks/useLottie";
@@ -7,6 +7,6 @@ import useLottie from "./hooks/useLottie";
 export const Animator = Lottie;
 export const useAnimator = useLottie;
 
-export { LottieWebLibrary, useLottie };
+export { LottiePlayer, useLottie };
 
 export default Lottie;
