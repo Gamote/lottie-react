@@ -1,5 +1,5 @@
 import lottie from 'lottie-web';
-export { default as LottieWebLibrary } from 'lottie-web';
+export { default as LottiePlayer } from 'lottie-web';
 import React, { useRef, useEffect, forwardRef } from 'react';
 import { shape, oneOfType, bool, number, arrayOf, func } from 'prop-types';
 

@@ -471,7 +471,7 @@
   var Animator = Lottie;
   var useAnimator = useLottie;
 
-  exports.LottieWebLibrary = lottie;
+  exports.LottiePlayer = lottie;
   exports.Animator = Animator;
   exports.default = Lottie;
   exports.useAnimator = useAnimator;
