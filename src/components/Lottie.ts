@@ -30,7 +30,7 @@ const Lottie = forwardRef<LottieRefCurrentType, LottieComponentProps>(
 		} = useLottie(lottieProps, style);
 
 		/**
-		 * Share methods which control Lottie to the parent component
+		 * Share the hook methods with the parent component using 'ref'
 		 */
 		useEffect(() => {
 			if (parentRef) {
@@ -48,7 +48,7 @@ const Lottie = forwardRef<LottieRefCurrentType, LottieComponentProps>(
 					getDuration,
 				};
 			}
-		}, [parentRef.current]);
+		}, [parentRef?.current]);
 
 		return View;
 	},

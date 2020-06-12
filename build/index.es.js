@@ -407,7 +407,7 @@ var Lottie = forwardRef(function (props, ref) {
       destroy = _useLottie.destroy,
       getDuration = _useLottie.getDuration;
   /**
-   * Share methods which control Lottie to the parent component
+   * Share the hook methods with the parent component using 'ref'
    */
 
 
@@ -427,7 +427,7 @@ var Lottie = forwardRef(function (props, ref) {
         getDuration: getDuration
       };
     }
-  }, [parentRef.current]);
+  }, [parentRef === null || parentRef === void 0 ? void 0 : parentRef.current]);
   return View;
 });
 Lottie.propTypes = {
