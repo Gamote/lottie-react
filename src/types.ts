@@ -1,38 +1,48 @@
-import { DetailedHTMLProps, HTMLAttributes, MutableRefObject } from "react";
+import {
+	DetailedHTMLProps,
+	HTMLAttributes,
+	MutableRefObject,
+	AnimationEventHandler,
+	CSSProperties,
+} from "react";
+import {
+	AnimationDirection,
+	AnimationSegment,
+} from "lottie-web";
 
 export type LottieOptionsType = {
-	animationData: any,
-	loop: any,
-	autoplay: any,
-	initialSegment: any,
-	onComplete: any,
-	onLoopComplete: any,
-	onEnterFrame: any,
-	onSegmentStart: any,
-	onConfigReady: any,
-	onDataReady: any,
-	onDataFailed: any,
-	onLoadedImages: any,
-	onDOMLoaded: any,
-	onDestroy: any,
+	animationData: object;
+	loop?: boolean | number;
+	autoplay?: boolean;
+	initialSegment?: number[] | null;
+	onComplete?: AnimationEventHandler | null;
+	onLoopComplete?: AnimationEventHandler | null;
+	onEnterFrame?: AnimationEventHandler | null;
+	onSegmentStart?: AnimationEventHandler | null;
+	onConfigReady?: AnimationEventHandler | null;
+	onDataReady?: AnimationEventHandler | null;
+	onDataFailed?: AnimationEventHandler | null;
+	onLoadedImages?: AnimationEventHandler | null;
+	onDOMLoaded?: AnimationEventHandler | null;
+	onDestroy?: AnimationEventHandler | null;
 };
 
-export type HTMLDivElementProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
-
-export type LottieComponentProps = LottieOptionsType & HTMLDivElementProps;
+export type LottieComponentProps = LottieOptionsType & {
+	style?: CSSProperties;
+};
 
 export type LottieRefCurrentType = {
-	play: Function;
-	stop: Function;
-	pause: Function;
-	setSpeed: Function;
-	goToAndPlay: Function;
-	goToAndStop: Function;
-	setDirection: Function;
-	playSegments: Function;
-	setSubframe: Function;
-	destroy: Function;
-	getDuration: Function;
+	play: () => void;
+	stop: () => void;
+	pause: () => void;
+	setSpeed: (speed: number) => void;
+	goToAndStop: (value: number, isFrame?: boolean) => void;
+	goToAndPlay: (value: number, isFrame?: boolean) => void;
+	setDirection: (direction: AnimationDirection) => void;
+	playSegments: (segments: AnimationSegment | AnimationSegment[], forceFlag?: boolean) => void;
+	setSubframe: (useSubFrames: boolean) => void;
+	destroy: () => void;
+	getDuration: (inFrames?: boolean) => number | undefined;
 };
 
 export type LottieRefType = MutableRefObject<LottieRefCurrentType>;

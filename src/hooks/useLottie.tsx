@@ -3,18 +3,29 @@ import React, {
 	CSSProperties,
 	useEffect,
 	useRef,
+	ReactElement,
 } from "react";
 import lottie, {
 	AnimationConfigWithData,
 	AnimationEventName,
 	AnimationItem,
+	AnimationDirection,
+	AnimationSegment,
 } from "lottie-web";
-import { LottieOptionsType } from "../types";
+import { LottieOptionsType, LottieRefCurrentType } from "../types";
+
+type Listener = {
+	name: AnimationEventName;
+	handler: AnimationEventHandler;
+};
+type PartialListener = Omit<Listener, "handler"> & {
+	handler?: Listener["handler"] | null;
+};
 
 const useLottie = (
 	props: LottieOptionsType,
 	style: CSSProperties | undefined = undefined,
-) => {
+): { View: ReactElement } & LottieRefCurrentType => {
 	const {
 		animationData,
 		loop,
@@ -88,7 +99,7 @@ const useLottie = (
 	 * @param value
 	 * @param isFrame
 	 */
-	const goToAndPlay = (value: number, isFrame: boolean): void => {
+	const goToAndPlay = (value: number, isFrame?: boolean): void => {
 		if (animationInstanceRef.current) {
 			animationInstanceRef.current.goToAndPlay(value, isFrame);
 		}
@@ -100,7 +111,7 @@ const useLottie = (
 	 * @param value
 	 * @param isFrame
 	 */
-	const goToAndStop = (value: number, isFrame: boolean): void => {
+	const goToAndStop = (value: number, isFrame?: boolean): void => {
 		if (animationInstanceRef.current) {
 			animationInstanceRef.current.goToAndStop(value, isFrame);
 		}
@@ -111,7 +122,7 @@ const useLottie = (
 	 * TODO: complete
 	 * @param direction
 	 */
-	const setDirection = (direction: -1 | 1): void => {
+	const setDirection = (direction: AnimationDirection): void => {
 		if (animationInstanceRef.current) {
 			animationInstanceRef.current.setDirection(direction);
 		}
@@ -120,15 +131,15 @@ const useLottie = (
 	/**
 	 * Play animation segments
 	 * TODO: complete
-	 * @param segment
-	 * @param force
+	 * @param segments
+	 * @param forceFlag
 	 */
 	const playSegments = (
-		segment: [number, number] | [number, number][],
-		force: boolean,
+		segments: AnimationSegment | AnimationSegment[],
+		forceFlag?: boolean,
 	): void => {
 		if (animationInstanceRef.current) {
-			animationInstanceRef.current.playSegments(segment, force);
+			animationInstanceRef.current.playSegments(segments, forceFlag);
 		}
 	};
 
@@ -158,7 +169,7 @@ const useLottie = (
 	 * TODO: complete
 	 * @param inFrames
 	 */
-	const getDuration = (inFrames: boolean): number | undefined => {
+	const getDuration = (inFrames?: boolean): number | undefined => {
 		if (animationInstanceRef.current) {
 			return animationInstanceRef.current.getDuration(inFrames);
 		}
@@ -243,10 +254,7 @@ const useLottie = (
 	 * Reinitialize listener on change
 	 */
 	useEffect(() => {
-		const listeners: {
-			name: AnimationEventName;
-			handler: AnimationEventHandler;
-		}[] = [
+		const partialListeners: PartialListener[] = [
 			{ name: "complete", handler: onComplete },
 			{ name: "loopComplete", handler: onLoopComplete },
 			{ name: "enterFrame", handler: onEnterFrame },
@@ -258,6 +266,12 @@ const useLottie = (
 			{ name: "DOMLoaded", handler: onDOMLoaded },
 			{ name: "destroy", handler: onDestroy },
 		];
+		const listeners = partialListeners.filter(
+			(listener: PartialListener): listener is Listener => (
+				listener.handler != null
+			)
+		);
+		if (!listeners.length) { return undefined; }
 
 		const deregisterList = listeners.map((event) =>
 			addEventListenerHelper(event.name, event.handler),

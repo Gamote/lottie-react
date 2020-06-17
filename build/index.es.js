@@ -197,14 +197,14 @@ var useLottie = function useLottie(props) {
   /**
    * Play animation segments
    * TODO: complete
-   * @param segment
-   * @param force
+   * @param segments
+   * @param forceFlag
    */
 
 
-  var playSegments = function playSegments(segment, force) {
+  var playSegments = function playSegments(segments, forceFlag) {
     if (animationInstanceRef.current) {
-      animationInstanceRef.current.playSegments(segment, force);
+      animationInstanceRef.current.playSegments(segments, forceFlag);
     }
   };
   /**
@@ -317,7 +317,7 @@ var useLottie = function useLottie(props) {
 
 
   useEffect(function () {
-    var listeners = [{
+    var partialListeners = [{
       name: "complete",
       handler: onComplete
     }, {
@@ -348,6 +348,14 @@ var useLottie = function useLottie(props) {
       name: "destroy",
       handler: onDestroy
     }];
+    var listeners = partialListeners.filter(function (listener) {
+      return listener.handler != null;
+    });
+
+    if (!listeners.length) {
+      return undefined;
+    }
+
     var deregisterList = listeners.map(function (event) {
       return addEventListenerHelper(event.name, event.handler);
     }); // Deregister listeners on unmount
