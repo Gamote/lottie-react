@@ -5,6 +5,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import postcss from "rollup-plugin-postcss";
 import autoprefixer from "autoprefixer";
 import { terser } from "rollup-plugin-terser";
+import dts from "rollup-plugin-dts";
 
 import packageJSON from "./package.json";
 
@@ -122,6 +123,14 @@ const exports = {
 		external: ["lottie-web"],
 		plugins: [...reusablePluginList, terser()],
 	},
+	dts: {
+		input: input.replace(".js", ".d.ts"),
+		output: {
+			file: packageJSON.types,
+			format: "es",
+		},
+		plugins: [dts()],
+	},
 };
 
 export default [
@@ -131,4 +140,5 @@ export default [
 	exports.umd_min,
 	exports.es,
 	exports.es_min,
+	exports.dts,
 ];

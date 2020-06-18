@@ -2,7 +2,7 @@
 	"compilerOptions": {
 		"target": "ES2018",
 		"allowJs": true /* Allow javascript files to be compiled. */,
-		// "declaration": true /* Generates corresponding '.d.ts' file. */,
+		"declaration": true /* Generates corresponding '.d.ts' file. */,
 		// "sourceMap": true /* Generates corresponding '.map' file. */,
 		"outDir": "./compiled",
 		"strict": true /* Enable all strict type-checking options. */,

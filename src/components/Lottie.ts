@@ -1,9 +1,22 @@
-import { forwardRef, useEffect } from "react";
+import {
+	forwardRef,
+	useEffect,
+	ForwardRefExoticComponent,
+	PropsWithoutRef,
+	RefAttributes,
+} from "react";
 import * as PropTypes from "prop-types";
-import { LottieComponentProps, LottieRefCurrentType, LottieRefType } from "../types";
+import {
+	LottieComponentProps,
+	LottieRefCurrentType,
+	LottieRefType,
+} from "../types";
 import useLottie from "../hooks/useLottie";
 
-const Lottie = forwardRef<LottieRefCurrentType, LottieComponentProps>(
+const Lottie: ForwardRefExoticComponent<
+	PropsWithoutRef<LottieComponentProps> &
+	RefAttributes<LottieRefCurrentType>
+> = forwardRef<LottieRefCurrentType, LottieComponentProps>(
 	(props, ref) => {
 		const { style, ...lottieProps } = props;
 
