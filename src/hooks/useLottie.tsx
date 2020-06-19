@@ -12,7 +12,7 @@ import lottie, {
 	AnimationDirection,
 	AnimationSegment,
 } from "lottie-web";
-import { LottieOptionsType, LottieRefCurrentType } from "../types";
+import { LottieOptions, LottieRefCurrentProps } from "../types";
 
 type Listener = {
 	name: AnimationEventName;
@@ -23,7 +23,7 @@ type PartialListener = Omit<Listener, "handler"> & {
 };
 
 const useLottie = (
-	props: LottieOptionsType,
+	props: LottieOptions,
 	style: CSSProperties | undefined = undefined,
 ): { View: ReactElement } & LottieRefCurrentType => {
 	const {

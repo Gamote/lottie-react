@@ -8,21 +8,21 @@ import {
 import * as PropTypes from "prop-types";
 import {
 	LottieComponentProps,
-	LottieRefCurrentType,
-	LottieRefType,
+	LottieRef,
+	LottieRefCurrentProps,
 } from "../types";
 import useLottie from "../hooks/useLottie";
 
 const Lottie: ForwardRefExoticComponent<
 	PropsWithoutRef<LottieComponentProps> &
-	RefAttributes<LottieRefCurrentType>
-> = forwardRef<LottieRefCurrentType, LottieComponentProps>(
-	(props, ref) => {
+	RefAttributes<LottieRefCurrentProps>
+> = forwardRef<LottieRefCurrentProps, LottieComponentProps>(
+	(props, ref?) => {
 		const { style, ...lottieProps } = props;
 
 		// TODO: find a better was to specified the ref type
 		//  instead of redefining
-		const parentRef = ref as LottieRefType;
+		const parentRef = ref as LottieRef;
 
 		/**
 		 * Initialize the 'useLottie' hook

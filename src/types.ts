@@ -1,37 +1,13 @@
-import {
-	DetailedHTMLProps,
-	HTMLAttributes,
+import React, {
 	MutableRefObject,
 	AnimationEventHandler,
-	CSSProperties,
 } from "react";
 import {
 	AnimationDirection,
 	AnimationSegment,
 } from "lottie-web";
 
-export type LottieOptionsType = {
-	animationData: object;
-	loop?: boolean | number;
-	autoplay?: boolean;
-	initialSegment?: number[] | null;
-	onComplete?: AnimationEventHandler | null;
-	onLoopComplete?: AnimationEventHandler | null;
-	onEnterFrame?: AnimationEventHandler | null;
-	onSegmentStart?: AnimationEventHandler | null;
-	onConfigReady?: AnimationEventHandler | null;
-	onDataReady?: AnimationEventHandler | null;
-	onDataFailed?: AnimationEventHandler | null;
-	onLoadedImages?: AnimationEventHandler | null;
-	onDOMLoaded?: AnimationEventHandler | null;
-	onDestroy?: AnimationEventHandler | null;
-};
-
-export type LottieComponentProps = LottieOptionsType & {
-	style?: CSSProperties;
-};
-
-export type LottieRefCurrentType = {
+export type LottieRefCurrentProps = {
 	play: () => void;
 	stop: () => void;
 	pause: () => void;
@@ -45,4 +21,27 @@ export type LottieRefCurrentType = {
 	getDuration: (inFrames?: boolean) => number | undefined;
 };
 
-export type LottieRefType = MutableRefObject<LottieRefCurrentType>;
+export type LottieRef = MutableRefObject<LottieRefCurrentProps>;
+
+export type LottieOptions = {
+	// TODO: replace this with `AnimationConfig`
+	animationData: object;
+	loop?: boolean | number;
+	autoplay?: boolean;
+	initialSegment?: number[] | null;
+} & {
+	ref?: LottieRef;
+	onComplete?: AnimationEventHandler | null;
+	onLoopComplete?: AnimationEventHandler | null;
+	onEnterFrame?: AnimationEventHandler | null;
+	onSegmentStart?: AnimationEventHandler | null;
+	onConfigReady?: AnimationEventHandler | null;
+	onDataReady?: AnimationEventHandler | null;
+	onDataFailed?: AnimationEventHandler | null;
+	onLoadedImages?: AnimationEventHandler | null;
+	onDOMLoaded?: AnimationEventHandler | null;
+	onDestroy?: AnimationEventHandler | null;
+};
+
+export type LottieComponentProps = React.HTMLProps<HTMLDivElement> &
+	LottieOptions;
