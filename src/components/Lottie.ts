@@ -1,75 +1,59 @@
-import {
-	forwardRef,
-	useEffect,
-	ForwardRefExoticComponent,
-	PropsWithoutRef,
-	RefAttributes,
-} from "react";
+import { useEffect } from "react";
 import * as PropTypes from "prop-types";
-import {
-	LottieComponentProps,
-	LottieRef,
-	LottieRefCurrentProps,
-} from "../types";
+import { LottieComponentProps } from "../types";
 import useLottie from "../hooks/useLottie";
 
-const Lottie: ForwardRefExoticComponent<
-	PropsWithoutRef<LottieComponentProps> &
-	RefAttributes<LottieRefCurrentProps>
-> = forwardRef<LottieRefCurrentProps, LottieComponentProps>(
-	(props, ref?) => {
-		const { style, ...lottieProps } = props;
+const Lottie = (props: LottieComponentProps) => {
+	const { style, ...lottieProps } = props;
 
-		// TODO: find a better was to specified the ref type
-		//  instead of redefining
-		const parentRef = ref as LottieRef;
+	/**
+	 * Initialize the 'useLottie' hook
+	 */
+	const {
+		View,
+		play,
+		stop,
+		pause,
+		setSpeed,
+		goToAndStop,
+		goToAndPlay,
+		setDirection,
+		playSegments,
+		setSubframe,
+		getDuration,
+		destroy,
+		animationLoaded,
+		animationItem,
+	} = useLottie(lottieProps, style);
 
-		/**
-		 * Initialize the 'useLottie' hook
-		 */
-		const {
-			View,
-			play,
-			stop,
-			pause,
-			setSpeed,
-			goToAndStop,
-			goToAndPlay,
-			setDirection,
-			playSegments,
-			setSubframe,
-			destroy,
-			getDuration,
-		} = useLottie(lottieProps, style);
+	/**
+	 * Make the hook variables/methods available through the provided 'lottieRef'
+	 */
+	useEffect(() => {
+		if (props.lottieRef) {
+			props.lottieRef.current = {
+				play,
+				stop,
+				pause,
+				setSpeed,
+				goToAndPlay,
+				goToAndStop,
+				setDirection,
+				playSegments,
+				setSubframe,
+				getDuration,
+				destroy,
+				animationLoaded,
+				animationItem,
+			};
+		}
+	}, [props.lottieRef?.current]);
 
-		/**
-		 * Share the hook methods with the parent component using 'ref'
-		 */
-		useEffect(() => {
-			if (parentRef) {
-				parentRef.current = {
-					play,
-					stop,
-					pause,
-					setSpeed,
-					goToAndPlay,
-					goToAndStop,
-					setDirection,
-					playSegments,
-					setSubframe,
-					destroy,
-					getDuration,
-				};
-			}
-		}, [parentRef?.current]);
-
-		return View;
-	},
-);
+	return View;
+};
 
 Lottie.propTypes = {
 	animationData: PropTypes.shape(undefined as any).isRequired,
-	// @ts-ignore
 	loop: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
 	autoplay: PropTypes.bool,
 	initialSegment: PropTypes.arrayOf(PropTypes.number.isRequired),

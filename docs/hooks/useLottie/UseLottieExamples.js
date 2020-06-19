@@ -18,7 +18,6 @@ const UseLottieExamples = () => {
 
 	const Lottie = useLottie(options, style);
 
-	// TODO: methods to describe in the documentation
 	// useEffect(() => {
 	// 	setTimeout(() => {
 	// 		// Lottie.play();
@@ -31,8 +30,8 @@ const UseLottieExamples = () => {
 	// 		// Lottie.playSegments([350, 500]);
 	// 		// Lottie.playSegments([350, 500], true);
 	// 		// Lottie.setSubframe(true);
-	// 		// Lottie.destroy();
 	// 		// console.log('Duration:', Lottie.getDuration());
+	// 		// Lottie.destroy();
 	// 	}, 2000);
 	// });
 

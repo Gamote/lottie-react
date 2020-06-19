@@ -3,8 +3,8 @@ import React, {
 	AnimationEventHandler,
 } from "react";
 import {
-	AnimationDirection,
-	AnimationSegment,
+	AnimationDirection, AnimationEventName, AnimationItem,
+	AnimationSegment, CanvasRendererConfig, HTMLRendererConfig, SVGRendererConfig,
 } from "lottie-web";
 
 export type LottieRefCurrentProps = {
@@ -17,20 +17,26 @@ export type LottieRefCurrentProps = {
 	setDirection: (direction: AnimationDirection) => void;
 	playSegments: (segments: AnimationSegment | AnimationSegment[], forceFlag?: boolean) => void;
 	setSubframe: (useSubFrames: boolean) => void;
-	destroy: () => void;
 	getDuration: (inFrames?: boolean) => number | undefined;
+	destroy: () => void;
+	animationLoaded: boolean;
+	animationItem: AnimationItem | undefined;
 };
 
-export type LottieRef = MutableRefObject<LottieRefCurrentProps>;
+export type LottieRef = MutableRefObject<LottieRefCurrentProps | null>;
 
 export type LottieOptions = {
-	// TODO: replace this with `AnimationConfig`
+	// TODO: replace this with `AnimationConfig` if possible
 	animationData: object;
+	renderer?: 'svg' | 'canvas' | 'html';
 	loop?: boolean | number;
 	autoplay?: boolean;
+	name?: string;
+	assetsPath?: string;
+	rendererSettings?: SVGRendererConfig | CanvasRendererConfig | HTMLRendererConfig;
 	initialSegment?: number[] | null;
 } & {
-	ref?: LottieRef;
+	lottieRef?: LottieRef;
 	onComplete?: AnimationEventHandler | null;
 	onLoopComplete?: AnimationEventHandler | null;
 	onEnterFrame?: AnimationEventHandler | null;
@@ -43,5 +49,20 @@ export type LottieOptions = {
 	onDestroy?: AnimationEventHandler | null;
 };
 
-export type LottieComponentProps = React.HTMLProps<HTMLDivElement> &
-	LottieOptions;
+export type PartialLottieOptions = Omit<LottieOptions, 'animationData'> & {
+	animationData?: LottieOptions["animationData"];
+};
+
+export type LottieComponentProps = LottieOptions & React.HTMLProps<HTMLDivElement>;
+
+export type PartialLottieComponentProps = Omit<LottieComponentProps, 'animationData'> & {
+	animationData?: LottieOptions["animationData"];
+};
+
+export type Listener = {
+	name: AnimationEventName;
+	handler: AnimationEventHandler;
+};
+export type PartialListener = Omit<Listener, "handler"> & {
+	handler?: Listener["handler"] | null;
+};

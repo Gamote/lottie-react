@@ -1,30 +1,26 @@
 import React, {
-	AnimationEventHandler,
 	CSSProperties,
 	useEffect,
 	useRef,
 	ReactElement,
+	useState,
 } from "react";
 import lottie, {
 	AnimationConfigWithData,
-	AnimationEventName,
 	AnimationItem,
 	AnimationDirection,
 	AnimationSegment,
 } from "lottie-web";
-import { LottieOptions, LottieRefCurrentProps } from "../types";
-
-type Listener = {
-	name: AnimationEventName;
-	handler: AnimationEventHandler;
-};
-type PartialListener = Omit<Listener, "handler"> & {
-	handler?: Listener["handler"] | null;
-};
+import {
+	Listener,
+	LottieOptions,
+	LottieRefCurrentProps,
+	PartialListener,
+} from "../types";
 
 const useLottie = (
 	props: LottieOptions,
-	style: CSSProperties | undefined = undefined,
+	style?: CSSProperties,
 ): { View: ReactElement } & LottieRefCurrentProps => {
 	const {
 		animationData,
@@ -43,6 +39,7 @@ const useLottie = (
 		onDestroy,
 	} = props;
 
+	const [animationLoaded, setAnimationLoaded] = useState(false);
 	const animationInstanceRef = useRef<AnimationItem>();
 	const animationContainer = useRef<HTMLDivElement>(null);
 
@@ -54,83 +51,61 @@ const useLottie = (
 
 	/**
 	 * Play
-	 * TODO: complete
 	 */
 	const play = (): void => {
-		if (animationInstanceRef.current) {
-			animationInstanceRef.current.play();
-		}
+		animationInstanceRef.current?.play();
 	};
 
 	/**
 	 * Stop
-	 * TODO: complete
 	 */
 	const stop = (): void => {
-		if (animationInstanceRef.current) {
-			animationInstanceRef.current.stop();
-		}
+		animationInstanceRef.current?.stop();
 	};
 
 	/**
 	 * Pause
-	 * TODO: complete
 	 */
 	const pause = (): void => {
-		if (animationInstanceRef.current) {
-			animationInstanceRef.current.pause();
-		}
+		animationInstanceRef.current?.pause();
 	};
 
 	/**
 	 * Set animation speed
-	 * TODO: complete
 	 * @param speed
 	 */
 	const setSpeed = (speed: number): void => {
-		if (animationInstanceRef.current) {
-			animationInstanceRef.current.setSpeed(speed);
-		}
+		animationInstanceRef.current?.setSpeed(speed);
 	};
 
 	/**
 	 * Got to frame and play
-	 * TODO: complete
 	 * @param value
 	 * @param isFrame
 	 */
 	const goToAndPlay = (value: number, isFrame?: boolean): void => {
-		if (animationInstanceRef.current) {
-			animationInstanceRef.current.goToAndPlay(value, isFrame);
-		}
+		animationInstanceRef.current?.goToAndPlay(value, isFrame);
 	};
 
 	/**
 	 * Got to frame and stop
-	 * TODO: complete
 	 * @param value
 	 * @param isFrame
 	 */
 	const goToAndStop = (value: number, isFrame?: boolean): void => {
-		if (animationInstanceRef.current) {
-			animationInstanceRef.current.goToAndStop(value, isFrame);
-		}
+		animationInstanceRef.current?.goToAndStop(value, isFrame);
 	};
 
 	/**
 	 * Set animation direction
-	 * TODO: complete
 	 * @param direction
 	 */
 	const setDirection = (direction: AnimationDirection): void => {
-		if (animationInstanceRef.current) {
-			animationInstanceRef.current.setDirection(direction);
-		}
+		animationInstanceRef.current?.setDirection(direction);
 	};
 
 	/**
 	 * Play animation segments
-	 * TODO: complete
 	 * @param segments
 	 * @param forceFlag
 	 */
@@ -138,43 +113,30 @@ const useLottie = (
 		segments: AnimationSegment | AnimationSegment[],
 		forceFlag?: boolean,
 	): void => {
-		if (animationInstanceRef.current) {
-			animationInstanceRef.current.playSegments(segments, forceFlag);
-		}
+		animationInstanceRef.current?.playSegments(segments, forceFlag);
 	};
 
 	/**
 	 * Set sub frames
-	 * TODO: complete
 	 * @param useSubFrames
 	 */
 	const setSubframe = (useSubFrames: boolean): void => {
-		if (animationInstanceRef.current) {
-			animationInstanceRef.current.setSubframe(useSubFrames);
-		}
-	};
-
-	/**
-	 * Destroy animation
-	 * TODO: complete
-	 */
-	const destroy = (): void => {
-		if (animationInstanceRef.current) {
-			animationInstanceRef.current.destroy();
-		}
+		animationInstanceRef.current?.setSubframe(useSubFrames);
 	};
 
 	/**
 	 * Get animation duration
-	 * TODO: complete
 	 * @param inFrames
 	 */
 	const getDuration = (inFrames?: boolean): number | undefined => {
-		if (animationInstanceRef.current) {
-			return animationInstanceRef.current.getDuration(inFrames);
-		}
+		return animationInstanceRef.current?.getDuration(inFrames);
+	};
 
-		return undefined;
+	/**
+	 * Destroy animation
+	 */
+	const destroy = (): void => {
+		animationInstanceRef.current?.destroy();
 	};
 
 	/*
@@ -194,9 +156,7 @@ const useLottie = (
 		}
 
 		// Destroy any previous instance
-		if (animationInstanceRef.current) {
-			animationInstanceRef.current.destroy();
-		}
+		animationInstanceRef.current?.destroy();
 
 		// Build the animation configuration
 		const config: AnimationConfigWithData = {
@@ -207,6 +167,8 @@ const useLottie = (
 
 		// Save the animation instance
 		animationInstanceRef.current = lottie.loadAnimation(config);
+
+		setAnimationLoaded(!!animationInstanceRef.current);
 	};
 
 	/**
@@ -221,34 +183,6 @@ const useLottie = (
 			EVENTS
 		======================================
 	 */
-
-	/**
-	 * Handle the process of adding an event listener
-	 * @param {AnimationEventName} eventName
-	 * @param {AnimationEventHandler} eventHandler
-	 * @return {Function} Function that deregister the listener
-	 */
-	const addEventListenerHelper = (
-		eventName: AnimationEventName,
-		eventHandler: AnimationEventHandler,
-	): Function => {
-		if (animationInstanceRef.current && eventName && eventHandler) {
-			animationInstanceRef.current.addEventListener(
-				eventName,
-				eventHandler,
-			);
-
-			// Return a function to deregister this listener
-			return () => {
-				animationInstanceRef.current?.removeEventListener(
-					eventName,
-					eventHandler,
-				);
-			};
-		}
-
-		return () => {};
-	};
 
 	/**
 	 * Reinitialize listener on change
@@ -266,15 +200,36 @@ const useLottie = (
 			{ name: "DOMLoaded", handler: onDOMLoaded },
 			{ name: "destroy", handler: onDestroy },
 		];
-		const listeners = partialListeners.filter(
-			(listener: PartialListener): listener is Listener => (
-				listener.handler != null
-			)
-		);
-		if (!listeners.length) { return undefined; }
 
-		const deregisterList = listeners.map((event) =>
-			addEventListenerHelper(event.name, event.handler),
+		const listeners = partialListeners.filter(
+			(listener: PartialListener): listener is Listener =>
+				listener.handler != null,
+		);
+
+		if (!listeners.length) {
+			return;
+		}
+
+		const deregisterList = listeners.map(
+			/**
+			 * Handle the process of adding an event listener
+			 * @param {Listener} listener
+			 * @return {Function} Function that deregister the listener
+			 */
+			(listener) => {
+				animationInstanceRef.current?.addEventListener(
+					listener.name,
+					listener.handler,
+				);
+
+				// Return a function to deregister this listener
+				return () => {
+					animationInstanceRef.current?.removeEventListener(
+						listener.name,
+						listener.handler,
+					);
+				};
+			},
 		);
 
 		// Deregister listeners on unmount
@@ -310,8 +265,10 @@ const useLottie = (
 		setDirection,
 		playSegments,
 		setSubframe,
-		destroy,
 		getDuration,
+		destroy,
+		animationLoaded,
+		animationItem: animationInstanceRef.current,
 	};
 };
 

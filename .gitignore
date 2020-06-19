@@ -1,5 +1,12 @@
-/node_modules
-/.idea
+# Coverage directory used by tools like istanbul
+coverage
+
+# Dependency directories
+node_modules
+
+# IDE directories
+.idea
+
 /compiled
 /.docz
 /docs-dist

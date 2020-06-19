@@ -30,6 +30,13 @@ const input = "./compiled/index.js";
 const minifyExtension = (pathToFile) => pathToFile.replace(/\.js$/, ".min.js");
 
 /**
+ * Get the extension for the TS definition files
+ * @param pathToFile
+ * @return string
+ */
+const dtsExtension = (pathToFile) => pathToFile.replace(".js", ".d.ts");
+
+/**
  * Definition of the common plugins used in the rollup configurations
  */
 const reusablePluginList = [
@@ -124,7 +131,7 @@ const exports = {
 		plugins: [...reusablePluginList, terser()],
 	},
 	dts: {
-		input: input.replace(".js", ".d.ts"),
+		input: dtsExtension(input),
 		output: {
 			file: packageJSON.types,
 			format: "es",
