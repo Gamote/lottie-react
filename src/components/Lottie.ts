@@ -69,6 +69,7 @@ const Lottie: ForwardRefExoticComponent<
 
 Lottie.propTypes = {
 	animationData: PropTypes.shape(undefined as any).isRequired,
+	// @ts-ignore
 	loop: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
 	autoplay: PropTypes.bool,
 	initialSegment: PropTypes.arrayOf(PropTypes.number.isRequired),

@@ -444,6 +444,7 @@
   });
   Lottie.propTypes = {
     animationData: PropTypes.shape(undefined).isRequired,
+    // @ts-ignore
     loop: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
     autoplay: PropTypes.bool,
     initialSegment: PropTypes.arrayOf(PropTypes.number.isRequired),

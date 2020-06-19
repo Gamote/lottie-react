@@ -25,7 +25,7 @@ type PartialListener = Omit<Listener, "handler"> & {
 const useLottie = (
 	props: LottieOptions,
 	style: CSSProperties | undefined = undefined,
-): { View: ReactElement } & LottieRefCurrentType => {
+): { View: ReactElement } & LottieRefCurrentProps => {
 	const {
 		animationData,
 		loop,

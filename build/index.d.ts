@@ -1,27 +1,8 @@
 import { AnimationDirection, AnimationSegment } from 'lottie-web';
 export { default as LottiePlayer } from 'lottie-web';
-import { AnimationEventHandler, CSSProperties, MutableRefObject, ForwardRefExoticComponent, PropsWithoutRef, RefAttributes, ReactElement } from 'react';
+import React, { MutableRefObject, AnimationEventHandler, ForwardRefExoticComponent, PropsWithoutRef, RefAttributes, CSSProperties, ReactElement } from 'react';
 
-declare type LottieOptionsType = {
-    animationData: object;
-    loop?: boolean | number;
-    autoplay?: boolean;
-    initialSegment?: number[] | null;
-    onComplete?: AnimationEventHandler | null;
-    onLoopComplete?: AnimationEventHandler | null;
-    onEnterFrame?: AnimationEventHandler | null;
-    onSegmentStart?: AnimationEventHandler | null;
-    onConfigReady?: AnimationEventHandler | null;
-    onDataReady?: AnimationEventHandler | null;
-    onDataFailed?: AnimationEventHandler | null;
-    onLoadedImages?: AnimationEventHandler | null;
-    onDOMLoaded?: AnimationEventHandler | null;
-    onDestroy?: AnimationEventHandler | null;
-};
-declare type LottieComponentProps = LottieOptionsType & {
-    style?: CSSProperties;
-};
-declare type LottieRefCurrentType = {
+declare type LottieRefCurrentProps = {
     play: () => void;
     stop: () => void;
     pause: () => void;
@@ -34,16 +15,35 @@ declare type LottieRefCurrentType = {
     destroy: () => void;
     getDuration: (inFrames?: boolean) => number | undefined;
 };
-declare type LottieRefType = MutableRefObject<LottieRefCurrentType>;
+declare type LottieRef = MutableRefObject<LottieRefCurrentProps>;
+declare type LottieOptions = {
+    animationData: object;
+    loop?: boolean | number;
+    autoplay?: boolean;
+    initialSegment?: number[] | null;
+} & {
+    ref?: LottieRef;
+    onComplete?: AnimationEventHandler | null;
+    onLoopComplete?: AnimationEventHandler | null;
+    onEnterFrame?: AnimationEventHandler | null;
+    onSegmentStart?: AnimationEventHandler | null;
+    onConfigReady?: AnimationEventHandler | null;
+    onDataReady?: AnimationEventHandler | null;
+    onDataFailed?: AnimationEventHandler | null;
+    onLoadedImages?: AnimationEventHandler | null;
+    onDOMLoaded?: AnimationEventHandler | null;
+    onDestroy?: AnimationEventHandler | null;
+};
+declare type LottieComponentProps = React.HTMLProps<HTMLDivElement> & LottieOptions;
 
-declare const Lottie: ForwardRefExoticComponent<PropsWithoutRef<LottieComponentProps> & RefAttributes<LottieRefCurrentType>>;
+declare const Lottie: ForwardRefExoticComponent<PropsWithoutRef<LottieComponentProps> & RefAttributes<LottieRefCurrentProps>>;
 
-declare const useLottie: (props: LottieOptionsType, style?: CSSProperties | undefined) => {
+declare const useLottie: (props: LottieOptions, style?: CSSProperties | undefined) => {
     View: ReactElement;
-} & LottieRefCurrentType;
+} & LottieRefCurrentProps;
 
 declare const Animator: typeof Lottie;
 declare const useAnimator: typeof useLottie;
 
 export default Lottie;
-export { Animator, LottieComponentProps, LottieOptionsType, LottieRefCurrentType, LottieRefType, useAnimator, useLottie };
+export { Animator, LottieComponentProps, LottieOptions, LottieRef, LottieRefCurrentProps, useAnimator, useLottie };

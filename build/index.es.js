@@ -440,6 +440,7 @@ var Lottie = forwardRef(function (props, ref) {
 });
 Lottie.propTypes = {
   animationData: shape(undefined).isRequired,
+  // @ts-ignore
   loop: oneOfType([bool, number]),
   autoplay: bool,
   initialSegment: arrayOf(number.isRequired),
