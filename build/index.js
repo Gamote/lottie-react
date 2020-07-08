@@ -94,8 +94,63 @@ function _objectWithoutProperties(source, excluded) {
   return target;
 }
 
-var useLottie = function useLottie(props) {
-  var style = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
+function _slicedToArray(arr, i) {
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+}
+
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+
+function _iterableToArrayLimit(arr, i) {
+  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+  var _e = undefined;
+
+  try {
+    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+}
+
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+  return arr2;
+}
+
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+var useLottie = function useLottie(props, style) {
   var animationData = props.animationData,
       loop = props.loop,
       autoplay = props.autoplay,
@@ -110,151 +165,144 @@ var useLottie = function useLottie(props) {
       onLoadedImages = props.onLoadedImages,
       onDOMLoaded = props.onDOMLoaded,
       onDestroy = props.onDestroy;
+
+  var _useState = React.useState(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      animationLoaded = _useState2[0],
+      setAnimationLoaded = _useState2[1];
+
   var animationInstanceRef = React.useRef();
   var animationContainer = React.useRef(null);
   /*
-      ======================================
-          INTERACTION METHODS
-      ======================================
-   */
+        ======================================
+            INTERACTION METHODS
+        ======================================
+     */
 
   /**
    * Play
-   * TODO: complete
    */
 
   var play = function play() {
-    if (animationInstanceRef.current) {
-      animationInstanceRef.current.play();
-    }
+    var _a;
+
+    (_a = animationInstanceRef.current) === null || _a === void 0 ? void 0 : _a.play();
   };
   /**
    * Stop
-   * TODO: complete
    */
 
 
   var stop = function stop() {
-    if (animationInstanceRef.current) {
-      animationInstanceRef.current.stop();
-    }
+    var _a;
+
+    (_a = animationInstanceRef.current) === null || _a === void 0 ? void 0 : _a.stop();
   };
   /**
    * Pause
-   * TODO: complete
    */
 
 
   var pause = function pause() {
-    if (animationInstanceRef.current) {
-      animationInstanceRef.current.pause();
-    }
+    var _a;
+
+    (_a = animationInstanceRef.current) === null || _a === void 0 ? void 0 : _a.pause();
   };
   /**
    * Set animation speed
-   * TODO: complete
    * @param speed
    */
 
 
   var setSpeed = function setSpeed(speed) {
-    if (animationInstanceRef.current) {
-      animationInstanceRef.current.setSpeed(speed);
-    }
+    var _a;
+
+    (_a = animationInstanceRef.current) === null || _a === void 0 ? void 0 : _a.setSpeed(speed);
   };
   /**
    * Got to frame and play
-   * TODO: complete
    * @param value
    * @param isFrame
    */
 
 
   var goToAndPlay = function goToAndPlay(value, isFrame) {
-    if (animationInstanceRef.current) {
-      animationInstanceRef.current.goToAndPlay(value, isFrame);
-    }
+    var _a;
+
+    (_a = animationInstanceRef.current) === null || _a === void 0 ? void 0 : _a.goToAndPlay(value, isFrame);
   };
   /**
    * Got to frame and stop
-   * TODO: complete
    * @param value
    * @param isFrame
    */
 
 
   var goToAndStop = function goToAndStop(value, isFrame) {
-    if (animationInstanceRef.current) {
-      animationInstanceRef.current.goToAndStop(value, isFrame);
-    }
+    var _a;
+
+    (_a = animationInstanceRef.current) === null || _a === void 0 ? void 0 : _a.goToAndStop(value, isFrame);
   };
   /**
    * Set animation direction
-   * TODO: complete
    * @param direction
    */
 
 
   var setDirection = function setDirection(direction) {
-    if (animationInstanceRef.current) {
-      animationInstanceRef.current.setDirection(direction);
-    }
+    var _a;
+
+    (_a = animationInstanceRef.current) === null || _a === void 0 ? void 0 : _a.setDirection(direction);
   };
   /**
    * Play animation segments
-   * TODO: complete
    * @param segments
    * @param forceFlag
    */
 
 
   var playSegments = function playSegments(segments, forceFlag) {
-    if (animationInstanceRef.current) {
-      animationInstanceRef.current.playSegments(segments, forceFlag);
-    }
+    var _a;
+
+    (_a = animationInstanceRef.current) === null || _a === void 0 ? void 0 : _a.playSegments(segments, forceFlag);
   };
   /**
    * Set sub frames
-   * TODO: complete
    * @param useSubFrames
    */
 
 
   var setSubframe = function setSubframe(useSubFrames) {
-    if (animationInstanceRef.current) {
-      animationInstanceRef.current.setSubframe(useSubFrames);
-    }
-  };
-  /**
-   * Destroy animation
-   * TODO: complete
-   */
+    var _a;
 
-
-  var destroy = function destroy() {
-    if (animationInstanceRef.current) {
-      animationInstanceRef.current.destroy();
-    }
+    (_a = animationInstanceRef.current) === null || _a === void 0 ? void 0 : _a.setSubframe(useSubFrames);
   };
   /**
    * Get animation duration
-   * TODO: complete
    * @param inFrames
    */
 
 
   var getDuration = function getDuration(inFrames) {
-    if (animationInstanceRef.current) {
-      return animationInstanceRef.current.getDuration(inFrames);
-    }
+    var _a;
 
-    return undefined;
+    return (_a = animationInstanceRef.current) === null || _a === void 0 ? void 0 : _a.getDuration(inFrames);
+  };
+  /**
+   * Destroy animation
+   */
+
+
+  var destroy = function destroy() {
+    var _a;
+
+    (_a = animationInstanceRef.current) === null || _a === void 0 ? void 0 : _a.destroy();
   };
   /*
-      ======================================
-          LOTTIE
-      ======================================
-   */
+        ======================================
+            LOTTIE
+        ======================================
+     */
 
   /**
    * Load a new animation, and if it's the case, destroy the previous one
@@ -265,16 +313,15 @@ var useLottie = function useLottie(props) {
   var loadAnimation = function loadAnimation() {
     var forcedConfigs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-    // Return if the container ref is null
+    var _a; // Return if the container ref is null
+
+
     if (!animationContainer.current) {
       return;
     } // Destroy any previous instance
 
 
-    if (animationInstanceRef.current) {
-      animationInstanceRef.current.destroy();
-    } // Build the animation configuration
-
+    (_a = animationInstanceRef.current) === null || _a === void 0 ? void 0 : _a.destroy(); // Build the animation configuration
 
     var config = _objectSpread2(_objectSpread2(_objectSpread2({}, props), forcedConfigs), {}, {
       container: animationContainer.current
@@ -282,6 +329,7 @@ var useLottie = function useLottie(props) {
 
 
     animationInstanceRef.current = lottie.loadAnimation(config);
+    setAnimationLoaded(!!animationInstanceRef.current);
   };
   /**
    * Initialize and listen for changes that need to reinitialize Lottie
@@ -292,35 +340,14 @@ var useLottie = function useLottie(props) {
     loadAnimation();
   }, [animationData, loop, autoplay, initialSegment]);
   /*
-      ======================================
-          EVENTS
-      ======================================
-   */
+        ======================================
+            EVENTS
+        ======================================
+     */
 
-  /**
-   * Handle the process of adding an event listener
-   * @param {AnimationEventName} eventName
-   * @param {AnimationEventHandler} eventHandler
-   * @return {Function} Function that deregister the listener
-   */
-
-  var addEventListenerHelper = function addEventListenerHelper(eventName, eventHandler) {
-    if (animationInstanceRef.current && eventName && eventHandler) {
-      animationInstanceRef.current.addEventListener(eventName, eventHandler); // Return a function to deregister this listener
-
-      return function () {
-        var _a;
-
-        (_a = animationInstanceRef.current) === null || _a === void 0 ? void 0 : _a.removeEventListener(eventName, eventHandler);
-      };
-    }
-
-    return function () {};
-  };
   /**
    * Reinitialize listener on change
    */
-
 
   React.useEffect(function () {
     var partialListeners = [{
@@ -359,11 +386,25 @@ var useLottie = function useLottie(props) {
     });
 
     if (!listeners.length) {
-      return undefined;
+      return;
     }
 
-    var deregisterList = listeners.map(function (event) {
-      return addEventListenerHelper(event.name, event.handler);
+    var deregisterList = listeners.map(
+    /**
+     * Handle the process of adding an event listener
+     * @param {Listener} listener
+     * @return {Function} Function that deregister the listener
+     */
+    function (listener) {
+      var _a;
+
+      (_a = animationInstanceRef.current) === null || _a === void 0 ? void 0 : _a.addEventListener(listener.name, listener.handler); // Return a function to deregister this listener
+
+      return function () {
+        var _a;
+
+        (_a = animationInstanceRef.current) === null || _a === void 0 ? void 0 : _a.removeEventListener(listener.name, listener.handler);
+      };
     }); // Deregister listeners on unmount
 
     return function () {
@@ -376,7 +417,7 @@ var useLottie = function useLottie(props) {
    * Build the animation view
    */
 
-  var View = React__default.createElement("div", {
+  var View = /*#__PURE__*/React__default.createElement("div", {
     style: style,
     ref: animationContainer
   });
@@ -391,21 +432,22 @@ var useLottie = function useLottie(props) {
     setDirection: setDirection,
     playSegments: playSegments,
     setSubframe: setSubframe,
+    getDuration: getDuration,
     destroy: destroy,
-    getDuration: getDuration
+    animationLoaded: animationLoaded,
+    animationItem: animationInstanceRef.current
   };
 };
 
-var Lottie = React.forwardRef(function (props, ref) {
+var Lottie = function Lottie(props) {
+  var _a;
+
   var style = props.style,
-      lottieProps = _objectWithoutProperties(props, ["style"]); // TODO: find a better was to specified the ref type
-  //  instead of redefining
-
-
-  var parentRef = ref;
+      lottieProps = _objectWithoutProperties(props, ["style"]);
   /**
    * Initialize the 'useLottie' hook
    */
+
 
   var _useLottie = useLottie(lottieProps, style),
       View = _useLottie.View,
@@ -418,16 +460,18 @@ var Lottie = React.forwardRef(function (props, ref) {
       setDirection = _useLottie.setDirection,
       playSegments = _useLottie.playSegments,
       setSubframe = _useLottie.setSubframe,
+      getDuration = _useLottie.getDuration,
       destroy = _useLottie.destroy,
-      getDuration = _useLottie.getDuration;
+      animationLoaded = _useLottie.animationLoaded,
+      animationItem = _useLottie.animationItem;
   /**
-   * Share the hook methods with the parent component using 'ref'
+   * Make the hook variables/methods available through the provided 'lottieRef'
    */
 
 
   React.useEffect(function () {
-    if (parentRef) {
-      parentRef.current = {
+    if (props.lottieRef) {
+      props.lottieRef.current = {
         play: play,
         stop: stop,
         pause: pause,
@@ -437,13 +481,16 @@ var Lottie = React.forwardRef(function (props, ref) {
         setDirection: setDirection,
         playSegments: playSegments,
         setSubframe: setSubframe,
+        getDuration: getDuration,
         destroy: destroy,
-        getDuration: getDuration
+        animationLoaded: animationLoaded,
+        animationItem: animationItem
       };
     }
-  }, [parentRef === null || parentRef === void 0 ? void 0 : parentRef.current]);
+  }, [(_a = props.lottieRef) === null || _a === void 0 ? void 0 : _a.current]);
   return View;
-});
+};
+
 Lottie.propTypes = {
   animationData: PropTypes.shape(undefined).isRequired,
   loop: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
