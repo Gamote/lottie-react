@@ -6,6 +6,7 @@ route: /components/Lottie
 
 import { Playground } from "docz";
 import LottieExamples from "./LottieExamples";
+import LottieWithInteractivity from "./LottieWithInteractivity";
 
 # Lottie
 
@@ -216,4 +217,89 @@ ref.current.pause();
 ```
 
 ## Examples
-Soon :)
+
+### `Animate on scroll (interactivity)`
+
+<LottieWithInteractivity />
+
+```jsx
+import React, { useRef, useEffect } from "react";
+import Lottie from "lottie-react";
+import groovyWalkAnimation from "./groovyWalk.json";
+
+const style = {
+	height: 300,
+	border: 3,
+	borderStyle: "solid",
+	borderRadius: 7,
+};
+
+// Indicates the actual visual boundaries.
+// A value is between 0 and 1 and is the percentage of animation viewport.
+const viewport = [0, 1];
+
+function getContainerVisibility(container) {
+	// Get the bounding box for the container
+	const { top, height } = container.getBoundingClientRect();
+
+	// Calculate current view percentage
+	const current = window.innerHeight - top;
+	const max = window.innerHeight + height;
+	return current / max;
+}
+
+const Example = () => {
+	const containerRef = useRef();
+	const lottieRef = useRef();
+
+	useEffect(() => {
+		if (containerRef.current && lottieRef.current) {
+			const container = containerRef.current;
+			const { getDuration, goToAndStop } = lottieRef.current;
+			const totalFrames = getDuration(true);
+
+			const scrollHandler = () => {
+				const currentPercent = getContainerVisibility(container);
+
+				const isInView =
+					currentPercent >= viewport[0] &&
+					currentPercent <= viewport[1];
+
+				if (isInView) {
+					goToAndStop(
+						Math.ceil(
+							((currentPercent - viewport[0]) /
+								(viewport[1] - viewport[0])) *
+								totalFrames,
+						),
+						true,
+					);
+				}
+			};
+
+			document.addEventListener("scroll", scrollHandler);
+
+			return () => {
+				document.removeEventListener("scroll", scrollHandler);
+			};
+		}
+
+		return () => {};
+	}, [containerRef.current, lottieRef.current]);
+
+	return (
+		<div ref={containerRef}>
+			<Lottie
+				ref={lottieRef}
+				animationData={groovyWalkAnimation}
+				style={style}
+				loop={false}
+				autoplay={false}
+			/>
+		</div>
+	);
+};
+
+export default Example;
+
+```
