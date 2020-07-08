@@ -172,10 +172,10 @@
     var animationInstanceRef = React.useRef();
     var animationContainer = React.useRef(null);
     /*
-        ======================================
-            INTERACTION METHODS
-        ======================================
-     */
+          ======================================
+              INTERACTION METHODS
+          ======================================
+       */
 
     /**
      * Play
@@ -297,10 +297,10 @@
       (_a = animationInstanceRef.current) === null || _a === void 0 ? void 0 : _a.destroy();
     };
     /*
-        ======================================
-            LOTTIE
-        ======================================
-     */
+          ======================================
+              LOTTIE
+          ======================================
+       */
 
     /**
      * Load a new animation, and if it's the case, destroy the previous one
@@ -338,10 +338,10 @@
       loadAnimation();
     }, [animationData, loop, autoplay, initialSegment]);
     /*
-        ======================================
-            EVENTS
-        ======================================
-     */
+          ======================================
+              EVENTS
+          ======================================
+       */
 
     /**
      * Reinitialize listener on change

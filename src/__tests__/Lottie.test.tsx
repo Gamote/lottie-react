@@ -1,43 +1,46 @@
 import React from "react";
-import { render, fireEvent, waitForElement } from "@testing-library/react";
-import groovyWalk from './assets/groovyWalk.json';
+import { render } from "@testing-library/react";
+import groovyWalk from "./assets/groovyWalk.json";
 
-import Lottie from "../components/Lottie"
-import { LottieComponentProps, LottieRef, PartialLottieComponentProps } from "../types";
+import Lottie from "../components/Lottie";
+import {
+  LottieRef,
+  PartialLottieComponentProps,
+} from "../types";
 
 function renderLottie(props?: PartialLottieComponentProps) {
-	const defaultProps = {
-		animationData: groovyWalk,
-	};
+  const defaultProps = {
+    animationData: groovyWalk,
+  };
 
-	return render(<Lottie {...defaultProps} {...props} />);
+  return render(<Lottie {...defaultProps} {...props} />);
 }
 
 describe("<Lottie />", () => {
-	test("should check if 'lottieRef' can be undefined", async () => {
-		const component = renderLottie();
-		expect(component.container).toBeDefined();
-	});
+  test("should check if 'lottieRef' can be undefined", async () => {
+    const component = renderLottie();
+    expect(component.container).toBeDefined();
+  });
 
-	test("should check 'lottieRef' properties", async () => {
-		const lottieRef: LottieRef = { current: null };
+  test("should check 'lottieRef' properties", async () => {
+    const lottieRef: LottieRef = { current: null };
 
-		renderLottie({ lottieRef });
+    renderLottie({ lottieRef });
 
-		expect(Object.keys(lottieRef.current || {}).length).toBe(13);
+    expect(Object.keys(lottieRef.current || {}).length).toBe(13);
 
-		expect(lottieRef.current?.play).toBeDefined();
-		expect(lottieRef.current?.stop).toBeDefined();
-		expect(lottieRef.current?.pause).toBeDefined();
-		expect(lottieRef.current?.setSpeed).toBeDefined();
-		expect(lottieRef.current?.goToAndPlay).toBeDefined();
-		expect(lottieRef.current?.goToAndStop).toBeDefined();
-		expect(lottieRef.current?.setDirection).toBeDefined();
-		expect(lottieRef.current?.playSegments).toBeDefined();
-		expect(lottieRef.current?.setSubframe).toBeDefined();
-		expect(lottieRef.current?.getDuration).toBeDefined();
-		expect(lottieRef.current?.destroy).toBeDefined();
-		expect(lottieRef.current?.animationLoaded).toBeDefined();
-		expect(lottieRef.current?.animationItem).toBeDefined();
-	});
+    expect(lottieRef.current?.play).toBeDefined();
+    expect(lottieRef.current?.stop).toBeDefined();
+    expect(lottieRef.current?.pause).toBeDefined();
+    expect(lottieRef.current?.setSpeed).toBeDefined();
+    expect(lottieRef.current?.goToAndPlay).toBeDefined();
+    expect(lottieRef.current?.goToAndStop).toBeDefined();
+    expect(lottieRef.current?.setDirection).toBeDefined();
+    expect(lottieRef.current?.playSegments).toBeDefined();
+    expect(lottieRef.current?.setSubframe).toBeDefined();
+    expect(lottieRef.current?.getDuration).toBeDefined();
+    expect(lottieRef.current?.destroy).toBeDefined();
+    expect(lottieRef.current?.animationLoaded).toBeDefined();
+    expect(lottieRef.current?.animationItem).toBeDefined();
+  });
 });

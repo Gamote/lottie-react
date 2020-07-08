@@ -22,7 +22,7 @@ declare type LottieRefCurrentProps = {
 declare type LottieRef = MutableRefObject<LottieRefCurrentProps | null>;
 declare type LottieOptions = {
     animationData: object;
-    renderer?: 'svg' | 'canvas' | 'html';
+    renderer?: "svg" | "canvas" | "html";
     loop?: boolean | number;
     autoplay?: boolean;
     name?: string;
@@ -42,11 +42,11 @@ declare type LottieOptions = {
     onDOMLoaded?: AnimationEventHandler | null;
     onDestroy?: AnimationEventHandler | null;
 };
-declare type PartialLottieOptions = Omit<LottieOptions, 'animationData'> & {
+declare type PartialLottieOptions = Omit<LottieOptions, "animationData"> & {
     animationData?: LottieOptions["animationData"];
 };
 declare type LottieComponentProps = LottieOptions & React.HTMLProps<HTMLDivElement>;
-declare type PartialLottieComponentProps = Omit<LottieComponentProps, 'animationData'> & {
+declare type PartialLottieComponentProps = Omit<LottieComponentProps, "animationData"> & {
     animationData?: LottieOptions["animationData"];
 };
 declare type Listener = {

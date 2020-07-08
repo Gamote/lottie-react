@@ -18,19 +18,19 @@ import { useLottie } from "lottie-react";
 import groovyWalkAnimation from "./groovyWalk.json";
 
 const style = {
-	height: 300,
+  height: 300,
 };
 
 const Example = () => {
-	const options = {
-		animationData: groovyWalkAnimation,
-		loop: true,
-		autoplay: true,
-	};
+  const options = {
+    animationData: groovyWalkAnimation,
+    loop: true,
+    autoplay: true,
+  };
 
-	const { View } = useLottie(options, style);
+  const { View } = useLottie(options, style);
 
-	return View;
+  return View;
 };
 
 export default Example;
@@ -49,8 +49,8 @@ export default Example;
 
 ## Returns
 
-| Property                | Type          |
-| ----------------------- | ------------- |
+| Property            | Type          |
+| ------------------- | ------------- |
 | Lottie              | Object        |
 | Lottie.View         | React.Element |
 | Lottie.play         | method        |
