@@ -1,5 +1,6 @@
 # Coverage directory used by tools like istanbul
 coverage
+.coveralls.yml
 
 # Dependency directories
 node_modules
