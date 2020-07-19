@@ -47,7 +47,7 @@
     "tsc:compile:watch": "tsc --watch"
   },
   "dependencies": {
-    "lottie-web": "^5.6.10"
+    "lottie-web": "^5.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
