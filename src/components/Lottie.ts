@@ -2,9 +2,10 @@ import { useEffect } from "react";
 import * as PropTypes from "prop-types";
 import { LottieComponentProps } from "../types";
 import useLottie from "../hooks/useLottie";
+import useLottieInteractivity from "../hooks/useLottieInteractivity";
 
 const Lottie = (props: LottieComponentProps) => {
-  const { style, ...lottieProps } = props;
+  const { style, interactivity, ...lottieProps } = props;
 
   /**
    * Initialize the 'useLottie' hook
@@ -48,6 +49,30 @@ const Lottie = (props: LottieComponentProps) => {
       };
     }
   }, [props.lottieRef?.current]);
+
+  if (interactivity) {
+    const EnhancedView = useLottieInteractivity({
+      lottieObj: {
+        View,
+        play,
+        stop,
+        pause,
+        setSpeed,
+        goToAndStop,
+        goToAndPlay,
+        setDirection,
+        playSegments,
+        setSubframe,
+        getDuration,
+        destroy,
+        animationLoaded,
+        animationItem,
+      },
+      ...interactivity,
+    });
+
+    return EnhancedView;
+  }
 
   return View;
 };
