@@ -3,10 +3,10 @@ import { render } from "@testing-library/react";
 import groovyWalk from "./assets/groovyWalk.json";
 
 import Lottie from "../components/Lottie";
-import {
-  LottieRef,
-  PartialLottieComponentProps,
-} from "../types";
+import { LottieRef, PartialLottieComponentProps } from "../types";
+
+import useLottieInteractivity from "../hooks/useLottieInteractivity";
+jest.mock("../hooks/useLottieInteractivity.tsx");
 
 function renderLottie(props?: PartialLottieComponentProps) {
   const defaultProps = {
@@ -42,5 +42,11 @@ describe("<Lottie />", () => {
     expect(lottieRef.current?.destroy).toBeDefined();
     expect(lottieRef.current?.animationLoaded).toBeDefined();
     expect(lottieRef.current?.animationItem).toBeDefined();
+  });
+
+  test("should check if interactivity applied when passed as a prop", async () => {
+    (useLottieInteractivity as jest.Mock).mockReturnValue(<div />);
+    renderLottie({ interactivity: { actions: [], mode: "scroll" } });
+    expect(useLottieInteractivity).toBeCalled();
   });
 });
