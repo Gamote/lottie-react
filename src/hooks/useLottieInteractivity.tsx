@@ -1,5 +1,5 @@
 import { AnimationSegment } from "lottie-web";
-import React, { useEffect, useState, ReactElement, useRef } from "react";
+import React, { useEffect, ReactElement, useRef } from "react";
 import { InteractivityProps } from "../types";
 
 // helpers
@@ -29,32 +29,25 @@ const useLottieInteractivity = ({
   mode,
   lottieObj,
 }: InteractivityProps): ReactElement => {
-  const {
-    goToAndStop,
-    getDuration,
-    playSegments,
-    animationItem,
-    play,
-    stop,
-    View,
-  } = lottieObj;
+  const { animationItem, View } = lottieObj;
 
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const [assignedSegment, setAssignedSegment] = useState<number[]>();
 
   useEffect(() => {
     const wrapper = wrapperRef.current;
-    if (!wrapper) {
+
+    if (!wrapper || !animationItem) {
       return;
     }
 
-    const totalFrames = getDuration(true) as number;
-    stop();
+    const totalFrames = animationItem.totalFrames;
+    animationItem.stop();
 
     if (mode === "scroll") {
+      let assignedSegment: number[] | null = null;
+
       const scrollHandler = () => {
         const currentPercent = getContainerVisibility(wrapper);
-
         // Find the first action that satisfies the current position conditions
         const action = actions.find(
           ({ visibility }) =>
@@ -68,72 +61,67 @@ const useLottieInteractivity = ({
           return;
         }
 
-        switch (action.type) {
+        if (action.type === "seek") {
           // Seek: Go to a frame based on player scroll position action
-          case "seek": {
-            if (action.visibility) {
-              goToAndStop(
-                Math.ceil(
-                  ((currentPercent - action.visibility[0]) /
-                    (action.visibility[1] - action.visibility[0])) *
-                    totalFrames,
-                ),
-                true,
+          if (action.visibility && action.frames.length === 2) {
+            const frameToGo =
+              action.frames[0] +
+              Math.ceil(
+                ((currentPercent - action.visibility[0]) /
+                  (action.visibility[1] - action.visibility[0])) *
+                  action.frames[1],
               );
-            }
 
-            break;
+            //! goToAndStop must be relative to the start of the current segment
+            animationItem.goToAndStop(
+              frameToGo - animationItem.firstFrame - 1,
+              true,
+            );
           }
-
-          case "loop": {
-            // Loop: Loop a given frames
-            if (assignedSegment === null) {
-              playSegments(action.frames as AnimationSegment, true);
-              setAssignedSegment(action.frames);
-            }
-            // if playing any segments currently
-            // check if segments in state are equal to the frames selected by action
+        } else if (action.type === "loop") {
+          // Loop: Loop a given frames
+          if (assignedSegment === null) {
+            // if not playing any segments currently. play those segments and save to state
+            animationItem.playSegments(action.frames as AnimationSegment, true);
+            assignedSegment = action.frames;
+          } else {
+            // if playing any segments currently.
+            //check if segments in state are equal to the frames selected by action
             if (assignedSegment !== action.frames) {
               // if they are not equal. new segments are to be loaded
-              playSegments(action.frames as AnimationSegment, true);
-              setAssignedSegment(action.frames);
+              animationItem.playSegments(
+                action.frames as AnimationSegment,
+                true,
+              );
+              assignedSegment = action.frames;
+            } else {
+              // if they are equal the play method must be called only if lottie is paused
+              if (animationItem.isPaused === true) {
+                animationItem.playSegments(
+                  action.frames as AnimationSegment,
+                  true,
+                );
+                assignedSegment = action.frames;
+              }
             }
-
-            if (
-              assignedSegment === action.frames &&
-              animationItem?.isPaused === true
-            ) {
-              playSegments(action.frames as AnimationSegment, true);
-              setAssignedSegment(action.frames);
-            }
-
-            break;
           }
-
-          case "play": {
-            // Play: Reset segments and continue playing full animation from current position
-            if (animationItem?.isPaused === true) {
-              animationItem.resetSegments(false);
-              play();
-            }
-
-            break;
+        } else if (action.type === "play") {
+          // Play: Reset segments and continue playing full animation from current position
+          if (animationItem.isPaused === true) {
+            animationItem.resetSegments(true);
+            animationItem.play();
           }
-
-          case "stop": {
-            // Stop: Stop playback
-            goToAndStop(action.frames[0], true);
-
-            break;
-          }
-
-          default:
+        } else if (action.type === "stop") {
+          // Stop: Stop playback
+          animationItem.goToAndStop(
+            action.frames[0] - animationItem.firstFrame - 1,
+            true,
+          );
         }
       };
 
       document.addEventListener("scroll", scrollHandler);
 
-      // eslint-disable-next-line consistent-return
       return () => {
         document.removeEventListener("scroll", scrollHandler);
       };
@@ -191,7 +179,8 @@ const useLottieInteractivity = ({
           if (
             action.position &&
             Array.isArray(action.position.x) &&
-            Array.isArray(action.position.y)
+            Array.isArray(action.position.y) &&
+            action.frames.length === 2
           ) {
             const xPercent =
               (x - action.position.x[0]) /
@@ -200,22 +189,25 @@ const useLottieInteractivity = ({
               (y - action.position.y[0]) /
               (action.position.y[1] - action.position.y[0]);
 
-            playSegments(action.frames as AnimationSegment, true);
-            goToAndStop(
-              Math.ceil(((xPercent + yPercent) / 2) * totalFrames),
+            animationItem.playSegments(action.frames as AnimationSegment, true);
+            animationItem.goToAndStop(
+              Math.ceil(
+                ((xPercent + yPercent) / 2) *
+                  (action.frames[1] - action.frames[0]),
+              ),
               true,
             );
           }
         } else if (action.type === "loop") {
-          playSegments(action.frames as AnimationSegment, true);
+          animationItem.playSegments(action.frames as AnimationSegment, true);
         } else if (action.type === "play") {
           // Play: Reset segments and continue playing full animation from current position
-          if (animationItem?.isPaused === true) {
+          if (animationItem.isPaused === true) {
             animationItem.resetSegments(false);
           }
-          playSegments(action.frames as AnimationSegment);
+          animationItem.playSegments(action.frames as AnimationSegment);
         } else if (action.type === "stop") {
-          goToAndStop(action.frames[0], true);
+          animationItem.goToAndStop(action.frames[0], true);
         }
       };
 
@@ -230,13 +222,12 @@ const useLottieInteractivity = ({
       wrapper.addEventListener("mousemove", mouseMoveHandler);
       wrapper.addEventListener("mouseout", mouseOutHandler);
 
-      // eslint-disable-next-line consistent-return
       return () => {
         wrapper.removeEventListener("mousemove", mouseMoveHandler);
         wrapper.removeEventListener("mouseout", mouseOutHandler);
       };
     }
-  }, [mode]);
+  }, [mode, animationItem]);
 
   return <div ref={wrapperRef}>{View}</div>;
 };
