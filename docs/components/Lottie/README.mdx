@@ -6,6 +6,7 @@ route: /components/Lottie
 
 import { Playground } from "docz";
 import LottieExamples from "./LottieExamples";
+import LottieWithInteractivity from "./LottieWithInteractivity.js";
 
 # Lottie
 
@@ -136,6 +137,19 @@ Default: none
 Required: ☐
 ```
 
+---
+
+### `interactivity`
+
+Interactivity params to sync animation with either scroll or cursor.
+
+```yaml
+Type: Object
+Default: none
+Required: ☐
+```
+
+
 ## Interaction methods
 
 These methods are designed to give you more control over the Lottie animation, and fill in the gaps left by the props:
@@ -237,6 +251,60 @@ You can then use the interaction methods like this:
 lottieRef.current.pause();
 ...
 ```
+
+## Interactivity
+
+To sync animation with either scroll or cursor, you can pass the interactivity
+object.
+
+For more information please navigate to __useLottieInteractivity__ hook
+
+<LottieWithInteractivity />
+
+```jsx
+import React from "react";
+import Lottie from "lottie-react";
+import robotAnimation from "./robotAnimation.json";
+
+const style = {
+  height: 300,
+};
+
+const interactivity = {
+  mode: "scroll",
+  actions: [
+    {
+      visibility: [0, 0.2],
+      type: "stop",
+      frames: [0],
+    },
+    {
+      visibility: [0.2, 0.45],
+      type: "seek",
+      frames: [0, 45],
+    },
+    {
+      visibility: [0.45, 1.0],
+      type: "loop",
+      frames: [45, 60],
+    },
+  ],
+};
+
+const Example = () => {
+  return (
+    <Lottie
+      animationData={robotAnimation}
+      style={style}
+      interactivity={interactivity}
+    />
+  );
+};
+
+export default Example;
+```
+
+
 
 ## Examples
 
