@@ -3,7 +3,7 @@ import React, { useEffect, ReactElement, useRef } from "react";
 import { InteractivityProps } from "../types";
 
 // helpers
-function getContainerVisibility(container: Element): number {
+export function getContainerVisibility(container: Element): number {
   const { top, height } = container.getBoundingClientRect();
 
   const current = window.innerHeight - top;
@@ -11,7 +11,7 @@ function getContainerVisibility(container: Element): number {
   return current / max;
 }
 
-function getContainerCursorPosition(
+export function getContainerCursorPosition(
   container: Element,
   cursorX: number,
   cursorY: number,
@@ -24,15 +24,19 @@ function getContainerCursorPosition(
   return { x, y };
 }
 
-const useLottieInteractivity = ({
-  actions,
+export type InitInteractivity = {
+  wrapperRef: React.RefObject<HTMLDivElement>;
+  animationItem: InteractivityProps["lottieObj"]["animationItem"];
+  actions: InteractivityProps["actions"];
+  mode: InteractivityProps["mode"];
+};
+
+export const useInitInteractivity = ({
+  wrapperRef,
+  animationItem,
   mode,
-  lottieObj,
-}: InteractivityProps): ReactElement => {
-  const { animationItem, View } = lottieObj;
-
-  const wrapperRef = useRef<HTMLDivElement>(null);
-
+  actions,
+}: InitInteractivity) => {
   useEffect(() => {
     const wrapper = wrapperRef.current;
 
@@ -40,7 +44,6 @@ const useLottieInteractivity = ({
       return;
     }
 
-    const totalFrames = animationItem.totalFrames;
     animationItem.stop();
 
     if (mode === "scroll") {
@@ -228,6 +231,17 @@ const useLottieInteractivity = ({
       };
     }
   }, [mode, animationItem]);
+};
+
+const useLottieInteractivity = ({
+  actions,
+  mode,
+  lottieObj,
+}: InteractivityProps): ReactElement => {
+  const { animationItem, View } = lottieObj;
+
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  useInitInteractivity({ actions, animationItem, mode, wrapperRef });
 
   return <div ref={wrapperRef}>{View}</div>;
 };
