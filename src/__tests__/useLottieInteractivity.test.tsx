@@ -186,7 +186,10 @@ describe("useInitInteractivity", () => {
         wrapperRef: wrapperRef as any,
         animationItem: animationItem as any,
         mode: "scroll",
-        actions: [{ visibility: [0, 1], frames: [5, 10], type: "loop" }],
+        actions: [
+          { visibility: [0, 0.4], frames: [10, 15], type: "loop" },
+          { visibility: [0.4, 1], frames: [5, 10], type: "loop" },
+        ],
       });
 
       act(() => {
@@ -210,6 +213,23 @@ describe("useInitInteractivity", () => {
       });
 
       expect(playSegmentsSpy).toHaveBeenCalledTimes(2);
+
+      // container visibility => 0.2
+      (wrapperRef.current.getBoundingClientRect as jest.Mock<
+        any,
+        any
+      >).mockReturnValue({
+        top: 0.6,
+        left: 0,
+        width: 0,
+        height: 1,
+      });
+
+      act(() => {
+        fireEvent.scroll(document);
+      });
+
+      expect(playSegmentsSpy).toHaveBeenCalledTimes(3);
     });
 
     test("handles `play` type correctly", () => {
@@ -322,12 +342,46 @@ describe("useInitInteractivity", () => {
       const playSegmentsSpy = jest.spyOn(animationItem, "playSegments");
       const resetSegmentsSpy = jest.spyOn(animationItem, "resetSegments");
 
-      renderUseInitInteractivity({
+      const commonProps = {
         wrapperRef: wrapperRef as any,
         animationItem: animationItem as any,
-        mode: "cursor",
+        mode: "cursor" as "cursor",
+      };
+
+      renderUseInitInteractivity({
+        ...commonProps,
         actions: [
           { position: { x: [0, 1], y: [1, 0] }, frames: [5, 10], type: "seek" },
+        ],
+      });
+
+      act(() => {
+        fireEvent.mouseMove(wrapperRef.current);
+      });
+
+      expect(goToAndStopSpy).toHaveBeenCalledTimes(0);
+      expect(playSegmentsSpy).toHaveBeenCalledTimes(0);
+      expect(resetSegmentsSpy).toHaveBeenCalledTimes(0);
+
+      renderUseInitInteractivity({
+        ...commonProps,
+        actions: [
+          { position: { x: 0.5, y: 0.8 }, frames: [5, 10], type: "seek" },
+        ],
+      });
+
+      act(() => {
+        fireEvent.mouseMove(wrapperRef.current);
+      });
+
+      expect(goToAndStopSpy).toHaveBeenCalledTimes(0);
+      expect(playSegmentsSpy).toHaveBeenCalledTimes(0);
+      expect(resetSegmentsSpy).toHaveBeenCalledTimes(0);
+
+      renderUseInitInteractivity({
+        ...commonProps,
+        actions: [
+          { position: { x: 0.5, y: NaN }, frames: [5, 10], type: "seek" },
         ],
       });
 
