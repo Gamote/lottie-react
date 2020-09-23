@@ -3,10 +3,7 @@ import { render } from "@testing-library/react";
 import groovyWalk from "./assets/groovyWalk.json";
 
 import Lottie from "../components/Lottie";
-import {
-  LottieRef,
-  PartialLottieComponentProps,
-} from "../types";
+import { LottieRef, PartialLottieComponentProps } from "../types";
 
 function renderLottie(props?: PartialLottieComponentProps) {
   const defaultProps = {
@@ -42,5 +39,10 @@ describe("<Lottie />", () => {
     expect(lottieRef.current?.destroy).toBeDefined();
     expect(lottieRef.current?.animationLoaded).toBeDefined();
     expect(lottieRef.current?.animationItem).toBeDefined();
+  });
+
+  test("should pass HTML props to container <div>", () => {
+    const { getByLabelText } = renderLottie({ "aria-label": "test" });
+    expect(getByLabelText("test")).toBeTruthy();
   });
 });
