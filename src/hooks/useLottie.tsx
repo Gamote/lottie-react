@@ -19,7 +19,7 @@ import {
 } from "../types";
 
 const useLottie = (
-  props: LottieOptions & React.HTMLProps<HTMLDivElement>,
+  props: LottieOptions,
   style?: CSSProperties,
 ): { View: ReactElement } & LottieRefCurrentProps => {
   const {
