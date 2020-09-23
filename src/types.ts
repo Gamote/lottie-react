@@ -46,7 +46,7 @@ export type LottieOptions = {
     | SVGRendererConfig
     | CanvasRendererConfig
     | HTMLRendererConfig;
-  initialSegment?: number[] | null;
+  initialSegment?: AnimationSegment;
 } & {
   lottieRef?: LottieRef;
   onComplete?: AnimationEventHandler | null;
