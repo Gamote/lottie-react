@@ -13,13 +13,13 @@ import lottie, {
 } from "lottie-web";
 import {
   Listener,
-  LottieComponentProps,
+  LottieOptions,
   LottieRefCurrentProps,
   PartialListener,
 } from "../types";
 
 const useLottie = (
-  props: LottieComponentProps,
+  props: LottieOptions & React.HTMLProps<HTMLDivElement>,
   style?: CSSProperties,
 ): { View: ReactElement } & LottieRefCurrentProps => {
   const {
