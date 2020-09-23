@@ -13,13 +13,13 @@ import lottie, {
 } from "lottie-web";
 import {
   Listener,
-  LottieOptions,
+  LottieComponentProps,
   LottieRefCurrentProps,
   PartialListener,
 } from "../types";
 
 const useLottie = (
-  props: LottieOptions,
+  props: LottieComponentProps,
   style?: CSSProperties,
 ): { View: ReactElement } & LottieRefCurrentProps => {
   const {
@@ -37,6 +37,7 @@ const useLottie = (
     onLoadedImages,
     onDOMLoaded,
     onDestroy,
+    ...rest
   } = props;
 
   const [animationLoaded, setAnimationLoaded] = useState(false);
@@ -252,7 +253,7 @@ const useLottie = (
   /**
    * Build the animation view
    */
-  const View = <div style={style} ref={animationContainer} />;
+  const View = <div style={style} ref={animationContainer} {...rest} />;
 
   return {
     View,
