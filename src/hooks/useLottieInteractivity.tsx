@@ -46,7 +46,7 @@ export const useInitInteractivity = ({
 
     animationItem.stop();
 
-    if (mode === "scroll") {
+    const scrollModeHandler = () => {
       let assignedSegment: number[] | null = null;
 
       const scrollHandler = () => {
@@ -64,24 +64,28 @@ export const useInitInteractivity = ({
           return;
         }
 
-        if (action.type === "seek") {
+        if (
+          action.type === "seek" &&
+          action.visibility &&
+          action.frames.length === 2
+        ) {
           // Seek: Go to a frame based on player scroll position action
-          if (action.visibility && action.frames.length === 2) {
-            const frameToGo =
-              action.frames[0] +
-              Math.ceil(
-                ((currentPercent - action.visibility[0]) /
-                  (action.visibility[1] - action.visibility[0])) *
-                  action.frames[1],
-              );
-
-            //! goToAndStop must be relative to the start of the current segment
-            animationItem.goToAndStop(
-              frameToGo - animationItem.firstFrame - 1,
-              true,
+          const frameToGo =
+            action.frames[0] +
+            Math.ceil(
+              ((currentPercent - action.visibility[0]) /
+                (action.visibility[1] - action.visibility[0])) *
+                action.frames[1],
             );
-          }
-        } else if (action.type === "loop") {
+
+          //! goToAndStop must be relative to the start of the current segment
+          animationItem.goToAndStop(
+            frameToGo - animationItem.firstFrame - 1,
+            true,
+          );
+        }
+
+        if (action.type === "loop") {
           // Loop: Loop a given frames
           if (assignedSegment === null) {
             // if not playing any segments currently. play those segments and save to state
@@ -97,24 +101,24 @@ export const useInitInteractivity = ({
                 true,
               );
               assignedSegment = action.frames;
-            } else {
+            } else if (animationItem.isPaused) {
               // if they are equal the play method must be called only if lottie is paused
-              if (animationItem.isPaused === true) {
-                animationItem.playSegments(
-                  action.frames as AnimationSegment,
-                  true,
-                );
-                assignedSegment = action.frames;
-              }
+              animationItem.playSegments(
+                action.frames as AnimationSegment,
+                true,
+              );
+              assignedSegment = action.frames;
             }
           }
-        } else if (action.type === "play") {
+        }
+
+        if (action.type === "play" && animationItem.isPaused) {
           // Play: Reset segments and continue playing full animation from current position
-          if (animationItem.isPaused === true) {
-            animationItem.resetSegments(true);
-            animationItem.play();
-          }
-        } else if (action.type === "stop") {
+          animationItem.resetSegments(true);
+          animationItem.play();
+        }
+
+        if (action.type === "stop") {
           // Stop: Stop playback
           animationItem.goToAndStop(
             action.frames[0] - animationItem.firstFrame - 1,
@@ -130,7 +134,7 @@ export const useInitInteractivity = ({
       };
     }
 
-    if (mode === "cursor") {
+    const cursorModeHandler = () => {
       const handleCursor = (_x: number, _y: number) => {
         let x = _x;
         let y = _y;
@@ -177,39 +181,44 @@ export const useInitInteractivity = ({
         }
 
         // Process action types:
-        if (action.type === "seek") {
+        if (
+          action.type === "seek" &&
+          action.position &&
+          Array.isArray(action.position.x) &&
+          Array.isArray(action.position.y) &&
+          action.frames.length === 2
+        ) {
           // Seek: Go to a frame based on player scroll position action
-          if (
-            action.position &&
-            Array.isArray(action.position.x) &&
-            Array.isArray(action.position.y) &&
-            action.frames.length === 2
-          ) {
-            const xPercent =
-              (x - action.position.x[0]) /
-              (action.position.x[1] - action.position.x[0]);
-            const yPercent =
-              (y - action.position.y[0]) /
-              (action.position.y[1] - action.position.y[0]);
+          const xPercent =
+            (x - action.position.x[0]) /
+            (action.position.x[1] - action.position.x[0]);
+          const yPercent =
+            (y - action.position.y[0]) /
+            (action.position.y[1] - action.position.y[0]);
 
-            animationItem.playSegments(action.frames as AnimationSegment, true);
-            animationItem.goToAndStop(
-              Math.ceil(
-                ((xPercent + yPercent) / 2) *
-                  (action.frames[1] - action.frames[0]),
-              ),
-              true,
-            );
-          }
-        } else if (action.type === "loop") {
           animationItem.playSegments(action.frames as AnimationSegment, true);
-        } else if (action.type === "play") {
+          animationItem.goToAndStop(
+            Math.ceil(
+              ((xPercent + yPercent) / 2) *
+                (action.frames[1] - action.frames[0]),
+            ),
+            true,
+          );
+        }
+
+        if (action.type === "loop") {
+          animationItem.playSegments(action.frames as AnimationSegment, true);
+        }
+
+        if (action.type === "play") {
           // Play: Reset segments and continue playing full animation from current position
-          if (animationItem.isPaused === true) {
+          if (animationItem.isPaused) {
             animationItem.resetSegments(false);
           }
           animationItem.playSegments(action.frames as AnimationSegment);
-        } else if (action.type === "stop") {
+        }
+
+        if (action.type === "stop") {
           animationItem.goToAndStop(action.frames[0], true);
         }
       };
@@ -229,6 +238,13 @@ export const useInitInteractivity = ({
         wrapper.removeEventListener("mousemove", mouseMoveHandler);
         wrapper.removeEventListener("mouseout", mouseOutHandler);
       };
+    }
+
+    switch (mode) {
+      case "scroll":
+        return scrollModeHandler();
+      case "cursor":
+        return cursorModeHandler();
     }
   }, [mode, animationItem]);
 };
