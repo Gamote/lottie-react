@@ -1,4 +1,8 @@
-import React, { MutableRefObject, AnimationEventHandler } from "react";
+import React, {
+  MutableRefObject,
+  AnimationEventHandler,
+  ReactElement,
+} from "react";
 import {
   AnimationDirection,
   AnimationEventName,
@@ -42,7 +46,7 @@ export type LottieOptions = {
     | SVGRendererConfig
     | CanvasRendererConfig
     | HTMLRendererConfig;
-  initialSegment?: number[] | null;
+  initialSegment?: AnimationSegment;
 } & {
   lottieRef?: LottieRef;
   onComplete?: AnimationEventHandler | null;
@@ -62,7 +66,9 @@ export type PartialLottieOptions = Omit<LottieOptions, "animationData"> & {
 };
 
 export type LottieComponentProps = LottieOptions &
-  React.HTMLProps<HTMLDivElement>;
+  React.HTMLProps<HTMLDivElement> & {
+    interactivity?: Omit<InteractivityProps, "lottieObj">;
+  };
 
 export type PartialLottieComponentProps = Omit<
   LottieComponentProps,
@@ -77,4 +83,21 @@ export type Listener = {
 };
 export type PartialListener = Omit<Listener, "handler"> & {
   handler?: Listener["handler"] | null;
+};
+
+// Interactivity
+export type Axis = "x" | "y";
+export type Position = { [key in Axis]: number | [number, number] };
+
+export type Action = {
+  type: "seek" | "play" | "stop" | "loop";
+  frames: [number] | [number, number];
+  visibility?: [number, number];
+  position?: Position;
+};
+
+export type InteractivityProps = {
+  lottieObj: { View: ReactElement } & LottieRefCurrentProps;
+  actions: Action[];
+  mode: "scroll" | "cursor";
 };
