@@ -227,6 +227,24 @@ inFrames: If true, returns duration in frames, if false, in seconds
 
 ### `destroy()`
 
+### `React.HTMLProps<HTMLDivElement>`
+
+Alongside the props listed above, the `<Lottie/>` component also extends `React.HTMLProps<HTMLDivElement>`. This allows you to pass props to the container `<div>` element.
+
+```jsx
+import Lottie from "lottie-react";
+import groovyWalkAnimation from "./groovyWalk.json";
+
+const Example = () =>
+   <Lottie
+    animationData={groovyWalkAnimation}
+    aria-aria-labelledby="use lottie animation"
+  />
+};
+
+export default Example;
+```
+
 ### Calling the methods
 
 To use the interaction methods listed above, pass a reference object to the Lottie component by using the `ref` prop (see the React documentation to learn more about [Ref](https://reactjs.org/docs/refs-and-the-dom.html) or [useRef](https://reactjs.org/docs/hooks-reference.html#useref) hook):

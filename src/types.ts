@@ -59,7 +59,7 @@ export type LottieOptions = {
   onLoadedImages?: AnimationEventHandler | null;
   onDOMLoaded?: AnimationEventHandler | null;
   onDestroy?: AnimationEventHandler | null;
-};
+} & React.HTMLProps<HTMLDivElement>;
 
 export type PartialLottieOptions = Omit<LottieOptions, "animationData"> & {
   animationData?: LottieOptions["animationData"];
