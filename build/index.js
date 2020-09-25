@@ -164,7 +164,13 @@ var useLottie = function useLottie(props, style) {
       onDataFailed = props.onDataFailed,
       onLoadedImages = props.onLoadedImages,
       onDOMLoaded = props.onDOMLoaded,
-      onDestroy = props.onDestroy;
+      onDestroy = props.onDestroy,
+      lottieRef = props.lottieRef,
+      renderer = props.renderer,
+      name = props.name,
+      assetsPath = props.assetsPath,
+      rendererSettings = props.rendererSettings,
+      rest = _objectWithoutProperties(props, ["animationData", "loop", "autoplay", "initialSegment", "onComplete", "onLoopComplete", "onEnterFrame", "onSegmentStart", "onConfigReady", "onDataReady", "onDataFailed", "onLoadedImages", "onDOMLoaded", "onDestroy", "lottieRef", "renderer", "name", "assetsPath", "rendererSettings"]);
 
   var _useState = React.useState(false),
       _useState2 = _slicedToArray(_useState, 2),
@@ -417,10 +423,10 @@ var useLottie = function useLottie(props, style) {
    * Build the animation view
    */
 
-  var View = /*#__PURE__*/React__default.createElement("div", {
+  var View = /*#__PURE__*/React__default.createElement("div", Object.assign({
     style: style,
     ref: animationContainer
-  });
+  }, rest));
   return {
     View: View,
     play: play,
@@ -439,11 +445,213 @@ var useLottie = function useLottie(props, style) {
   };
 };
 
+function getContainerVisibility(container) {
+  var _container$getBoundin = container.getBoundingClientRect(),
+      top = _container$getBoundin.top,
+      height = _container$getBoundin.height;
+
+  var current = window.innerHeight - top;
+  var max = window.innerHeight + height;
+  return current / max;
+}
+function getContainerCursorPosition(container, cursorX, cursorY) {
+  var _container$getBoundin2 = container.getBoundingClientRect(),
+      top = _container$getBoundin2.top,
+      left = _container$getBoundin2.left,
+      width = _container$getBoundin2.width,
+      height = _container$getBoundin2.height;
+
+  var x = (cursorX - left) / width;
+  var y = (cursorY - top) / height;
+  return {
+    x: x,
+    y: y
+  };
+}
+var useInitInteractivity = function useInitInteractivity(_ref) {
+  var wrapperRef = _ref.wrapperRef,
+      animationItem = _ref.animationItem,
+      mode = _ref.mode,
+      actions = _ref.actions;
+  React.useEffect(function () {
+    var wrapper = wrapperRef.current;
+
+    if (!wrapper || !animationItem) {
+      return;
+    }
+
+    animationItem.stop();
+
+    var scrollModeHandler = function scrollModeHandler() {
+      var assignedSegment = null;
+
+      var scrollHandler = function scrollHandler() {
+        var currentPercent = getContainerVisibility(wrapper); // Find the first action that satisfies the current position conditions
+
+        var action = actions.find(function (_ref2) {
+          var visibility = _ref2.visibility;
+          return visibility && currentPercent >= visibility[0] && currentPercent <= visibility[1];
+        }); // Skip if no matching action was found!
+
+        if (!action) {
+          return;
+        }
+
+        if (action.type === "seek" && action.visibility && action.frames.length === 2) {
+          // Seek: Go to a frame based on player scroll position action
+          var frameToGo = action.frames[0] + Math.ceil((currentPercent - action.visibility[0]) / (action.visibility[1] - action.visibility[0]) * action.frames[1]); //! goToAndStop must be relative to the start of the current segment
+
+          animationItem.goToAndStop(frameToGo - animationItem.firstFrame - 1, true);
+        }
+
+        if (action.type === "loop") {
+          // Loop: Loop a given frames
+          if (assignedSegment === null) {
+            // if not playing any segments currently. play those segments and save to state
+            animationItem.playSegments(action.frames, true);
+            assignedSegment = action.frames;
+          } else {
+            // if playing any segments currently.
+            //check if segments in state are equal to the frames selected by action
+            if (assignedSegment !== action.frames) {
+              // if they are not equal. new segments are to be loaded
+              animationItem.playSegments(action.frames, true);
+              assignedSegment = action.frames;
+            } else if (animationItem.isPaused) {
+              // if they are equal the play method must be called only if lottie is paused
+              animationItem.playSegments(action.frames, true);
+              assignedSegment = action.frames;
+            }
+          }
+        }
+
+        if (action.type === "play" && animationItem.isPaused) {
+          // Play: Reset segments and continue playing full animation from current position
+          animationItem.resetSegments(true);
+          animationItem.play();
+        }
+
+        if (action.type === "stop") {
+          // Stop: Stop playback
+          animationItem.goToAndStop(action.frames[0] - animationItem.firstFrame - 1, true);
+        }
+      };
+
+      document.addEventListener("scroll", scrollHandler);
+      return function () {
+        document.removeEventListener("scroll", scrollHandler);
+      };
+    };
+
+    var cursorModeHandler = function cursorModeHandler() {
+      var handleCursor = function handleCursor(_x, _y) {
+        var x = _x;
+        var y = _y; // Resolve cursor position if cursor is inside container
+
+        if (x !== -1 && y !== -1) {
+          // Get container cursor position
+          var pos = getContainerCursorPosition(wrapper, x, y); // Use the resolved position
+
+          x = pos.x;
+          y = pos.y;
+        } // Find the first action that satisfies the current position conditions
+
+
+        var action = actions.find(function (_ref3) {
+          var position = _ref3.position;
+
+          if (position && Array.isArray(position.x) && Array.isArray(position.y)) {
+            return x >= position.x[0] && x <= position.x[1] && y >= position.y[0] && y <= position.y[1];
+          }
+
+          if (position && !Number.isNaN(position.x) && !Number.isNaN(position.y)) {
+            return x === position.x && y === position.y;
+          }
+
+          return false;
+        }); // Skip if no matching action was found!
+
+        if (!action) {
+          return;
+        } // Process action types:
+
+
+        if (action.type === "seek" && action.position && Array.isArray(action.position.x) && Array.isArray(action.position.y) && action.frames.length === 2) {
+          // Seek: Go to a frame based on player scroll position action
+          var xPercent = (x - action.position.x[0]) / (action.position.x[1] - action.position.x[0]);
+          var yPercent = (y - action.position.y[0]) / (action.position.y[1] - action.position.y[0]);
+          animationItem.playSegments(action.frames, true);
+          animationItem.goToAndStop(Math.ceil((xPercent + yPercent) / 2 * (action.frames[1] - action.frames[0])), true);
+        }
+
+        if (action.type === "loop") {
+          animationItem.playSegments(action.frames, true);
+        }
+
+        if (action.type === "play") {
+          // Play: Reset segments and continue playing full animation from current position
+          if (animationItem.isPaused) {
+            animationItem.resetSegments(false);
+          }
+
+          animationItem.playSegments(action.frames);
+        }
+
+        if (action.type === "stop") {
+          animationItem.goToAndStop(action.frames[0], true);
+        }
+      };
+
+      var mouseMoveHandler = function mouseMoveHandler(ev) {
+        handleCursor(ev.clientX, ev.clientY);
+      };
+
+      var mouseOutHandler = function mouseOutHandler() {
+        handleCursor(-1, -1);
+      };
+
+      wrapper.addEventListener("mousemove", mouseMoveHandler);
+      wrapper.addEventListener("mouseout", mouseOutHandler);
+      return function () {
+        wrapper.removeEventListener("mousemove", mouseMoveHandler);
+        wrapper.removeEventListener("mouseout", mouseOutHandler);
+      };
+    };
+
+    switch (mode) {
+      case "scroll":
+        return scrollModeHandler();
+
+      case "cursor":
+        return cursorModeHandler();
+    }
+  }, [mode, animationItem]);
+};
+
+var useLottieInteractivity = function useLottieInteractivity(_ref4) {
+  var actions = _ref4.actions,
+      mode = _ref4.mode,
+      lottieObj = _ref4.lottieObj;
+  var animationItem = lottieObj.animationItem,
+      View = lottieObj.View;
+  var wrapperRef = React.useRef(null);
+  useInitInteractivity({
+    actions: actions,
+    animationItem: animationItem,
+    mode: mode,
+    wrapperRef: wrapperRef
+  });
+  return /*#__PURE__*/React__default.createElement("div", {
+    ref: wrapperRef
+  }, View);
+};
+
 var Lottie = function Lottie(props) {
   var _a;
 
   var style = props.style,
-      lottieProps = _objectWithoutProperties(props, ["style"]);
+      interactivity = props.interactivity,
+      lottieProps = _objectWithoutProperties(props, ["style", "interactivity"]);
   /**
    * Initialize the 'useLottie' hook
    */
@@ -488,6 +696,29 @@ var Lottie = function Lottie(props) {
       };
     }
   }, [(_a = props.lottieRef) === null || _a === void 0 ? void 0 : _a.current]);
+
+  if (interactivity) {
+    var EnhancedView = useLottieInteractivity(_objectSpread2({
+      lottieObj: {
+        View: View,
+        play: play,
+        stop: stop,
+        pause: pause,
+        setSpeed: setSpeed,
+        goToAndStop: goToAndStop,
+        goToAndPlay: goToAndPlay,
+        setDirection: setDirection,
+        playSegments: playSegments,
+        setSubframe: setSubframe,
+        getDuration: getDuration,
+        destroy: destroy,
+        animationLoaded: animationLoaded,
+        animationItem: animationItem
+      }
+    }, interactivity));
+    return EnhancedView;
+  }
+
   return View;
 };
 
@@ -533,4 +764,5 @@ exports.Animator = Animator;
 exports.default = Lottie;
 exports.useAnimator = useAnimator;
 exports.useLottie = useLottie;
+exports.useLottieInteractivity = useLottieInteractivity;
 //# sourceMappingURL=index.js.map

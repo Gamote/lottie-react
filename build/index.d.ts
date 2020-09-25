@@ -28,7 +28,7 @@ declare type LottieOptions = {
     name?: string;
     assetsPath?: string;
     rendererSettings?: SVGRendererConfig | CanvasRendererConfig | HTMLRendererConfig;
-    initialSegment?: number[] | null;
+    initialSegment?: AnimationSegment;
 } & {
     lottieRef?: LottieRef;
     onComplete?: AnimationEventHandler | null;
@@ -41,11 +41,13 @@ declare type LottieOptions = {
     onLoadedImages?: AnimationEventHandler | null;
     onDOMLoaded?: AnimationEventHandler | null;
     onDestroy?: AnimationEventHandler | null;
-};
+} & React.HTMLProps<HTMLDivElement>;
 declare type PartialLottieOptions = Omit<LottieOptions, "animationData"> & {
     animationData?: LottieOptions["animationData"];
 };
-declare type LottieComponentProps = LottieOptions & React.HTMLProps<HTMLDivElement>;
+declare type LottieComponentProps = LottieOptions & React.HTMLProps<HTMLDivElement> & {
+    interactivity?: Omit<InteractivityProps, "lottieObj">;
+};
 declare type PartialLottieComponentProps = Omit<LottieComponentProps, "animationData"> & {
     animationData?: LottieOptions["animationData"];
 };
@@ -55,6 +57,23 @@ declare type Listener = {
 };
 declare type PartialListener = Omit<Listener, "handler"> & {
     handler?: Listener["handler"] | null;
+};
+declare type Axis = "x" | "y";
+declare type Position = {
+    [key in Axis]: number | [number, number];
+};
+declare type Action = {
+    type: "seek" | "play" | "stop" | "loop";
+    frames: [number] | [number, number];
+    visibility?: [number, number];
+    position?: Position;
+};
+declare type InteractivityProps = {
+    lottieObj: {
+        View: ReactElement;
+    } & LottieRefCurrentProps;
+    actions: Action[];
+    mode: "scroll" | "cursor";
 };
 
 declare const Lottie: {
@@ -98,8 +117,10 @@ declare const useLottie: (props: LottieOptions, style?: React.CSSProperties | un
     View: ReactElement;
 } & LottieRefCurrentProps;
 
+declare const useLottieInteractivity: ({ actions, mode, lottieObj, }: InteractivityProps) => ReactElement;
+
 declare const Animator: typeof Lottie;
 declare const useAnimator: typeof useLottie;
 
 export default Lottie;
-export { Animator, Listener, LottieComponentProps, LottieOptions, LottieRef, LottieRefCurrentProps, PartialListener, PartialLottieComponentProps, PartialLottieOptions, useAnimator, useLottie };
+export { Action, Animator, Axis, InteractivityProps, Listener, LottieComponentProps, LottieOptions, LottieRef, LottieRefCurrentProps, PartialListener, PartialLottieComponentProps, PartialLottieOptions, Position, useAnimator, useLottie, useLottieInteractivity };
