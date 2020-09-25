@@ -27,6 +27,7 @@ const useLottie = (
     loop,
     autoplay,
     initialSegment,
+
     onComplete,
     onLoopComplete,
     onEnterFrame,
@@ -37,6 +38,16 @@ const useLottie = (
     onLoadedImages,
     onDOMLoaded,
     onDestroy,
+
+    // Specified here to take them out from the 'rest'
+    lottieRef,
+    renderer,
+    name,
+    assetsPath,
+    rendererSettings,
+
+    // TODO: find a better way to extract the html props to avoid specifying
+    //  all the props that we want to exclude (as you can see above)
     ...rest
   } = props;
 

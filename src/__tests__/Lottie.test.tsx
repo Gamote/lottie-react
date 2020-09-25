@@ -44,12 +44,15 @@ describe("<Lottie />", () => {
     expect(lottieRef.current?.animationItem).toBeDefined();
   });
 
-
   test("should pass HTML props to container <div>", () => {
     const { getByLabelText } = renderLottie({ "aria-label": "test" });
     expect(getByLabelText("test")).toBeTruthy();
-  })
-  
+  });
+
+  test("should not pass non-HTML props to container <div>", () => {
+    // TODO
+  });
+
   test("should check if interactivity applied when passed as a prop", async () => {
     (useLottieInteractivity as jest.Mock).mockReturnValue(<div />);
     renderLottie({ interactivity: { actions: [], mode: "scroll" } });
