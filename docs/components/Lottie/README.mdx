@@ -149,6 +149,25 @@ Default: none
 Required: ☐
 ```
 
+---
+
+### `React.HTMLProps<HTMLDivElement>`
+
+Alongside the props listed above, the `<Lottie/>` component also extends `React.HTMLProps<HTMLDivElement>`. This allows you to pass props to the container `<div>` element.
+
+```jsx
+import Lottie from "lottie-react";
+import groovyWalkAnimation from "./groovyWalk.json";
+
+const Example = () =>
+   <Lottie
+    animationData={groovyWalkAnimation}
+    aria-aria-labelledby="use lottie animation"
+  />
+};
+
+export default Example;
+```
 
 ## Interaction methods
 
@@ -226,24 +245,6 @@ inFrames: If true, returns duration in frames, if false, in seconds
 ---
 
 ### `destroy()`
-
-### `React.HTMLProps<HTMLDivElement>`
-
-Alongside the props listed above, the `<Lottie/>` component also extends `React.HTMLProps<HTMLDivElement>`. This allows you to pass props to the container `<div>` element.
-
-```jsx
-import Lottie from "lottie-react";
-import groovyWalkAnimation from "./groovyWalk.json";
-
-const Example = () =>
-   <Lottie
-    animationData={groovyWalkAnimation}
-    aria-aria-labelledby="use lottie animation"
-  />
-};
-
-export default Example;
-```
 
 ### Calling the methods
 
