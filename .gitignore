@@ -11,3 +11,4 @@ node_modules
 /compiled
 /.docz
 /docs-dist
+build
