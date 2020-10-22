@@ -1,4 +1,3 @@
-import React from "react";
 import useLottie from "../../../src/hooks/useLottie";
 import groovyWalkAnimation from "../../assets/groovyWalk.json";
 

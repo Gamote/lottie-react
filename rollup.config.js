@@ -40,112 +40,112 @@ const dtsExtension = (pathToFile) => pathToFile.replace(".js", ".d.ts");
  * Definition of the common plugins used in the rollup configurations
  */
 const reusablePluginList = [
-	postcss({
-		plugins: [autoprefixer],
-	}),
-	babel({
-		exclude: "node_modules/**",
-	}),
-	external(),
-	resolve(),
-	commonjs(),
+  postcss({
+    plugins: [autoprefixer],
+  }),
+  babel({
+    exclude: "node_modules/**",
+  }),
+  external(),
+  resolve(),
+  commonjs(),
 ];
 
 /**
  * Definition of the rollup configurations
  */
 const exports = {
-	cjs: {
-		input,
-		output: {
-			file: packageJSON.main,
-			format: "cjs",
-			sourcemap: true,
-			exports: "named",
-		},
-		external: ["lottie-web"],
-		plugins: reusablePluginList,
-	},
-	cjs_min: {
-		input,
-		output: {
-			file: minifyExtension(packageJSON.main),
-			format: "cjs",
-			exports: "named",
-		},
-		external: ["lottie-web"],
-		plugins: [...reusablePluginList, terser()],
-	},
-	umd: {
-		input,
-		output: {
-			file: packageJSON.browser,
-			format: "umd",
-			sourcemap: true,
-			name: "lottie-react",
-			exports: "named",
-			globals: {
-				react: "React",
-				"prop-types": "PropTypes",
-				"lottie-web": "Lottie",
-			},
-		},
-		external: ["lottie-web"],
-		plugins: reusablePluginList,
-	},
-	umd_min: {
-		input,
-		output: {
-			file: minifyExtension(packageJSON.browser),
-			format: "umd",
-			exports: "named",
-			name: "lottie-react",
-			globals: {
-				react: "React",
-				"prop-types": "PropTypes",
-				"lottie-web": "Lottie",
-			},
-		},
-		external: ["lottie-web"],
-		plugins: [...reusablePluginList, terser()],
-	},
-	es: {
-		input,
-		output: {
-			file: packageJSON.module,
-			format: "es",
-			sourcemap: true,
-			exports: "named",
-		},
-		external: ["lottie-web"],
-		plugins: reusablePluginList,
-	},
-	es_min: {
-		input,
-		output: {
-			file: minifyExtension(packageJSON.module),
-			format: "es",
-			exports: "named",
-		},
-		external: ["lottie-web"],
-		plugins: [...reusablePluginList, terser()],
-	},
-	dts: {
-		input: dtsExtension(input),
-		output: {
-			file: packageJSON.types,
-			format: "es",
-		},
-		plugins: [dts()],
-	},
+  cjs: {
+    input,
+    output: {
+      file: packageJSON.main,
+      format: "cjs",
+      sourcemap: true,
+      exports: "named",
+    },
+    external: ["lottie-web"],
+    plugins: reusablePluginList,
+  },
+  cjs_min: {
+    input,
+    output: {
+      file: minifyExtension(packageJSON.main),
+      format: "cjs",
+      exports: "named",
+    },
+    external: ["lottie-web"],
+    plugins: [...reusablePluginList, terser()],
+  },
+  umd: {
+    input,
+    output: {
+      file: packageJSON.browser,
+      format: "umd",
+      sourcemap: true,
+      name: "lottie-react",
+      exports: "named",
+      globals: {
+        react: "React",
+        "prop-types": "PropTypes",
+        "lottie-web": "Lottie",
+      },
+    },
+    external: ["lottie-web"],
+    plugins: reusablePluginList,
+  },
+  umd_min: {
+    input,
+    output: {
+      file: minifyExtension(packageJSON.browser),
+      format: "umd",
+      exports: "named",
+      name: "lottie-react",
+      globals: {
+        react: "React",
+        "prop-types": "PropTypes",
+        "lottie-web": "Lottie",
+      },
+    },
+    external: ["lottie-web"],
+    plugins: [...reusablePluginList, terser()],
+  },
+  es: {
+    input,
+    output: {
+      file: packageJSON.module,
+      format: "es",
+      sourcemap: true,
+      exports: "named",
+    },
+    external: ["lottie-web"],
+    plugins: reusablePluginList,
+  },
+  es_min: {
+    input,
+    output: {
+      file: minifyExtension(packageJSON.module),
+      format: "es",
+      exports: "named",
+    },
+    external: ["lottie-web"],
+    plugins: [...reusablePluginList, terser()],
+  },
+  dts: {
+    input: dtsExtension(input),
+    output: {
+      file: packageJSON.types,
+      format: "es",
+    },
+    plugins: [dts()],
+  },
 };
 
 export default [
-	exports.cjs,
-	exports.cjs_min,
-	exports.umd,
-	exports.umd_min,
-	exports.es,
-	exports.es_min,
-	exports.dts,
+  exports.cjs,
+  exports.cjs_min,
+  exports.umd,
+  exports.umd_min,
+  exports.es,
+  exports.es_min,
+  exports.dts,
 ];
