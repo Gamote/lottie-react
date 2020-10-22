@@ -4,7 +4,7 @@
 
 This project is meant to give developers full control over **[Lottie](https://airbnb.design/lottie/)** instance with minimal implementation by wrapping **[lottie-web](https://github.com/airbnb/lottie-web)** in a Component or Hook that can be easily used in **React** applications.
 
-# Installation
+## Installation
 
 Install **react**, **react-dom** and **prop-types** if you don’t have them already:
 
@@ -20,9 +20,9 @@ Install **lottie-react** using npm:
 npm i lottie-react
 ```
 
-# Usage
+## Usage
 
-## Component
+### Component
 
 ```js
 import Lottie from "lottie-react";
@@ -37,7 +37,7 @@ export default Example;
 
 [Try it on CodeSandbox](https://codesandbox.io/s/lottie-react-component-2k13t)
 
-## Hook
+### Hook
 
 ```js
 import { useLottie } from "lottie-react";
@@ -60,16 +60,16 @@ export default Example;
 
 [Try it on CodeSandbox](https://codesandbox.io/s/lottie-react-hook-13nio)
 
-# Documentation
+## Documentation
 
 Checkout the [Documentation](https://gamote.github.io/lottie-react) for more information and examples.
 
-# Test
+## Test
 ```text
 npm test
 ```
 
-## Coverage report
+### Coverage report
 ```text
 -----------------------------|---------|----------|---------|---------|-------------------
 File                         | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
@@ -83,19 +83,19 @@ All files                    |     100 |      100 |     100 |     100 |
 -----------------------------|---------|----------|---------|---------|-------------------
 ```
 
-# Contribution
+## Contribution
 
 Let us know if you have any suggestions or contributions. This package has the mission to help developers, so if you have any features that you think we should prioritize, reach out to us.
 
-# Projects to check out
+## Projects to check out
 
-- [lottie-web](https://github.com/airbnb/lottie-web) - Lottie implementation for Web. Our project is based on it and you should check it because it will help you understand what's behind this package and it will give you a better understanding on what features should you expect to have in the future.
-- [lottie-android](https://github.com/airbnb/lottie-android) - Lottie implementation for Android
-- [lottie-ios](https://github.com/airbnb/lottie-ios) - Lottie implementation for iOS
-- [lottie-react-native](https://github.com/react-native-community/lottie-react-native) - Lottie implementation for React Native
-- [LottieFiles](https://lottiefiles.com/) - Are you looking for animations? LottieFiles is the way to go!
+-   [lottie-web](https://github.com/airbnb/lottie-web) - Lottie implementation for Web. Our project is based on it and you should check it because it will help you understand what's behind this package and it will give you a better understanding on what features should you expect to have in the future.
+-   [lottie-android](https://github.com/airbnb/lottie-android) - Lottie implementation for Android
+-   [lottie-ios](https://github.com/airbnb/lottie-ios) - Lottie implementation for iOS
+-   [lottie-react-native](https://github.com/react-native-community/lottie-react-native) - Lottie implementation for React Native
+-   [LottieFiles](https://lottiefiles.com/) - Are you looking for animations? LottieFiles is the way to go!
 
-# License
+## License
 
 **lottie-react** is available under the [MIT license](https://github.com/Gamote/lottie-react/blob/master/LICENSE).
 
