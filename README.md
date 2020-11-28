@@ -1,8 +1,24 @@
-# lottie-react
+<p align="center">
+  <a href="https://www.npmjs.com/lottie-react" target="blank"><img src="https://svgshare.com/i/RtR.svg" width="500" alt="lottie-react Logo" /></a>
+</p>
 
-[![npm version](https://img.shields.io/npm/v/lottie-react)](https://www.npmjs.com/package/lottie-react) [![npm downloads/month](https://img.shields.io/npm/dm/lottie-react)](https://www.npmjs.com/package/lottie-react) [![Build Status](https://travis-ci.org/Gamote/lottie-react.svg?branch=master)](https://travis-ci.org/Gamote/lottie-react) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/13a28cb016c941daa9084654bc2bac75)](https://www.codacy.com/manual/Gamote/lottie-react) [![Known Vulnerabilities](https://snyk.io/test/github/Gamote/lottie-react/badge.svg?targetFile=package.json)](https://snyk.io/test/github/Gamote/lottie-react?targetFile=package.json) [![Coverage Status](https://coveralls.io/repos/github/Gamote/lottie-react/badge.svg?branch=master)](https://coveralls.io/github/Gamote/lottie-react?branch=master) [![Tested with jest](https://img.shields.io/badge/tested_with-jest-99424f.svg)](https://github.com/facebook/jest) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Gamote/lottie-react/blob/master/LICENSE)
+<p align="center">A lightweight <a href="https://reactjs.org" target="_blank">React</a> library for rendering complex After Effects animations in real time using <a href="https://airbnb.design/lottie" target="_blank">Lottie</a>.</p>
 
-This project is meant to give developers full control over **[Lottie](https://airbnb.design/lottie/)** instance with minimal implementation by wrapping **[lottie-web](https://github.com/airbnb/lottie-web)** in a Component or Hook that can be easily used in **React** applications.
+<p align="center">
+    <a href="https://www.npmjs.com/lottie-react" target="_blank"><img src="https://img.shields.io/npm/v/lottie-react.svg" alt="NPM Version" /></a>
+    <a href="https://www.npmjs.com/lottie-react" target="_blank"><img src="https://img.shields.io/npm/l/lottie-react.svg" alt="Package License" /></a>
+    <a href="https://www.npmjs.com/lottie-react" target="_blank"><img src="https://img.shields.io/npm/dm/lottie-react.svg" alt="NPM Downloads" /></a>
+    <a href="https://travis-ci.org/Gamote/lottie-react" target="_blank"><img src="https://travis-ci.org/Gamote/lottie-react.svg?branch=master" alt="TravisCI" /></a>
+    <a href="https://coveralls.io/github/Gamote/lottie-react?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/Gamote/lottie-react/badge.svg?branch=master" alt="Coverage" /></a>
+    <a href="https://github.com/facebook/jest" target="_blank"><img src="https://img.shields.io/badge/tested_with-jest-99424f.svg" alt="Tested with Jest" /></a>
+    <a href="https://www.codacy.com/manual/Gamote/lottie-react" target="_blank"><img src="https://app.codacy.com/project/badge/Grade/13a28cb016c941daa9084654bc2bac75" alt="Code Quality" /></a>
+    <a href="https://snyk.io/test/github/Gamote/lottie-react?targetFile=package.json" target="_blank"><img src="https://snyk.io/test/github/Gamote/lottie-react/badge.svg?targetFile=package.json" alt="Known Vulnerabilities" /></a>
+    <a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
+</p>
+
+## Description
+
+TODO: about Lottie and this library.
 
 ## Installation
 
