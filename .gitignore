@@ -3,12 +3,12 @@ coverage
 .coveralls.yml
 
 # Dependency directories
-node_modules
+/node_modules
 
 # IDE directories
-.idea
+/.idea
 
 /compiled
 /.docz
 /docs-dist
-build
+/build
