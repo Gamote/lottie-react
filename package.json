@@ -47,7 +47,7 @@
     "tsc:compile:watch": "tsc --watch"
   },
   "dependencies": {
-    "lottie-web": "^5.7.3"
+    "lottie-web": "^5.7.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
@@ -92,7 +92,7 @@
     "ts-jest": "^26.4.1",
     "ts-node": "^9.0.0",
     "tslib": "^2.0.3",
-    "typescript": "^4.0.3"
+    "typescript": "^4.1.2"
   },
   "peerDependencies": {
     "prop-types": "^15.5.0",
