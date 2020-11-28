@@ -10,7 +10,7 @@ const style = {
 };
 
 const options = {
-  animationData: robotAnimation,
+  data: robotAnimation,
 };
 
 const PlaySegmentsOnHover = () => {

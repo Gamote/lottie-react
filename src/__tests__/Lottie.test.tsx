@@ -3,14 +3,14 @@ import { render } from "@testing-library/react";
 import groovyWalk from "./assets/groovyWalk.json";
 
 import Lottie from "../components/Lottie";
-import { LottieRef, PartialLottieComponentProps } from "../types";
+import { LottieComponentProps, LottieRef } from "../types";
 import useLottieInteractivity from "../hooks/useLottieInteractivity";
 
 jest.mock("../hooks/useLottieInteractivity.tsx");
 
-function renderLottie(props?: PartialLottieComponentProps) {
+function renderLottie(props?: Partial<LottieComponentProps>) {
   const defaultProps = {
-    animationData: groovyWalk,
+    data: groovyWalk,
   };
 
   return render(<Lottie {...defaultProps} {...props} />);

@@ -4,6 +4,7 @@ import React, {
   ReactElement,
 } from "react";
 import {
+  AnimationConfig,
   AnimationDirection,
   AnimationEventName,
   AnimationItem,
@@ -34,20 +35,8 @@ export type LottieRefCurrentProps = {
 
 export type LottieRef = MutableRefObject<LottieRefCurrentProps | null>;
 
-export type LottieOptions = {
-  // TODO: replace this with `AnimationConfig` if possible
-  animationData: object;
-  renderer?: "svg" | "canvas" | "html";
-  loop?: boolean | number;
-  autoplay?: boolean;
-  name?: string;
-  assetsPath?: string;
-  rendererSettings?:
-    | SVGRendererConfig
-    | CanvasRendererConfig
-    | HTMLRendererConfig;
-  initialSegment?: AnimationSegment;
-} & {
+export type LottieOptions = Omit<AnimationConfig, "container"> & {
+  data: any;
   lottieRef?: LottieRef;
   onComplete?: AnimationEventHandler | null;
   onLoopComplete?: AnimationEventHandler | null;
@@ -61,21 +50,9 @@ export type LottieOptions = {
   onDestroy?: AnimationEventHandler | null;
 } & React.HTMLProps<HTMLDivElement>;
 
-export type PartialLottieOptions = Omit<LottieOptions, "animationData"> & {
-  animationData?: LottieOptions["animationData"];
-};
-
-export type LottieComponentProps = LottieOptions &
-  React.HTMLProps<HTMLDivElement> & {
-    interactivity?: Omit<InteractivityProps, "lottieObj">;
-  };
-
-export type PartialLottieComponentProps = Omit<
-  LottieComponentProps,
-  "animationData"
-> & {
-  animationData?: LottieOptions["animationData"];
-};
+export type LottieComponentProps = LottieOptions & {
+  interactivity?: Omit<InteractivityProps, "lottieObj">;
+} & React.HTMLProps<HTMLDivElement>;
 
 export type Listener = {
   name: AnimationEventName;

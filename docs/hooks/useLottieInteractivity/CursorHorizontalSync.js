@@ -10,7 +10,7 @@ const style = {
 };
 
 const options = {
-  animationData: hamsterAnimation,
+  data: hamsterAnimation,
 };
 
 const CursorHorizontalSync = () => {

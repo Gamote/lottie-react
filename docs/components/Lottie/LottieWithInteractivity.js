@@ -30,7 +30,7 @@ const interactivity = {
 const Example = () => {
   return (
     <Lottie
-      animationData={robotAnimation}
+      data={robotAnimation}
       style={style}
       interactivity={interactivity}
     />

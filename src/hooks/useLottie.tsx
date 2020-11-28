@@ -23,10 +23,14 @@ const useLottie = (
   style?: CSSProperties,
 ): { View: ReactElement } & LottieRefCurrentProps => {
   const {
-    animationData,
+    data,
+    renderer,
     loop,
     autoplay,
     initialSegment,
+    name,
+    assetsPath,
+    rendererSettings,
 
     onComplete,
     onLoopComplete,
@@ -41,10 +45,6 @@ const useLottie = (
 
     // Specified here to take them out from the 'rest'
     lottieRef,
-    renderer,
-    name,
-    assetsPath,
-    rendererSettings,
 
     // TODO: find a better way to extract the html props to avoid specifying
     //  all the props that we want to exclude (as you can see above)
@@ -159,9 +159,9 @@ const useLottie = (
 
   /**
    * Load a new animation, and if it's the case, destroy the previous one
-   * @param {Object} forcedConfigs
+   * @param {Object} forcedConfig
    */
-  const loadAnimation = (forcedConfigs = {}) => {
+  const loadAnimation = (forcedConfig = {}) => {
     // Return if the container ref is null
     if (!animationContainer.current) {
       return;
@@ -172,8 +172,15 @@ const useLottie = (
 
     // Build the animation configuration
     const config: AnimationConfigWithData = {
-      ...props,
-      ...forcedConfigs,
+      renderer,
+      loop,
+      autoplay,
+      initialSegment,
+      name,
+      assetsPath,
+      rendererSettings,
+      ...(typeof data === "string" ? { path: data } : { animationData: data }),
+      ...forcedConfig,
       container: animationContainer.current,
     };
 
@@ -189,7 +196,7 @@ const useLottie = (
   // Reinitialize when animation data changed
   useEffect(() => {
     loadAnimation();
-  }, [animationData]);
+  }, [data]);
 
   // Update the loop state
   useEffect(() => {

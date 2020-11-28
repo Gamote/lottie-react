@@ -10,7 +10,7 @@ const style = {
 
 const UseLottieExamples = () => {
   const options = {
-    animationData: groovyWalkAnimation,
+    data: groovyWalkAnimation,
     loop: true,
     autoplay: true,
   };

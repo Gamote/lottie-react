@@ -4,6 +4,7 @@ menu: Components
 route: /components/Lottie
 ---
 
+import LottieTest from "./LottieTest";
 import { Playground } from "docz";
 import LottieExamples from "./LottieExamples";
 import LottieWithInteractivity from "./LottieWithInteractivity.js";
@@ -12,6 +13,7 @@ import LottieWithInteractivity from "./LottieWithInteractivity.js";
 
 ## Getting Started
 
+<LottieTest />
 <LottieExamples />
 
 ```jsx
@@ -19,7 +21,7 @@ import Lottie from "lottie-react";
 import groovyWalkAnimation from "./groovyWalk.json";
 
 const Example = () => {
-  return <Lottie animationData={groovyWalkAnimation} />;
+  return <Lottie data={groovyWalkAnimation} />;
 };
 
 export default Example;
@@ -27,12 +29,12 @@ export default Example;
 
 ## Props
 
-### `animationData`
+### `data`
 
 A JSON Object with the exported animation data
 
 ```yaml
-Type: Object
+Type: Object | string
 Default: none
 Required: ☑
 ```
@@ -161,7 +163,7 @@ import groovyWalkAnimation from "./groovyWalk.json";
 
 const Example = () =>
   <Lottie
-    animationData={groovyWalkAnimation}
+    data={groovyWalkAnimation}
     aria-aria-labelledby="use lottie animation"
   />
 };
@@ -257,7 +259,7 @@ import groovyWalkAnimation from "./groovyWalk.json";
 const Example = () => {
   const lottieRef = useRef();
 
-  return <Lottie lottieRef={lottieRef} animationData={groovyWalkAnimation} />;
+  return <Lottie lottieRef={lottieRef} data={groovyWalkAnimation} />;
 };
 
 export default Example;
@@ -312,7 +314,7 @@ const interactivity = {
 const Example = () => {
   return (
     <Lottie
-      animationData={robotAnimation}
+      data={robotAnimation}
       style={style}
       interactivity={interactivity}
     />

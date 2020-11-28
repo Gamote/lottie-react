@@ -78,7 +78,10 @@ const Lottie = (props: LottieComponentProps) => {
 };
 
 Lottie.propTypes = {
-  animationData: PropTypes.shape(undefined as any).isRequired,
+  data: PropTypes.oneOfType([
+    PropTypes.shape(undefined as any),
+    PropTypes.string,
+  ]).isRequired,
   loop: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
   autoplay: PropTypes.bool,
   initialSegment: PropTypes.arrayOf(PropTypes.number.isRequired),

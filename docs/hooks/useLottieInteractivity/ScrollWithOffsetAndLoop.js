@@ -7,7 +7,7 @@ const style = {
 };
 
 const options = {
-  animationData: robotAnimation,
+  data: robotAnimation,
   loop: true,
 };
 

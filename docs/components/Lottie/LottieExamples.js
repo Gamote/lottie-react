@@ -85,7 +85,7 @@ const LottieExamples = () => {
   const animation = (
     <Lottie
       lottieRef={ref}
-      animationData={animationData}
+      data={animationData}
       loop={loop}
       autoplay={autoplay}
       initialSegment={initialSegment}
