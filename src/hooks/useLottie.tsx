@@ -184,11 +184,67 @@ const useLottie = (
   };
 
   /**
-   * Initialize and listen for changes that need to reinitialize Lottie
+   * Initialize and listen for changes that affect the animation state
    */
+  // Reinitialize when animation data changed
   useEffect(() => {
     loadAnimation();
-  }, [animationData, loop, autoplay, initialSegment]);
+  }, [animationData]);
+
+  // Update the loop state
+  useEffect(() => {
+    if (!animationInstanceRef.current) {
+      return;
+    }
+
+    animationInstanceRef.current.loop = !!loop;
+
+    if (loop && animationInstanceRef.current.isPaused) {
+      animationInstanceRef.current.play();
+    }
+  }, [loop]);
+
+  // Update the autoplay state
+  useEffect(() => {
+    if (!animationInstanceRef.current) {
+      return;
+    }
+
+    animationInstanceRef.current.autoplay = !!autoplay;
+  }, [autoplay]);
+
+  // Update the initial segment state
+  useEffect(() => {
+    if (!animationInstanceRef.current) {
+      return;
+    }
+
+    // When null should reset to default animation length
+    if (!initialSegment) {
+      animationInstanceRef.current.resetSegments(false);
+      return;
+    }
+
+    // If it's not a valid segment, do nothing
+    if (!Array.isArray(initialSegment) || !initialSegment.length) {
+      return;
+    }
+
+    // If the current position it's not in the new segment
+    // set the current position to start
+    if (
+      animationInstanceRef.current.currentRawFrame < initialSegment[0] ||
+      animationInstanceRef.current.currentRawFrame > initialSegment[1]
+    ) {
+      animationInstanceRef.current.currentRawFrame = initialSegment[0];
+    }
+
+    // Update the segment
+    animationInstanceRef.current.setSegment(
+      initialSegment[0],
+      initialSegment[1],
+    );
+  }, [initialSegment]);
 
   /*
 		======================================
