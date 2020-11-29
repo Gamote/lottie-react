@@ -1,28 +1,7 @@
 import { AnimationSegment } from "lottie-web";
 import React, { useEffect, ReactElement, useRef } from "react";
 import { InteractivityProps } from "../types";
-
-// helpers
-export function getContainerVisibility(container: Element): number {
-  const { top, height } = container.getBoundingClientRect();
-
-  const current = window.innerHeight - top;
-  const max = window.innerHeight + height;
-  return current / max;
-}
-
-export function getContainerCursorPosition(
-  container: Element,
-  cursorX: number,
-  cursorY: number,
-): { x: number; y: number } {
-  const { top, left, width, height } = container.getBoundingClientRect();
-
-  const x = (cursorX - left) / width;
-  const y = (cursorY - top) / height;
-
-  return { x, y };
-}
+import { getContainerCursorPosition, getContainerVisibility } from "../utils/helpers";
 
 export type InitInteractivity = {
   wrapperRef: React.RefObject<HTMLDivElement>;
