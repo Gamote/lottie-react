@@ -10,7 +10,7 @@ const style = {
 };
 
 const options = {
-  animData: likeButton,
+  data: likeButton,
 };
 
 const UseInteractivityBasic = () => {

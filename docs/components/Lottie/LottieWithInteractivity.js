@@ -31,7 +31,7 @@ const Example = () => {
   return (
     <Lottie
       config={{
-        animData: robotAnimation,
+        data: robotAnimation,
       }}
       style={style}
       interactivity={interactivity}

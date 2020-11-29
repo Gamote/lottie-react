@@ -86,7 +86,7 @@ const LottieExamples = () => {
     <Lottie
       lottieRef={ref}
       config={{
-        animData: animationData,
+        data: animationData,
       }}
       loop={loop}
       autoplay={autoplay}

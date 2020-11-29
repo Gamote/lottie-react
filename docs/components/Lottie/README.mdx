@@ -21,7 +21,7 @@ import Lottie from "lottie-react";
 import groovyWalkAnimation from "./groovyWalk.json";
 
 const Example = () => {
-  return <Lottie animData={groovyWalkAnimation} />;
+  return <Lottie data={groovyWalkAnimation} />;
 };
 
 export default Example;
@@ -163,7 +163,7 @@ import groovyWalkAnimation from "./groovyWalk.json";
 
 const Example = () =>
   <Lottie
-    animData={groovyWalkAnimation}
+    data={groovyWalkAnimation}
     aria-aria-labelledby="use lottie animation"
   />
 };
@@ -259,7 +259,7 @@ import groovyWalkAnimation from "./groovyWalk.json";
 const Example = () => {
   const lottieRef = useRef();
 
-  return <Lottie lottieRef={lottieRef} animData={groovyWalkAnimation} />;
+  return <Lottie lottieRef={lottieRef} data={groovyWalkAnimation} />;
 };
 
 export default Example;
@@ -314,7 +314,7 @@ const interactivity = {
 const Example = () => {
   return (
     <Lottie
-      animData={robotAnimation}
+      data={robotAnimation}
       style={style}
       interactivity={interactivity}
     />

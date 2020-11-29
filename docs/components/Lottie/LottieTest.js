@@ -28,7 +28,7 @@ const LottieTest = () => {
   const [onComp, setOnComp] = useState("DAA");
 
   // const l = useLottie({
-  //   animData: data,
+  //   data: data,
   //   loop,
   //   autoplay,
   //   style,
@@ -107,12 +107,10 @@ const LottieTest = () => {
   const animation = (
     <>
       <Lottie
-        config={{
-          animData: path,
-          loop,
-          autoplay,
-          initialSegment,
-        }}
+        data={path}
+        loop={loop}
+        autoplay={autoplay}
+        initialSegment={initialSegment}
         listeners={{
           // Works
           onComplete: () => {
@@ -152,7 +150,9 @@ const LottieTest = () => {
           },
         }}
         lottieRef={ref}
-        style={style}
+        containerProps={{
+          style,
+        }}
       />
       <input type="checkbox" checked={loop} onChange={() => setLoop(!loop)} />{" "}
       Loop

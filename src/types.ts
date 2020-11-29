@@ -72,16 +72,15 @@ export type PartialListener = Omit<Listener, "handler"> & {
  * Lottie configuration object
  */
 type LottieConfig = Omit<AnimationConfig, "container"> & {
-  animData: any;
+  data: any;
 };
 
 /**
  * Properties for the Lottie hook
  */
-export type LottieHookProps = {
-  config: LottieConfig;
+export type LottieHookProps = LottieConfig & {
   listeners?: LottieAnimationEvents;
-  htmlProps?: React.HTMLProps<HTMLDivElement>;
+  containerProps?: React.HTMLProps<HTMLDivElement>;
 };
 
 /**
@@ -90,7 +89,7 @@ export type LottieHookProps = {
 export type LottieComponentProps = LottieHookProps & {
   lottieRef?: LottieRef;
   interactivity?: Omit<InteractivityProps, "lottieObject">;
-} & React.HTMLProps<HTMLDivElement>;
+};
 
 /**
  * Object found in `lottieRef`

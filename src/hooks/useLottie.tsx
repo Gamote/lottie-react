@@ -5,7 +5,7 @@ import useInteractionMethods from "./useInteractionMethods";
 import useAnimationEvents from "./useAnimationEvents";
 
 const useLottie = (props: LottieHookProps): LottieObject => {
-  const { config, listeners, htmlProps } = props;
+  const { listeners, containerProps, ...config } = props;
 
   const animationContainer = useRef<HTMLDivElement>(null);
   const animationItemRef = useRef<AnimationItem>();
@@ -35,14 +35,14 @@ const useLottie = (props: LottieHookProps): LottieObject => {
     // Destroy any previous instance
     animationItemRef.current?.destroy();
 
-    const { animData, ...rest } = config;
+    const { data, ...rest } = config;
 
     // Save the animation instance
     animationItemRef.current = lottie.loadAnimation({
       ...rest,
-      ...(typeof animData === "string"
-        ? { path: animData }
-        : { animationData: animData }),
+      ...(typeof data === "string"
+        ? { path: data }
+        : { animationData: data }),
       ...forcedConfig,
       container: animationContainer.current,
     });
@@ -55,7 +55,7 @@ const useLottie = (props: LottieHookProps): LottieObject => {
    */
   useEffect(() => {
     loadAnimation();
-  }, [config.animData]);
+  }, [config.data]);
 
   /**
    * Update the loop state
@@ -125,7 +125,7 @@ const useLottie = (props: LottieHookProps): LottieObject => {
   /**
    * Build the animation view
    */
-  const View = <div {...htmlProps} ref={animationContainer} />;
+  const View = <div {...containerProps} ref={animationContainer} />;
 
   return {
     View,

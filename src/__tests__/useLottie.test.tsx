@@ -7,7 +7,7 @@ import useLottie from "../hooks/useLottie";
 import { LottieHookProps } from "../types";
 function initUseLottie(props?: Partial<LottieHookProps>, style?: CSSProperties) {
   const defaultProps = {
-    animData: groovyWalk,
+    data: groovyWalk,
   };
 
   return renderHook(

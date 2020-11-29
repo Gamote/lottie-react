@@ -5,16 +5,16 @@ import useLottie from "../hooks/useLottie";
 import useLottieInteractivity from "../hooks/useLottieInteractivity";
 
 const Lottie = ({
-  config,
-  listeners,
   lottieRef,
   interactivity,
-  ...htmlProps
+  listeners,
+  containerProps,
+  ...config
 }: LottieComponentProps) => {
   const lottieObject = useLottie({
-    config,
     listeners,
-    htmlProps,
+    containerProps,
+    ...config,
   });
 
   /**
@@ -40,7 +40,7 @@ const Lottie = ({
 };
 
 Lottie.propTypes = {
-  animData: PropTypes.oneOfType([
+  data: PropTypes.oneOfType([
     PropTypes.shape(undefined as any),
     PropTypes.string,
   ]).isRequired,
