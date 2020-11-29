@@ -36,14 +36,14 @@ const style = {
   borderRadius: 7,
 };
 
-const options = {
-  data: likeButton,
+const options: Lottie = {
+  animData: likeButton,
 };
 
 const Example = () => {
-  const lottieObj = useLottie(options, style);
+  const lottieObject = useLottie(options, style);
   const Animation = useLottieInteractivity({
-    lottieObj,
+    lottieObject,
     mode: "scroll",
     actions: [
       {
@@ -64,7 +64,7 @@ export default Example;
 
 | Param                  | Type            | Required | Default | Description                                                                                                                                                                                              |
 | ---------------------- | --------------- | -------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| lottieObj              | object          | required |         | Result returned from the useLottie() hook
+| lottieObject             | object          | required |         | Result returned from the useLottie() hook
 | mode                   | string          | required |         | Either "scroll" or "cursor". Event that will be synced with animation                                                                                                                                                           |
 | actions                | array           | required |         | Array of actions that will run in sequence (SEE BELOW)                                                                                                                                                                         |
 
@@ -139,13 +139,13 @@ import { useLottie, useLottieInteractivity } from "lottie-react";
 import likeButton from "./likeButton.json";
 
 const options = {
-  data: likeButton,
+  animData: likeButton,
 };
 
 const Example = () => {
-  const lottieObj = useLottie(options);
+  const lottieObject = useLottie(options);
   const Animation = useLottieInteractivity({
-    lottieObj,
+    lottieObject,
     mode: "scroll",
     actions: [
       {
@@ -182,13 +182,13 @@ import { useLottie, useLottieInteractivity } from "lottie-react";
 import robotAnimation from "./robotAnimation.json";
 
 const options = {
-  data: robotAnimation,
+  animData: robotAnimation,
 };
 
 const Example = () => {
-  const lottieObj = useLottie(options);
+  const lottieObject = useLottie(options);
   const Animation = useLottieInteractivity({
-    lottieObj,
+    lottieObject,
     mode: "scroll",
     actions: [
       {
@@ -236,13 +236,13 @@ const style = {
 };
 
 const options = {
-  data: robotAnimation,
+  animData: robotAnimation,
 };
 
 const PlaySegmentsOnHover = () => {
-  const lottieObj = useLottie(options, style);
+  const lottieObject = useLottie(options, style);
   const Animation = useLottieInteractivity({
-    lottieObj,
+    lottieObject,
     mode: "cursor",
     actions: [
       {
@@ -284,13 +284,13 @@ const style = {
 };
 
 const options = {
-  data: robotAnimation,
+  animData: robotAnimation,
 };
 
 const CursorDiagonalSync = () => {
-  const lottieObj = useLottie(options, style);
+  const lottieObject = useLottie(options, style);
   const Animation = useLottieInteractivity({
-    lottieObj,
+    lottieObject,
     mode: "cursor",
     actions: [
       {
@@ -327,13 +327,13 @@ const style = {
 };
 
 const options = {
-  data: hamsterAnimation,
+  animData: hamsterAnimation,
 };
 
 const CursorHorizontalSync = () => {
-  const lottieObj = useLottie(options, style);
+  const lottieObject = useLottie(options, style);
   const Animation = useLottieInteractivity({
-    lottieObj,
+    lottieObject,
     mode: "cursor",
     actions: [
       {

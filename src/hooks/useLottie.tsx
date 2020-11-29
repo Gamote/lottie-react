@@ -1,161 +1,26 @@
-import React, {
-  CSSProperties,
-  useEffect,
-  useRef,
-  ReactElement,
-  useState,
-} from "react";
-import lottie, {
-  AnimationConfigWithData,
-  AnimationItem,
-  AnimationDirection,
-  AnimationSegment,
-} from "lottie-web";
-import {
-  Listener,
-  LottieOptions,
-  LottieRefCurrentProps,
-  PartialListener,
-} from "../types";
+import React, { useEffect, useRef, useState } from "react";
+import lottie, { AnimationItem } from "lottie-web";
+import { LottieHookProps, LottieObject } from "../types";
+import useInteractionMethods from "./useInteractionMethods";
+import useAnimationEvents from "./useAnimationEvents";
 
-const useLottie = (
-  props: LottieOptions,
-  style?: CSSProperties,
-): { View: ReactElement } & LottieRefCurrentProps => {
-  const {
-    data,
-    renderer,
-    loop,
-    autoplay,
-    initialSegment,
-    name,
-    assetsPath,
-    rendererSettings,
+const useLottie = (props: LottieHookProps): LottieObject => {
+  const { config, listeners, htmlProps } = props;
 
-    onComplete,
-    onLoopComplete,
-    onEnterFrame,
-    onSegmentStart,
-    onConfigReady,
-    onDataReady,
-    onDataFailed,
-    onLoadedImages,
-    onDOMLoaded,
-    onDestroy,
-
-    // Specified here to take them out from the 'rest'
-    lottieRef,
-
-    // TODO: find a better way to extract the html props to avoid specifying
-    //  all the props that we want to exclude (as you can see above)
-    ...rest
-  } = props;
-
-  const [animationLoaded, setAnimationLoaded] = useState(false);
-  const animationInstanceRef = useRef<AnimationItem>();
   const animationContainer = useRef<HTMLDivElement>(null);
+  const animationItemRef = useRef<AnimationItem>();
 
-  /*
-		======================================
-			INTERACTION METHODS
-		======================================
-	 */
+  const [animationLoaded, setAnimationLoaded] = useState<boolean>(false);
 
   /**
-   * Play
+   * Interaction methods
    */
-  const play = (): void => {
-    animationInstanceRef.current?.play();
-  };
+  const interactionMethods = useInteractionMethods(animationItemRef);
 
   /**
-   * Stop
+   * Animation events
    */
-  const stop = (): void => {
-    animationInstanceRef.current?.stop();
-  };
-
-  /**
-   * Pause
-   */
-  const pause = (): void => {
-    animationInstanceRef.current?.pause();
-  };
-
-  /**
-   * Set animation speed
-   * @param speed
-   */
-  const setSpeed = (speed: number): void => {
-    animationInstanceRef.current?.setSpeed(speed);
-  };
-
-  /**
-   * Got to frame and play
-   * @param value
-   * @param isFrame
-   */
-  const goToAndPlay = (value: number, isFrame?: boolean): void => {
-    animationInstanceRef.current?.goToAndPlay(value, isFrame);
-  };
-
-  /**
-   * Got to frame and stop
-   * @param value
-   * @param isFrame
-   */
-  const goToAndStop = (value: number, isFrame?: boolean): void => {
-    animationInstanceRef.current?.goToAndStop(value, isFrame);
-  };
-
-  /**
-   * Set animation direction
-   * @param direction
-   */
-  const setDirection = (direction: AnimationDirection): void => {
-    animationInstanceRef.current?.setDirection(direction);
-  };
-
-  /**
-   * Play animation segments
-   * @param segments
-   * @param forceFlag
-   */
-  const playSegments = (
-    segments: AnimationSegment | AnimationSegment[],
-    forceFlag?: boolean,
-  ): void => {
-    animationInstanceRef.current?.playSegments(segments, forceFlag);
-  };
-
-  /**
-   * Set sub frames
-   * @param useSubFrames
-   */
-  const setSubframe = (useSubFrames: boolean): void => {
-    animationInstanceRef.current?.setSubframe(useSubFrames);
-  };
-
-  /**
-   * Get animation duration
-   * @param inFrames
-   */
-  const getDuration = (inFrames?: boolean): number | undefined => {
-    return animationInstanceRef.current?.getDuration(inFrames);
-  };
-
-  /**
-   * Destroy animation
-   */
-  const destroy = (): void => {
-    animationInstanceRef.current?.destroy();
-  };
-
-  /*
-		======================================
-			LOTTIE
-		======================================
-	 */
+  useAnimationEvents(animationItemRef, listeners);
 
   /**
    * Load a new animation, and if it's the case, destroy the previous one
@@ -168,182 +33,105 @@ const useLottie = (
     }
 
     // Destroy any previous instance
-    animationInstanceRef.current?.destroy();
+    animationItemRef.current?.destroy();
 
-    // Build the animation configuration
-    const config: AnimationConfigWithData = {
-      renderer,
-      loop,
-      autoplay,
-      initialSegment,
-      name,
-      assetsPath,
-      rendererSettings,
-      ...(typeof data === "string" ? { path: data } : { animationData: data }),
-      ...forcedConfig,
-      container: animationContainer.current,
-    };
+    const { animData, ...rest } = config;
 
     // Save the animation instance
-    animationInstanceRef.current = lottie.loadAnimation(config);
+    animationItemRef.current = lottie.loadAnimation({
+      ...rest,
+      ...(typeof animData === "string"
+        ? { path: animData }
+        : { animationData: animData }),
+      ...forcedConfig,
+      container: animationContainer.current,
+    });
 
-    setAnimationLoaded(!!animationInstanceRef.current);
+    setAnimationLoaded(!!animationItemRef.current);
   };
 
   /**
-   * Initialize and listen for changes that affect the animation state
+   * Initialize and listen for changes that should reinitialised the animation
    */
-  // Reinitialize when animation data changed
   useEffect(() => {
     loadAnimation();
-  }, [data]);
+  }, [config.animData]);
 
-  // Update the loop state
+  /**
+   * Update the loop state
+   */
   useEffect(() => {
-    if (!animationInstanceRef.current) {
+    if (!animationItemRef.current) {
       return;
     }
 
-    animationInstanceRef.current.loop = !!loop;
+    animationItemRef.current.loop = !!config.loop;
 
-    if (loop && animationInstanceRef.current.isPaused) {
-      animationInstanceRef.current.play();
+    if (config.loop && animationItemRef.current.isPaused) {
+      animationItemRef.current.play();
     }
-  }, [loop]);
+  }, [config.loop]);
 
-  // Update the autoplay state
+  /**
+   * Update the autoplay state
+   */
   useEffect(() => {
-    if (!animationInstanceRef.current) {
+    if (!animationItemRef.current) {
       return;
     }
 
-    animationInstanceRef.current.autoplay = !!autoplay;
-  }, [autoplay]);
+    animationItemRef.current.autoplay = !!config.autoplay;
+  }, [config.autoplay]);
 
-  // Update the initial segment state
+  /**
+   * Update the initial segment state
+   */
   useEffect(() => {
-    if (!animationInstanceRef.current) {
+    if (!animationItemRef.current) {
       return;
     }
 
     // When null should reset to default animation length
-    if (!initialSegment) {
-      animationInstanceRef.current.resetSegments(false);
+    if (!config.initialSegment) {
+      animationItemRef.current.resetSegments(false);
+      // TODO: find a way to increase the totalFrames to the max in the current loop
       return;
     }
 
     // If it's not a valid segment, do nothing
-    if (!Array.isArray(initialSegment) || !initialSegment.length) {
+    if (
+      !Array.isArray(config.initialSegment) ||
+      !config.initialSegment.length
+    ) {
       return;
     }
 
     // If the current position it's not in the new segment
     // set the current position to start
     if (
-      animationInstanceRef.current.currentRawFrame < initialSegment[0] ||
-      animationInstanceRef.current.currentRawFrame > initialSegment[1]
+      animationItemRef.current.currentRawFrame < config.initialSegment[0] ||
+      animationItemRef.current.currentRawFrame > config.initialSegment[1]
     ) {
-      animationInstanceRef.current.currentRawFrame = initialSegment[0];
+      animationItemRef.current.currentRawFrame = config.initialSegment[0];
     }
 
     // Update the segment
-    animationInstanceRef.current.setSegment(
-      initialSegment[0],
-      initialSegment[1],
+    animationItemRef.current.setSegment(
+      config.initialSegment[0],
+      config.initialSegment[1],
     );
-  }, [initialSegment]);
-
-  /*
-		======================================
-			EVENTS
-		======================================
-	 */
-
-  /**
-   * Reinitialize listener on change
-   */
-  useEffect(() => {
-    const partialListeners: PartialListener[] = [
-      { name: "complete", handler: onComplete },
-      { name: "loopComplete", handler: onLoopComplete },
-      { name: "enterFrame", handler: onEnterFrame },
-      { name: "segmentStart", handler: onSegmentStart },
-      { name: "config_ready", handler: onConfigReady },
-      { name: "data_ready", handler: onDataReady },
-      { name: "data_failed", handler: onDataFailed },
-      { name: "loaded_images", handler: onLoadedImages },
-      { name: "DOMLoaded", handler: onDOMLoaded },
-      { name: "destroy", handler: onDestroy },
-    ];
-
-    const listeners = partialListeners.filter(
-      (listener: PartialListener): listener is Listener =>
-        listener.handler != null,
-    );
-
-    if (!listeners.length) {
-      return;
-    }
-
-    const deregisterList = listeners.map(
-      /**
-       * Handle the process of adding an event listener
-       * @param {Listener} listener
-       * @return {Function} Function that deregister the listener
-       */
-      (listener) => {
-        animationInstanceRef.current?.addEventListener(
-          listener.name,
-          listener.handler,
-        );
-
-        // Return a function to deregister this listener
-        return () => {
-          animationInstanceRef.current?.removeEventListener(
-            listener.name,
-            listener.handler,
-          );
-        };
-      },
-    );
-
-    // Deregister listeners on unmount
-    return () => {
-      deregisterList.forEach((deregister) => deregister());
-    };
-  }, [
-    onComplete,
-    onLoopComplete,
-    onEnterFrame,
-    onSegmentStart,
-    onConfigReady,
-    onDataReady,
-    onDataFailed,
-    onLoadedImages,
-    onDOMLoaded,
-    onDestroy,
-  ]);
+  }, [config.initialSegment]);
 
   /**
    * Build the animation view
    */
-  const View = <div style={style} ref={animationContainer} {...rest} />;
+  const View = <div {...htmlProps} ref={animationContainer} />;
 
   return {
     View,
-    play,
-    stop,
-    pause,
-    setSpeed,
-    goToAndStop,
-    goToAndPlay,
-    setDirection,
-    playSegments,
-    setSubframe,
-    getDuration,
-    destroy,
+    ...interactionMethods,
     animationLoaded,
-    animationItem: animationInstanceRef.current,
+    animationItem: animationItemRef.current,
   };
 };
 

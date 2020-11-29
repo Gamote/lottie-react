@@ -10,13 +10,13 @@ const style = {
 };
 
 const options = {
-  data: robotAnimation,
+  animData: robotAnimation,
 };
 
 const PlaySegmentsOnHover = () => {
-  const lottieObj = useLottie(options, style);
+  const lottieObject = useLottie(options);
   const Animation = useLottieInteractivity({
-    lottieObj,
+    lottieObject,
     mode: "cursor",
     actions: [
       {

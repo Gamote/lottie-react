@@ -10,12 +10,12 @@ const style = {
 
 const UseLottieExamples = () => {
   const options = {
-    data: groovyWalkAnimation,
+    animData: groovyWalkAnimation,
     loop: true,
     autoplay: true,
   };
 
-  const Lottie = useLottie(options, style);
+  const Lottie = useLottie(options);
 
   // useEffect(() => {
   // 	setTimeout(() => {

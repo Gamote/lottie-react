@@ -10,14 +10,14 @@ const style = {
 };
 
 const options = {
-  data: likeButton,
+  animData: likeButton,
 };
 
 const UseInteractivityBasic = () => {
-  const lottieObj = useLottie(options, style);
+  const lottieObject = useLottie(options, style);
   const Animation = useLottieInteractivity({
     mode: "scroll",
-    lottieObj,
+    lottieObject,
     actions: [
       {
         visibility: [0.4, 0.9],

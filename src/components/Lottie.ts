@@ -4,81 +4,43 @@ import { LottieComponentProps } from "../types";
 import useLottie from "../hooks/useLottie";
 import useLottieInteractivity from "../hooks/useLottieInteractivity";
 
-const Lottie = (props: LottieComponentProps) => {
-  const { style, interactivity, ...lottieProps } = props;
+const Lottie = ({
+  config,
+  listeners,
+  lottieRef,
+  interactivity,
+  ...htmlProps
+}: LottieComponentProps) => {
+  const lottieObject = useLottie({
+    config,
+    listeners,
+    htmlProps,
+  });
 
   /**
-   * Initialize the 'useLottie' hook
-   */
-  const {
-    View,
-    play,
-    stop,
-    pause,
-    setSpeed,
-    goToAndStop,
-    goToAndPlay,
-    setDirection,
-    playSegments,
-    setSubframe,
-    getDuration,
-    destroy,
-    animationLoaded,
-    animationItem,
-  } = useLottie(lottieProps, style);
-
-  /**
-   * Make the hook variables/methods available through the provided 'lottieRef'
+   * Make the lottie object available through the provided 'lottieRef'
    */
   useEffect(() => {
-    if (props.lottieRef) {
-      props.lottieRef.current = {
-        play,
-        stop,
-        pause,
-        setSpeed,
-        goToAndPlay,
-        goToAndStop,
-        setDirection,
-        playSegments,
-        setSubframe,
-        getDuration,
-        destroy,
-        animationLoaded,
-        animationItem,
-      };
+    if (lottieRef) {
+      lottieRef.current = lottieObject;
     }
-  }, [props.lottieRef?.current]);
+  }, [lottieRef?.current]);
 
+  /**
+   * Interactive view
+   */
   if (interactivity) {
-    const EnhancedView = useLottieInteractivity({
-      lottieObj: {
-        View,
-        play,
-        stop,
-        pause,
-        setSpeed,
-        goToAndStop,
-        goToAndPlay,
-        setDirection,
-        playSegments,
-        setSubframe,
-        getDuration,
-        destroy,
-        animationLoaded,
-        animationItem,
-      },
+    return useLottieInteractivity({
+      lottieObject,
       ...interactivity,
     });
-
-    return EnhancedView;
   }
 
-  return View;
+  return lottieObject.View;
 };
 
 Lottie.propTypes = {
-  data: PropTypes.oneOfType([
+  animData: PropTypes.oneOfType([
     PropTypes.shape(undefined as any),
     PropTypes.string,
   ]).isRequired,
@@ -95,7 +57,6 @@ Lottie.propTypes = {
   onLoadedImages: PropTypes.func,
   onDOMLoaded: PropTypes.func,
   onDestroy: PropTypes.func,
-  style: PropTypes.shape(undefined as any),
 };
 
 Lottie.defaultProps = {
@@ -112,7 +73,6 @@ Lottie.defaultProps = {
   onLoadedImages: null,
   onDOMLoaded: null,
   onDestroy: null,
-  style: undefined,
 };
 
 export default Lottie;

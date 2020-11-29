@@ -23,7 +23,7 @@ describe("useLottieInteractivity", () => {
   describe("General", () => {
     test("mounts with a div wrapper around lottie element", async () => {
       const hook = renderUseLottieInteractivity({
-        lottieObj: {
+        lottieObject: {
           View: <span />,
         } as any,
         mode: "scroll",

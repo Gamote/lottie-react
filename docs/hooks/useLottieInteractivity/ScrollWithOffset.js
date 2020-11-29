@@ -7,13 +7,13 @@ const style = {
 };
 
 const options = {
-  data: likeButton,
+  animData: likeButton,
 };
 
 const ScrollWithOffset = () => {
-  const lottieObj = useLottie(options, style);
+  const lottieObject = useLottie(options, style);
   const Animation = useLottieInteractivity({
-    lottieObj,
+    lottieObject,
     mode: "scroll",
     actions: [
       {

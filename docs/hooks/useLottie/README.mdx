@@ -22,12 +22,13 @@ const style = {
 
 const Example = () => {
   const options = {
-    data: groovyWalkAnimation,
+    animData: groovyWalkAnimation,
     loop: true,
     autoplay: true,
+
   };
 
-  const { View } = useLottie(options, style);
+  const { View } = useLottie(options);
 
   return View;
 };

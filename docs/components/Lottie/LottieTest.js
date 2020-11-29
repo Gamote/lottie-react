@@ -16,7 +16,7 @@ const styles = {
 
 const LottieTest = () => {
   const ref = useRef();
-  const [data, setData] = useState(vac);
+  const [data, setData] = useState(groovyWalkAnimation);
   const [path, setPath] = useState(
     "https://assets4.lottiefiles.com/packages/lf20_ovhnyvxu.json",
   );
@@ -25,6 +25,23 @@ const LottieTest = () => {
   const [initialSegment, setInitialSegment] = useState([1, 250]);
   const [style, setStyle] = useState(styles.animation);
   const [show, setShow] = useState(true);
+  const [onComp, setOnComp] = useState("DAA");
+
+  // const l = useLottie({
+  //   animData: data,
+  //   loop,
+  //   autoplay,
+  //   style,
+  //   onLoopComplete: (event) => {
+  //     console.log("Loop completed", event);
+  //   },
+  // });
+  //
+  // return l.View;
+
+  setTimeout(() => {
+    setOnComp("NUU");
+  }, 10000);
 
   useEffect(() => {
     // Test the unmount hooks
@@ -90,41 +107,51 @@ const LottieTest = () => {
   const animation = (
     <>
       <Lottie
+        config={{
+          animData: path,
+          loop,
+          autoplay,
+          initialSegment,
+        }}
+        listeners={{
+          // Works
+          onComplete: () => {
+            console.log("Info: onComplete called");
+          },
+          // Works
+          onLoopComplete: () => {
+            console.log("Info: onLoopComplete called");
+          },
+          // Works
+          onEnterFrame: () => {
+            // console.log("Info: onEnterFrame called");
+          },
+          // Works
+          onSegmentStart: () => {
+            console.log("Info: onSegmentStart called");
+          },
+          onConfigReady: () => {
+            console.log("Info: onConfigReady called");
+          },
+          onDataReady: () => {
+            console.log("Info: onDataReady called");
+          },
+          // Works
+          onDataFailed: () => {
+            console.log("Info: onDataFailed called");
+          },
+          onLoadedImages: () => {
+            console.log("Info: onLoadedImages called");
+          },
+          // Works
+          onDOMLoaded: () => {
+            console.log("Info: onDOMLoaded called");
+          },
+          onDestroy: () => {
+            console.log("Info: onDestroy called");
+          },
+        }}
         lottieRef={ref}
-        data={path}
-        loop={loop}
-        autoplay={autoplay}
-        initialSegment={initialSegment}
-        // onComplete={() => {
-        // 	console.log("Info: onComplete called");
-        // }}
-        // onLoopComplete={() => {
-        // 	console.log("Info: onLoopComplete called");
-        // }}
-        // onEnterFrame={() => {
-        // 	console.log("Info: onEnterFrame called");
-        // }}
-        // onSegmentStart={() => {
-        // 	console.log("Info: onSegmentStart called");
-        // }}
-        // onConfigReady={() => {
-        // 	console.log("Info: onConfigReady called");
-        // }}
-        // onDataReady={() => {
-        // 	console.log("Info: onDataReady called");
-        // }}
-        // onDataFailed={() => {
-        // 	console.log("Info: onDataFailed called");
-        // }}
-        // onLoadedImages={() => {
-        // 	console.log("Info: onLoadedImages called");
-        // }}
-        // onDOMLoaded={() => {
-        // 	console.log("Info: onDOMLoaded called");
-        // }}
-        // onDestroy={() => {
-        // 	console.log("Info: onDestroy called");
-        // }}
         style={style}
       />
       <input type="checkbox" checked={loop} onChange={() => setLoop(!loop)} />{" "}

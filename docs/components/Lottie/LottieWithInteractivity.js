@@ -30,7 +30,9 @@ const interactivity = {
 const Example = () => {
   return (
     <Lottie
-      data={robotAnimation}
+      config={{
+        animData: robotAnimation,
+      }}
       style={style}
       interactivity={interactivity}
     />

@@ -7,14 +7,14 @@ const style = {
 };
 
 const options = {
-  data: robotAnimation,
+  animData: robotAnimation,
   loop: true,
 };
 
 const ScrollWithOffsetAndLoop = () => {
-  const lottieObj = useLottie(options, style);
+  const lottieObject = useLottie(options, style);
   const Animation = useLottieInteractivity({
-    lottieObj,
+    lottieObject,
     mode: "scroll",
     actions: [
       {

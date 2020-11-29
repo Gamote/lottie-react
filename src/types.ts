@@ -9,12 +9,12 @@ import {
   AnimationEventName,
   AnimationItem,
   AnimationSegment,
-  CanvasRendererConfig,
-  HTMLRendererConfig,
-  SVGRendererConfig,
 } from "lottie-web";
 
-export type LottieRefCurrentProps = {
+/**
+ * Interaction methods
+ */
+export type LottieInteractionMethods = {
   play: () => void;
   stop: () => void;
   pause: () => void;
@@ -29,15 +29,25 @@ export type LottieRefCurrentProps = {
   setSubframe: (useSubFrames: boolean) => void;
   getDuration: (inFrames?: boolean) => number | undefined;
   destroy: () => void;
-  animationLoaded: boolean;
-  animationItem: AnimationItem | undefined;
 };
 
+/**
+ * Object found in 'lottieRef.current'
+ */
+export type LottieRefCurrentProps = {
+  animationLoaded: boolean;
+  animationItem: AnimationItem | undefined;
+} & LottieInteractionMethods;
+
+/**
+ * Object found in `lottieRef`
+ */
 export type LottieRef = MutableRefObject<LottieRefCurrentProps | null>;
 
-export type LottieOptions = Omit<AnimationConfig, "container"> & {
-  data: any;
-  lottieRef?: LottieRef;
+/**
+ * Lottie animation events
+ */
+export type LottieAnimationEvents = {
   onComplete?: AnimationEventHandler | null;
   onLoopComplete?: AnimationEventHandler | null;
   onEnterFrame?: AnimationEventHandler | null;
@@ -48,11 +58,7 @@ export type LottieOptions = Omit<AnimationConfig, "container"> & {
   onLoadedImages?: AnimationEventHandler | null;
   onDOMLoaded?: AnimationEventHandler | null;
   onDestroy?: AnimationEventHandler | null;
-} & React.HTMLProps<HTMLDivElement>;
-
-export type LottieComponentProps = LottieOptions & {
-  interactivity?: Omit<InteractivityProps, "lottieObj">;
-} & React.HTMLProps<HTMLDivElement>;
+};
 
 export type Listener = {
   name: AnimationEventName;
@@ -61,6 +67,40 @@ export type Listener = {
 export type PartialListener = Omit<Listener, "handler"> & {
   handler?: Listener["handler"] | null;
 };
+
+/**
+ * Lottie configuration object
+ */
+type LottieConfig = Omit<AnimationConfig, "container"> & {
+  animData: any;
+};
+
+/**
+ * Properties for the Lottie hook
+ */
+export type LottieHookProps = {
+  config: LottieConfig;
+  listeners?: LottieAnimationEvents;
+  htmlProps?: React.HTMLProps<HTMLDivElement>;
+};
+
+/**
+ * Properties for the Lottie component
+ */
+export type LottieComponentProps = LottieHookProps & {
+  lottieRef?: LottieRef;
+  interactivity?: Omit<InteractivityProps, "lottieObject">;
+} & React.HTMLProps<HTMLDivElement>;
+
+/**
+ * Object found in `lottieRef`
+ */
+export type AnimationItemRef = MutableRefObject<AnimationItem | undefined>;
+
+/**
+ * Object returned by 'useLottie'
+ */
+export type LottieObject = { View: ReactElement } & LottieRefCurrentProps;
 
 // Interactivity
 export type Axis = "x" | "y";
@@ -74,7 +114,7 @@ export type Action = {
 };
 
 export type InteractivityProps = {
-  lottieObj: { View: ReactElement } & LottieRefCurrentProps;
+  lottieObject: LottieObject;
   actions: Action[];
   mode: "scroll" | "cursor";
 };

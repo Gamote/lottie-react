@@ -4,10 +4,10 @@ import { renderHook } from "@testing-library/react-hooks";
 import groovyWalk from "./assets/groovyWalk.json";
 
 import useLottie from "../hooks/useLottie";
-import { LottieOptions } from "../types";
-function initUseLottie(props?: Partial<LottieOptions>, style?: CSSProperties) {
+import { LottieHookProps } from "../types";
+function initUseLottie(props?: Partial<LottieHookProps>, style?: CSSProperties) {
   const defaultProps = {
-    data: groovyWalk,
+    animData: groovyWalk,
   };
 
   return renderHook(
@@ -21,7 +21,7 @@ function initUseLottie(props?: Partial<LottieOptions>, style?: CSSProperties) {
         style,
       ),
     {
-      initialProps: defaultProps as Partial<LottieOptions>,
+      initialProps: defaultProps as Partial<LottieHookProps>,
     },
   );
 }
@@ -31,7 +31,7 @@ function initUseLottie(props?: Partial<LottieOptions>, style?: CSSProperties) {
  * will remain 'null' so the animation will never be initialized
  * TODO: check if we can avoid a manual rerender
  */
-function renderUseLottie(hook: any, props?: Partial<LottieOptions>) {
+function renderUseLottie(hook: any, props?: Partial<LottieHookProps>) {
   render(hook.result.current.View);
 
   /*
@@ -68,7 +68,7 @@ describe("useLottie(...)", () => {
     });
   });
 
-  describe("w/o animationInstanceRef", () => {
+  describe("w/o animationItemRef", () => {
     test("should check the interaction methods", async () => {
       const { result } = initUseLottie();
 
@@ -97,7 +97,7 @@ describe("useLottie(...)", () => {
     });
   });
 
-  describe("w/ animationInstanceRef", () => {
+  describe("w/ animationItemRef", () => {
     test("should check the interaction methods", async () => {
       const hook = initUseLottie();
 

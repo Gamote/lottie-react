@@ -10,7 +10,7 @@ jest.mock("../hooks/useLottieInteractivity.tsx");
 
 function renderLottie(props?: Partial<LottieComponentProps>) {
   const defaultProps = {
-    data: groovyWalk,
+    animData: groovyWalk,
   };
 
   return render(<Lottie {...defaultProps} {...props} />);

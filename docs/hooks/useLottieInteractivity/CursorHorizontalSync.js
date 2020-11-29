@@ -10,13 +10,13 @@ const style = {
 };
 
 const options = {
-  data: hamsterAnimation,
+  animData: hamsterAnimation,
 };
 
 const CursorHorizontalSync = () => {
-  const lottieObj = useLottie(options, style);
+  const lottieObject = useLottie(options);
   const Animation = useLottieInteractivity({
-    lottieObj,
+    lottieObject,
     mode: "cursor",
     actions: [
       {
