@@ -1,11 +1,14 @@
-import React, { CSSProperties } from "react";
 import { render } from "@testing-library/react";
 import { renderHook } from "@testing-library/react-hooks";
-import groovyWalk from "./assets/groovyWalk.json";
-
+import React, { CSSProperties } from "react";
 import useLottie from "../hooks/useLottie";
 import { LottieHookProps } from "../types";
-function initUseLottie(props?: Partial<LottieHookProps>, style?: CSSProperties) {
+import groovyWalk from "./assets/groovyWalk.json";
+
+function initUseLottie(
+  props?: Partial<LottieHookProps>,
+  style?: CSSProperties,
+) {
   const defaultProps = {
     data: groovyWalk,
   };

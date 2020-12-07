@@ -4,8 +4,9 @@ export const getContainerVisibility = (container: Element): number => {
   const current = window.innerHeight - top;
   const max = window.innerHeight + height;
   return current / max;
-}
+};
 
+// TODO: define the return value in 'types.ts'
 export const getContainerCursorPosition = (
   container: Element,
   cursorX: number,
@@ -17,4 +18,4 @@ export const getContainerCursorPosition = (
   const y = (cursorY - top) / height;
 
   return { x, y };
-}
+};

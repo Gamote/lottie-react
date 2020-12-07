@@ -1,8 +1,8 @@
-import { useEffect } from "react";
 import * as PropTypes from "prop-types";
-import { LottieComponentProps } from "../types";
+import { useEffect } from "react";
 import useLottie from "../hooks/useLottie";
 import useLottieInteractivity from "../hooks/useLottieInteractivity";
+import { LottieComponentProps } from "../types";
 
 const Lottie = ({
   lottieRef,

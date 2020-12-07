@@ -1,8 +1,3 @@
-import React, {
-  MutableRefObject,
-  AnimationEventHandler,
-  ReactElement,
-} from "react";
 import {
   AnimationConfig,
   AnimationDirection,
@@ -10,6 +5,11 @@ import {
   AnimationItem,
   AnimationSegment,
 } from "lottie-web";
+import React, {
+  MutableRefObject,
+  AnimationEventHandler,
+  ReactElement,
+} from "react";
 
 /**
  * Interaction methods

@@ -1,10 +1,9 @@
-import React from "react";
 import { render } from "@testing-library/react";
-import groovyWalk from "./assets/groovyWalk.json";
-
+import React from "react";
 import Lottie from "../components/Lottie";
-import { LottieComponentProps, LottieRef } from "../types";
 import useLottieInteractivity from "../hooks/useLottieInteractivity";
+import { LottieComponentProps, LottieRef } from "../types";
+import groovyWalk from "./assets/groovyWalk.json";
 
 jest.mock("../hooks/useLottieInteractivity.tsx");
 

@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
 import lottie, { AnimationItem } from "lottie-web";
+import React, { useEffect, useRef, useState } from "react";
 import { LottieHookProps, LottieObject } from "../types";
-import useInteractionMethods from "./useInteractionMethods";
 import useAnimationEvents from "./useAnimationEvents";
+import useInteractionMethods from "./useInteractionMethods";
 
 const useLottie = (props: LottieHookProps): LottieObject => {
   const { listeners, containerProps, ...config } = props;
@@ -40,9 +40,7 @@ const useLottie = (props: LottieHookProps): LottieObject => {
     // Save the animation instance
     animationItemRef.current = lottie.loadAnimation({
       ...rest,
-      ...(typeof data === "string"
-        ? { path: data }
-        : { animationData: data }),
+      ...(typeof data === "string" ? { path: data } : { animationData: data }),
       ...forcedConfig,
       container: animationContainer.current,
     });

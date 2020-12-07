@@ -1,7 +1,7 @@
-import React from "react";
 import { render, fireEvent } from "@testing-library/react";
 import { renderHook } from "@testing-library/react-hooks";
-
+import React from "react";
+import { act } from "react-dom/test-utils";
 import useLottieInteractivity, {
   getContainerVisibility,
   getContainerCursorPosition,
@@ -9,7 +9,6 @@ import useLottieInteractivity, {
   InitInteractivity,
 } from "../hooks/useLottieInteractivity";
 import { InteractivityProps } from "../types";
-import { act } from "react-dom/test-utils";
 
 function renderUseLottieInteractivity(props: InteractivityProps) {
   return renderHook(() => useLottieInteractivity(props));
@@ -345,7 +344,7 @@ describe("useInitInteractivity", () => {
       const commonProps = {
         wrapperRef: wrapperRef as any,
         animationItem: animationItem as any,
-        mode: "cursor" as "cursor",
+        mode: "cursor" as const,
       };
 
       renderUseInitInteractivity({

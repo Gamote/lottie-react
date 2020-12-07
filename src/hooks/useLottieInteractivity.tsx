@@ -1,7 +1,13 @@
+// TODO: refactor the whole hook and if possible split it
+//  in small hooks and attach them to 'useLottie' hook
+
 import { AnimationSegment } from "lottie-web";
 import React, { useEffect, ReactElement, useRef } from "react";
 import { InteractivityProps } from "../types";
-import { getContainerCursorPosition, getContainerVisibility } from "../utils/helpers";
+import {
+  getContainerCursorPosition,
+  getContainerVisibility,
+} from "../utils/helpers";
 
 export type InitInteractivity = {
   wrapperRef: React.RefObject<HTMLDivElement>;
@@ -72,7 +78,7 @@ export const useInitInteractivity = ({
             assignedSegment = action.frames;
           } else {
             // if playing any segments currently.
-            //check if segments in state are equal to the frames selected by action
+            // check if segments in state are equal to the frames selected by action
             if (assignedSegment !== action.frames) {
               // if they are not equal. new segments are to be loaded
               animationItem.playSegments(
@@ -111,7 +117,7 @@ export const useInitInteractivity = ({
       return () => {
         document.removeEventListener("scroll", scrollHandler);
       };
-    }
+    };
 
     const cursorModeHandler = () => {
       const handleCursor = (_x: number, _y: number) => {
@@ -217,7 +223,7 @@ export const useInitInteractivity = ({
         wrapper.removeEventListener("mousemove", mouseMoveHandler);
         wrapper.removeEventListener("mouseout", mouseOutHandler);
       };
-    }
+    };
 
     switch (mode) {
       case "scroll":

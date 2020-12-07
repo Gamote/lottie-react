@@ -1,7 +1,9 @@
-import { AnimationItemRef, LottieInteractionMethods } from "../types";
 import { AnimationDirection, AnimationSegment } from "lottie-web";
+import { AnimationItemRef, LottieInteractionMethods } from "../types";
 
-const useInteractionMethods = (animationItemRef: AnimationItemRef): LottieInteractionMethods => {
+const useInteractionMethods = (
+  animationItemRef: AnimationItemRef,
+): LottieInteractionMethods => {
   /**
    * Play
    */
@@ -104,7 +106,7 @@ const useInteractionMethods = (animationItemRef: AnimationItemRef): LottieIntera
     setSubframe,
     getDuration,
     destroy,
-  }
+  };
 };
 
 export default useInteractionMethods;

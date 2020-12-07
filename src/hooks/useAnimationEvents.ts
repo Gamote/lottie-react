@@ -1,10 +1,10 @@
+import { useEffect } from "react";
 import {
   AnimationItemRef,
   Listener,
   LottieAnimationEvents,
   PartialListener,
 } from "../types";
-import { useEffect } from "react";
 
 const useAnimationEvents = (
   { current: animationItem }: AnimationItemRef,
