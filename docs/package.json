@@ -5,9 +5,12 @@
   "author": "David Gamote <contact@gamote.ro>",
   "license": "MIT",
   "dependencies": {
+    "@mdx-js/mdx": "^1.6.22",
+    "@mdx-js/react": "^1.6.22",
     "gatsby": "^2.28.1",
+    "gatsby-plugin-mdx": "^1.6.0",
+    "gatsby-theme-apollo-docs": "^4.5.12",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "gatsby-theme-apollo-docs": "^4.5.12"
+    "react-dom": "^17.0.1"
   }
 }

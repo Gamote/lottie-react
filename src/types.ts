@@ -72,7 +72,7 @@ export type PartialListener = Omit<Listener, "handler"> & {
  * Lottie configuration object
  */
 type LottieConfig = Omit<AnimationConfig, "container"> & {
-  data: any;
+  data: boolean | any; // TODO: find a better way to describe: path or object
 };
 
 /**

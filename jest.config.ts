@@ -1,4 +1,4 @@
-import type {Config} from '@jest/types';
+import type { Config } from "@jest/types";
 
 export default async (): Promise<Config.InitialOptions> => {
   return {
@@ -18,7 +18,7 @@ export default async (): Promise<Config.InitialOptions> => {
     setupFilesAfterEnv: [
       // "@testing-library/react/cleanup-after-each",
       "@testing-library/jest-dom/extend-expect",
-      "jest-canvas-mock"
+      "jest-canvas-mock",
     ],
 
     // Test spec file resolution pattern

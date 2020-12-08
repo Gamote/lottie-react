@@ -1,16 +1,15 @@
-import babel from "rollup-plugin-babel";
-import external from "rollup-plugin-peer-deps-external";
-import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
-import postcss from "rollup-plugin-postcss";
+import resolve from "@rollup/plugin-node-resolve";
 import autoprefixer from "autoprefixer";
-import { terser } from "rollup-plugin-terser";
+import babel from "rollup-plugin-babel";
 import dts from "rollup-plugin-dts";
-
+import external from "rollup-plugin-peer-deps-external";
+import postcss from "rollup-plugin-postcss";
+import { terser } from "rollup-plugin-terser";
 import packageJSON from "./package.json";
 
 /**
- * We are using 'build/compiled/index.md' instead of 'src/index.tsx'
+ * We are using 'build/compiled/index.js' instead of 'src/index.tsx'
  * because we need to compile the code first.
  *
  * We could've used the '@rollup/plugin-typescript' but that plugin
@@ -20,7 +19,7 @@ import packageJSON from "./package.json";
  *
  * @type {string}
  */
-const input = "./compiled/index.md";
+const input = "./compiled/index.js";
 
 /**
  * Get the extension for the minified files

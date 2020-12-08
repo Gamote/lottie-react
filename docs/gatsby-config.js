@@ -18,13 +18,16 @@ module.exports = {
         baseUrl: "https://lottiereact.com",
         // spectrumPath: "/", // TODO: find out what's this for
         sidebarCategories: {
-          null: ["index"],
+          null: ["index", "installation", "getting-started"],
+          Guides: ["guides/from-zero"],
+          "API Reference": ["api/use-lottie", "api/lottie"],
+          Examples: ["examples/simple"],
         },
         githubRepo: "Gamote/lottie-react",
         defaultVersion: "master",
         logoLink: "http://npmjs.com", // TODO: change this + the logo image
         baseDir: "docs",
-        contentDir: "src",
+        contentDir: "src/content",
         navConfig: {
           // TODO: change this
           "Cat Link": {
@@ -68,5 +71,13 @@ module.exports = {
         },
       },
     },
+    // {
+    //   resolve: `gatsby-plugin-mdx`,
+    //   options: {
+    //     defaultLayouts: {
+    //       default: require.resolve("./src/Layout.tsx"),
+    //     },
+    //   },
+    // },
   ],
 };
