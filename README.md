@@ -113,6 +113,6 @@ Let us know if you have any suggestions or contributions. This package has the m
 
 ## License
 
-**lottie-react** is available under the [MIT license](https://github.com/Gamote/lottie-react/blob/master/LICENSE).
+**lottie-react** is available under the [MIT license](https://github.com/Gamote/lottie-react/blob/master/LICENSE.md).
 
 Thanks to [David Probst Jr](https://lottiefiles.com/davidprobstjr) for the animations used in the examples.
