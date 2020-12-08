@@ -19,6 +19,6 @@ deploy:
   provider: pages
   skip_cleanup: true
   github_token: $GITHUB_TOKEN
-  local_dir: old-docs-dist
+  local_dir: old-oldv2.docs-dist
   on:
     branch: master

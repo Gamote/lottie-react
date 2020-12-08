@@ -10,7 +10,7 @@ import dts from "rollup-plugin-dts";
 import packageJSON from "./package.json";
 
 /**
- * We are using 'build/compiled/index.js' instead of 'src/index.tsx'
+ * We are using 'build/compiled/index.md' instead of 'src/index.tsx'
  * because we need to compile the code first.
  *
  * We could've used the '@rollup/plugin-typescript' but that plugin
@@ -20,7 +20,7 @@ import packageJSON from "./package.json";
  *
  * @type {string}
  */
-const input = "./compiled/index.js";
+const input = "./compiled/index.md";
 
 /**
  * Get the extension for the minified files
