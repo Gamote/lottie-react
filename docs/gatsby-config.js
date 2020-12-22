@@ -21,7 +21,7 @@ module.exports = {
           null: ["index", "installation", "getting-started"],
           Guides: ["guides/from-zero"],
           "API Reference": ["api/use-lottie", "api/lottie"],
-          Examples: ["examples/simple"],
+          Examples: ["examples/simple", "examples/full"],
         },
         githubRepo: "Gamote/lottie-react",
         defaultVersion: "master",

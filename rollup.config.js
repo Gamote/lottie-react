@@ -62,7 +62,7 @@ const exports = {
       sourcemap: true,
       exports: "named",
     },
-    external: ["lottie-web"],
+    external: ["lottie-web"], // TODO: should we add "react", "react-dom"?
     plugins: reusablePluginList,
   },
   cjs_min: {
@@ -72,7 +72,7 @@ const exports = {
       format: "cjs",
       exports: "named",
     },
-    external: ["lottie-web"],
+    external: ["lottie-web"], // TODO: should we add "react", "react-dom"?
     plugins: [...reusablePluginList, terser()],
   },
   umd: {
@@ -116,7 +116,7 @@ const exports = {
       sourcemap: true,
       exports: "named",
     },
-    external: ["lottie-web"],
+    external: ["lottie-web"], // TODO: should we add "react", "react-dom"?
     plugins: reusablePluginList,
   },
   es_min: {
@@ -126,7 +126,7 @@ const exports = {
       format: "es",
       exports: "named",
     },
-    external: ["lottie-web"],
+    external: ["lottie-web"], // TODO: should we add "react", "react-dom"?
     plugins: [...reusablePluginList, terser()],
   },
   dts: {

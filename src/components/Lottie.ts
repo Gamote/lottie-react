@@ -2,7 +2,7 @@ import * as PropTypes from "prop-types";
 import { useEffect } from "react";
 import useLottie from "../hooks/useLottie";
 import useLottieInteractivity from "../hooks/useLottieInteractivity";
-import { LottieComponentProps } from "../types";
+import { InteractivityProps, LottieComponentProps } from "../types";
 
 const Lottie = ({
   lottieRef,
@@ -29,11 +29,31 @@ const Lottie = ({
   /**
    * Interactive view
    */
+  const interactivityL = useLottieInteractivity({
+    lottieObject,
+    mode: "scroll",
+    actions: [
+      {
+        visibility: [0, 0.2],
+        type: "stop",
+        frames: [0],
+      },
+      {
+        visibility: [0.2, 0.45],
+        type: "seek",
+        frames: [0, 45],
+      },
+      {
+        visibility: [0.45, 1.0],
+        type: "loop",
+        frames: [45, 60],
+      },
+    ],
+    ...interactivity,
+  });
+
   if (interactivity) {
-    return useLottieInteractivity({
-      lottieObject,
-      ...interactivity,
-    });
+    return interactivityL;
   }
 
   return lottieObject.View;
