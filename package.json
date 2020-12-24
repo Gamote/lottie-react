@@ -42,7 +42,7 @@
     "tsc:compile:watch": "tsc --watch"
   },
   "dependencies": {
-    "lottie-web": "^5.7.4",
+    "lottie-web": "^5.7.5",
     "prop-types": "^15.7.2"
   },
   "devDependencies": {
