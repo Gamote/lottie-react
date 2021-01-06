@@ -6,62 +6,96 @@ import {
   PartialListener,
 } from "../types";
 
+export const addEventListeners = (
+  animationItemRef: AnimationItemRef,
+  animationEvents: LottieAnimationEvents = {},
+) => {
+  // eslint-disable-next-line no-console
+  console.log("[LOTTIE REACT] ON EVENT LOAD", animationItemRef?.current);
+
+  if (!animationItemRef || !animationItemRef.current) {
+    return () => undefined;
+  }
+
+  const partialListeners: PartialListener[] = [
+    { name: "complete", handler: animationEvents.onComplete },
+    { name: "loopComplete", handler: animationEvents.onLoopComplete },
+    { name: "enterFrame", handler: animationEvents.onEnterFrame },
+    { name: "segmentStart", handler: animationEvents.onSegmentStart },
+    { name: "config_ready", handler: animationEvents.onConfigReady },
+    {
+      name: "data_ready",
+      handler: () => {
+        return animationEvents.onDataReady;
+      },
+    },
+    { name: "data_failed", handler: animationEvents.onDataFailed },
+    { name: "loaded_images", handler: animationEvents.onLoadedImages },
+    {
+      name: "DOMLoaded",
+      handler: () => {
+        return animationEvents.onDOMLoaded;
+      },
+    },
+    {
+      name: "destroy",
+      handler: () => {
+        return animationEvents.onDestroy;
+      },
+    },
+  ];
+
+  const listeners = partialListeners.filter(
+    (listener: PartialListener): listener is Listener =>
+      listener.handler != null,
+  );
+
+  if (!listeners.length) {
+    return () => undefined;
+  }
+
+  const deregisterList = listeners.map(
+    /**
+     * Handle the process of adding an event listener
+     * @param {Listener} listener
+     * @return {Function} Function that deregister the listener
+     */
+    (listener) => {
+      animationItemRef.current?.addEventListener(
+        listener.name,
+        listener.handler,
+      );
+
+      // Return a function to deregister this listener
+      return () => {
+        animationItemRef.current?.removeEventListener(
+          listener.name,
+          listener.handler,
+        );
+      };
+    },
+  );
+
+  // Deregister listeners on unmount
+  return () => {
+    // eslint-disable-next-line no-console
+    console.log("[LOTTIE REACT] ON EVENT UNLOAD", animationItemRef?.current);
+
+    deregisterList.forEach((deregister) => deregister());
+  };
+};
+
 const useAnimationEvents = (
-  { current: animationItem }: AnimationItemRef,
+  animationItemRef: AnimationItemRef,
   animationEvents: LottieAnimationEvents = {},
 ) => {
   /**
    * Reinitialize listener on change
    */
-  useEffect(() => {
-    if (!animationItem) {
-      return;
-    }
-
-    const partialListeners: PartialListener[] = [
-      { name: "complete", handler: animationEvents.onComplete },
-      { name: "loopComplete", handler: animationEvents.onLoopComplete },
-      { name: "enterFrame", handler: animationEvents.onEnterFrame },
-      { name: "segmentStart", handler: animationEvents.onSegmentStart },
-      { name: "config_ready", handler: animationEvents.onConfigReady },
-      { name: "data_ready", handler: animationEvents.onDataReady },
-      { name: "data_failed", handler: animationEvents.onDataFailed },
-      { name: "loaded_images", handler: animationEvents.onLoadedImages },
-      { name: "DOMLoaded", handler: animationEvents.onDOMLoaded },
-      { name: "destroy", handler: animationEvents.onDestroy },
-    ];
-
-    const listeners = partialListeners.filter(
-      (listener: PartialListener): listener is Listener =>
-        listener.handler != null,
-    );
-
-    if (!listeners.length) {
-      return;
-    }
-
-    const deregisterList = listeners.map(
-      /**
-       * Handle the process of adding an event listener
-       * @param {Listener} listener
-       * @return {Function} Function that deregister the listener
-       */
-      (listener) => {
-        animationItem.addEventListener(listener.name, listener.handler);
-
-        // Return a function to deregister this listener
-        return () => {
-          animationItem.removeEventListener(listener.name, listener.handler);
-        };
-      },
-    );
-
-    // Deregister listeners on unmount
-    return () => {
-      deregisterList.forEach((deregister) => deregister());
-    };
-  }, [
-    animationItem,
+  useEffect(() => addEventListeners(animationItemRef, animationEvents), [
+    // TODO: should we keep this in here?
+    // animationItemRef?.current,
+    // TODO: should use just 'animationEvents'?
     animationEvents.onComplete,
     animationEvents.onLoopComplete,
     animationEvents.onEnterFrame,

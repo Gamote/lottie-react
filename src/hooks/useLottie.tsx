@@ -1,97 +1,207 @@
 import lottie, { AnimationItem } from "lottie-web";
-import React, { useEffect, useRef, useState } from "react";
-import { LottieHookProps, LottieObject } from "../types";
-import useAnimationEvents from "./useAnimationEvents";
-import useInteractionMethods from "./useInteractionMethods";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  Listener,
+  LottieHookProps,
+  LottieObject,
+  PlayerEvent,
+  PlayerState,
+} from "../types";
+import ProgressBar from "../components/Progress/ProgressBar";
 
 const useLottie = (props: LottieHookProps): LottieObject => {
-  const { listeners, containerProps, ...config } = props;
+  const { onEvent, onStateChange, containerProps, ...config } = props;
 
   const animationContainer = useRef<HTMLDivElement>(null);
-  const animationItemRef = useRef<AnimationItem>();
-
-  const [animationLoaded, setAnimationLoaded] = useState<boolean>(false);
-
-  /**
-   * Interaction methods
-   */
-  const interactionMethods = useInteractionMethods(animationItemRef);
-
-  /**
-   * Animation events
-   */
-  useAnimationEvents(animationItemRef, listeners);
+  const [animationItem, setAnimationItem] = useState<AnimationItem | null>(
+    null,
+  );
+  const [playerState, _setPlayerState] = useState<PlayerState>(
+    PlayerState.Loading,
+  );
+  const [currentFrame, setCurrentFrame] = useState<number>(0);
 
   /**
-   * Load a new animation, and if it's the case, destroy the previous one
-   * @param {Object} forcedConfig
+   * On player state changes
    */
-  const loadAnimation = (forcedConfig = {}) => {
-    // Return if the container ref is null
-    if (!animationContainer.current) {
-      return;
+  const setPlayerState = (
+    stateName: PlayerState,
+    skipStateChangeListener?: boolean,
+  ) => {
+    _setPlayerState(stateName);
+
+    if (
+      !skipStateChangeListener &&
+      onStateChange &&
+      typeof onStateChange === "function"
+    ) {
+      onStateChange(stateName);
     }
-
-    // Destroy any previous instance
-    animationItemRef.current?.destroy();
-
-    const { data, ...rest } = config;
-
-    // Save the animation instance
-    animationItemRef.current = lottie.loadAnimation({
-      ...rest,
-      ...(typeof data === "string" ? { path: data } : { animationData: data }),
-      ...forcedConfig,
-      container: animationContainer.current,
-    });
-
-    setAnimationLoaded(!!animationItemRef.current);
   };
 
   /**
-   * Initialize and listen for changes that should reinitialised the animation
+   * Trigger an event
    */
-  useEffect(() => {
-    loadAnimation();
+  const triggerEvent = (eventName: PlayerEvent) => {
+    if (onEvent) {
+      onEvent(eventName);
+    }
+  };
+
+  /**
+   * Initialize the animation and listen for changes that should reinitialised the animation
+   * TODO: can we use just 'useEffect' in here?
+   */
+  useLayoutEffect((): (() => any) => {
+    // eslint-disable-next-line no-console
+    console.log("[LOTTIE REACT] ON ANIMATION LOAD");
+
+    // Stop if the container is not ready
+    //  TODO: is this needed when we're using 'useLayoutEffect'?
+    if (!animationContainer.current) {
+      return () => undefined;
+    }
+
+    // Load and save the animation instance
+    const { data, ...rest } = config;
+
+    // Initialise and load the Lottie animation
+    let newAnimationItem: AnimationItem;
+
+    if (!data || data.length < 1) {
+      triggerEvent(PlayerEvent.Error);
+      setPlayerState(PlayerState.Error);
+      return () => undefined;
+    }
+
+    try {
+      newAnimationItem = lottie.loadAnimation({
+        ...rest,
+        ...(typeof data === "string"
+          ? { path: data }
+          : { animationData: data }),
+        container: animationContainer.current,
+      });
+
+      // Add event listeners
+      const eventListeners: Listener[] = [
+        {
+          name: "complete",
+          handler: () => {
+            setPlayerState(PlayerState.Paused);
+          },
+        },
+        { name: "loopComplete", handler: () => undefined },
+        {
+          name: "enterFrame",
+          handler: () => {
+            triggerEvent(PlayerEvent.Frame);
+
+            const newCurrentFrame = Math.floor(
+              newAnimationItem.currentFrame || 0,
+            );
+
+            if (newCurrentFrame !== currentFrame) {
+              setCurrentFrame(newCurrentFrame);
+            }
+          },
+        },
+        { name: "segmentStart", handler: () => undefined },
+        { name: "config_ready", handler: () => undefined },
+        {
+          name: "data_ready",
+          handler: () => {
+            triggerEvent(PlayerEvent.Ready);
+          },
+        },
+        {
+          name: "data_failed",
+          handler: () => {
+            setPlayerState(PlayerState.Error);
+          },
+        },
+        { name: "loaded_images", handler: () => undefined },
+        {
+          name: "DOMLoaded",
+          handler: () => {
+            triggerEvent(PlayerEvent.Load);
+            setPlayerState(PlayerState.Frozen); // TODO: is Frozen the right state
+          },
+        },
+        { name: "destroy", handler: () => undefined },
+      ];
+
+      const listenerDeregisterList = eventListeners.map(
+        /**
+         * Handle the process of adding an event listener
+         * @param {Listener} listener
+         * @return {Function} Function that deregister the listener
+         */
+        (listener) => {
+          newAnimationItem?.addEventListener(listener.name, listener.handler);
+          // TODO: to remove
+          // newAnimationItem?.addEventListener(listener.name, () => {
+          //   console.log("EVENT", listener.name);
+          // });
+
+          // Return a function to deregister this listener
+          return () => {
+            newAnimationItem?.removeEventListener(
+              listener.name,
+              listener.handler,
+            );
+          };
+        },
+      );
+
+      // Save the animation item
+      setAnimationItem(newAnimationItem);
+
+      return () => {
+        // eslint-disable-next-line no-console
+        console.log("[LOTTIE REACT] ON ANIMATION UNMOUNT");
+
+        // Cleanup: destroy any previous instance
+        listenerDeregisterList.forEach((deregister) => deregister());
+        newAnimationItem.destroy();
+        setAnimationItem(null);
+        setPlayerState(PlayerState.Loading);
+      };
+    } catch (e) {
+      triggerEvent(PlayerEvent.Error);
+      setPlayerState(PlayerState.Error);
+    }
+
+    return () => undefined;
   }, [config.data]);
 
   /**
-   * Update the loop state
+   * State effects
    */
+  // (Effect) Loop
   useEffect(() => {
-    if (!animationItemRef.current) {
-      return;
-    }
-
-    animationItemRef.current.loop = !!config.loop;
-
-    if (config.loop && animationItemRef.current.isPaused) {
-      animationItemRef.current.play();
+    if (animationItem) {
+      animationItem.loop = !!config.loop;
+      setAnimationItem(animationItem);
     }
   }, [config.loop]);
 
-  /**
-   * Update the autoplay state
-   */
+  // (Effect) Autoplay
   useEffect(() => {
-    if (!animationItemRef.current) {
-      return;
+    if (animationItem) {
+      animationItem.autoplay = Boolean(config.autoplay);
     }
-
-    animationItemRef.current.autoplay = !!config.autoplay;
   }, [config.autoplay]);
 
-  /**
-   * Update the initial segment state
-   */
+  // (Effect) Initial segment // TODO: to finish
   useEffect(() => {
-    if (!animationItemRef.current) {
+    if (!animationItem) {
       return;
     }
 
     // When null should reset to default animation length
     if (!config.initialSegment) {
-      animationItemRef.current.resetSegments(false);
+      animationItem.resetSegments(false);
       // TODO: find a way to increase the totalFrames to the max in the current loop
       return;
     }
@@ -107,29 +217,153 @@ const useLottie = (props: LottieHookProps): LottieObject => {
     // If the current position it's not in the new segment
     // set the current position to start
     if (
-      animationItemRef.current.currentRawFrame < config.initialSegment[0] ||
-      animationItemRef.current.currentRawFrame > config.initialSegment[1]
+      animationItem.currentRawFrame < config.initialSegment[0] ||
+      animationItem.currentRawFrame > config.initialSegment[1]
     ) {
-      animationItemRef.current.currentRawFrame = config.initialSegment[0];
+      animationItem.currentRawFrame = config.initialSegment[0];
     }
 
     // Update the segment
-    animationItemRef.current.setSegment(
+    animationItem.setSegment(
       config.initialSegment[0],
       config.initialSegment[1],
     );
   }, [config.initialSegment]);
 
   /**
+   * Interaction methods
+   */
+  // const interactionMethods = useInteractionMethods(animationItem);
+
+  // (Method) Play
+  const play = () => {
+    if (animationItem) {
+      triggerEvent(PlayerEvent.Play);
+
+      animationItem.play();
+
+      setPlayerState(PlayerState.Playing);
+    }
+  };
+
+  // (Method) Pause
+  const pause = () => {
+    if (animationItem) {
+      triggerEvent(PlayerEvent.Pause);
+
+      animationItem.pause();
+
+      setPlayerState(PlayerState.Paused);
+    }
+  };
+
+  // (Method) Stop
+  const stop = () => {
+    if (animationItem) {
+      triggerEvent(PlayerEvent.Stop);
+
+      animationItem.pause();
+
+      setPlayerState(PlayerState.Stopped);
+    }
+  };
+
+  // (Method) Set player speed
+  const setSpeed = (speed: number) => {
+    animationItem?.setSpeed(speed);
+  };
+
+  // (Method) Set seeker
+  const setSeeker = (seek: number, shouldPlay = false) => {
+    if (!shouldPlay || playerState !== PlayerState.Playing) {
+      animationItem?.goToAndStop(seek, true);
+      setPlayerState(PlayerState.Paused);
+    } else {
+      animationItem?.goToAndPlay(seek, true);
+      setPlayerState(PlayerState.Playing);
+    }
+  };
+
+  /**
    * Build the animation view
    */
-  const View = <div {...containerProps} ref={animationContainer} />;
+  const isLoading = playerState === PlayerState.Loading;
+  const isError = playerState === PlayerState.Error;
+
+  const View = (
+    <>
+      {isLoading && (
+        <div {...containerProps}>
+          <img
+            style={{
+              width: "100%",
+              height: "100%",
+              margin: 0,
+              padding: 0,
+            }}
+            alt="Animation is loading..."
+            src="https://svgshare.com/i/Sfy.svg"
+            title=""
+          />
+        </div>
+      )}
+
+      {isError && (
+        <div {...containerProps}>
+          <img
+            style={{
+              width: "100%",
+              height: "100%",
+              margin: 0,
+              padding: 0,
+            }}
+            alt="Animation error..."
+            src="https://svgshare.com/i/Sgd.svg"
+            title=""
+          />
+        </div>
+      )}
+
+      <div
+        {...containerProps}
+        style={{
+          ...containerProps?.style,
+          ...(isLoading || isError ? { display: "none" } : null),
+        }}
+        ref={animationContainer}
+      />
+
+      <ProgressBar
+        currentFrames={currentFrame || 0}
+        totalFrames={animationItem?.totalFrames || 0}
+        onChange={(progress, isDraggingEnded) => {
+          setSeeker(
+            progress,
+            isDraggingEnded && playerState === PlayerState.Playing,
+          );
+
+          // If the consumer is not done dragging the progress indicator
+          // set it back to what it was, because `setSeeker()` changed it
+          // TODO: should we move the logic in `setSeeker()` and pass `isDraggingEnded`
+          //  or create an `ON_HOLD` state and keep the previous state?
+          if (!isDraggingEnded) {
+            setPlayerState(playerState, true);
+          }
+        }}
+      />
+    </>
+  );
 
   return {
     View,
-    ...interactionMethods,
-    animationLoaded,
-    animationItem: animationItemRef.current,
+
+    play,
+    pause,
+    stop,
+    setSpeed,
+    setSeeker,
+
+    animationItem,
   };
 };
 

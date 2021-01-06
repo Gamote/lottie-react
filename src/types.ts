@@ -19,24 +19,24 @@ export type LottieInteractionMethods = {
   stop: () => void;
   pause: () => void;
   setSpeed: (speed: number) => void;
-  goToAndStop: (value: number, isFrame?: boolean) => void;
-  goToAndPlay: (value: number, isFrame?: boolean) => void;
-  setDirection: (direction: AnimationDirection) => void;
-  playSegments: (
-    segments: AnimationSegment | AnimationSegment[],
-    forceFlag?: boolean,
-  ) => void;
-  setSubframe: (useSubFrames: boolean) => void;
-  getDuration: (inFrames?: boolean) => number | undefined;
-  destroy: () => void;
+  setSeeker: (seek: number, shouldPlay: boolean) => void;
+  // goToAndStop: (value: number, isFrame?: boolean) => void;
+  // goToAndPlay: (value: number, isFrame?: boolean) => void;
+  // setDirection: (direction: AnimationDirection) => void;
+  // playSegments: (
+  //   segments: AnimationSegment | AnimationSegment[],
+  //   forceFlag?: boolean,
+  // ) => void;
+  // setSubframe: (useSubFrames: boolean) => void;
+  // getDuration: (inFrames?: boolean) => number | undefined;
+  // destroy: () => void;
 };
 
 /**
  * Object found in 'lottieRef.current'
  */
 export type LottieRefCurrentProps = {
-  animationLoaded: boolean;
-  animationItem: AnimationItem | undefined;
+  animationItem: AnimationItem | null;
 } & LottieInteractionMethods;
 
 /**
@@ -68,6 +68,28 @@ export type PartialListener = Omit<Listener, "handler"> & {
   handler?: Listener["handler"] | null;
 };
 
+export enum PlayerState {
+  Loading = "loading",
+  Playing = "playing",
+  Paused = "paused",
+  Stopped = "stopped",
+  Frozen = "frozen",
+  Error = "error",
+}
+
+export enum PlayerEvent {
+  Load = "load",
+  Error = "error",
+  Ready = "ready",
+  Play = "play",
+  Pause = "pause",
+  Stop = "stop",
+  Freeze = "freeze",
+  Loop = "loop",
+  Complete = "complete",
+  Frame = "frame",
+}
+
 /**
  * Lottie configuration object
  */
@@ -79,7 +101,9 @@ type LottieConfig = Omit<AnimationConfig, "container"> & {
  * Properties for the Lottie hook
  */
 export type LottieHookProps = LottieConfig & {
-  listeners?: LottieAnimationEvents;
+  debug?: boolean;
+  onEvent?: (eventName: PlayerEvent) => any;
+  onStateChange?: (stateName: PlayerState) => any;
   containerProps?: React.HTMLProps<HTMLDivElement>;
 };
 
@@ -87,7 +111,8 @@ export type LottieHookProps = LottieConfig & {
  * Properties for the Lottie component
  */
 export type LottieComponentProps = LottieHookProps & {
-  lottieRef?: LottieRef;
+  ref?: LottieRef;
+  lottieRef?: MutableRefObject<AnimationItem | null>;
   interactivity?: Omit<InteractivityProps, "lottieObject">;
 };
 

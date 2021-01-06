@@ -1,28 +1,32 @@
-import { AnimationDirection, AnimationSegment } from "lottie-web";
-import { AnimationItemRef, LottieInteractionMethods } from "../types";
+import {
+  AnimationDirection,
+  AnimationItem,
+  AnimationSegment,
+} from "lottie-web";
+import { LottieInteractionMethods } from "../types";
 
 const useInteractionMethods = (
-  animationItemRef: AnimationItemRef,
+  animationItem: AnimationItem | null,
 ): LottieInteractionMethods => {
   /**
    * Play
    */
   const play = (): void => {
-    animationItemRef.current?.play();
+    animationItem?.play();
   };
 
   /**
    * Stop
    */
   const stop = (): void => {
-    animationItemRef.current?.stop();
+    animationItem?.stop();
   };
 
   /**
    * Pause
    */
   const pause = (): void => {
-    animationItemRef.current?.pause();
+    animationItem?.pause();
   };
 
   /**
@@ -30,7 +34,7 @@ const useInteractionMethods = (
    * @param speed
    */
   const setSpeed = (speed: number): void => {
-    animationItemRef.current?.setSpeed(speed);
+    animationItem?.setSpeed(speed);
   };
 
   /**
@@ -39,7 +43,7 @@ const useInteractionMethods = (
    * @param isFrame
    */
   const goToAndPlay = (value: number, isFrame?: boolean): void => {
-    animationItemRef.current?.goToAndPlay(value, isFrame);
+    animationItem?.goToAndPlay(value, isFrame);
   };
 
   /**
@@ -48,7 +52,7 @@ const useInteractionMethods = (
    * @param isFrame
    */
   const goToAndStop = (value: number, isFrame?: boolean): void => {
-    animationItemRef.current?.goToAndStop(value, isFrame);
+    animationItem?.goToAndStop(value, isFrame);
   };
 
   /**
@@ -56,7 +60,7 @@ const useInteractionMethods = (
    * @param direction
    */
   const setDirection = (direction: AnimationDirection): void => {
-    animationItemRef.current?.setDirection(direction);
+    animationItem?.setDirection(direction);
   };
 
   /**
@@ -68,7 +72,7 @@ const useInteractionMethods = (
     segments: AnimationSegment | AnimationSegment[],
     forceFlag?: boolean,
   ): void => {
-    animationItemRef.current?.playSegments(segments, forceFlag);
+    animationItem?.playSegments(segments, forceFlag);
   };
 
   /**
@@ -76,7 +80,7 @@ const useInteractionMethods = (
    * @param useSubFrames
    */
   const setSubframe = (useSubFrames: boolean): void => {
-    animationItemRef.current?.setSubframe(useSubFrames);
+    animationItem?.setSubframe(useSubFrames);
   };
 
   /**
@@ -84,14 +88,14 @@ const useInteractionMethods = (
    * @param inFrames
    */
   const getDuration = (inFrames?: boolean): number | undefined => {
-    return animationItemRef.current?.getDuration(inFrames);
+    return animationItem?.getDuration(inFrames);
   };
 
   /**
    * Destroy animation
    */
   const destroy = (): void => {
-    animationItemRef.current?.destroy();
+    animationItem?.destroy();
   };
 
   return {

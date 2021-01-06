@@ -73,5 +73,6 @@
         "newlines-between": "never"
       }
     ]
+    // "react/jsx-props-no-spreading": ["off"]
   }
 }
