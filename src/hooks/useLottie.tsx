@@ -1,5 +1,6 @@
 import lottie, { AnimationItem } from "lottie-web";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import ProgressBar from "../components/Progress/ProgressBar";
 import {
   Listener,
   LottieHookProps,
@@ -7,7 +8,6 @@ import {
   PlayerEvent,
   PlayerState,
 } from "../types";
-import ProgressBar from "../components/Progress/ProgressBar";
 
 const useLottie = (props: LottieHookProps): LottieObject => {
   const { onEvent, onStateChange, containerProps, ...config } = props;
@@ -88,21 +88,23 @@ const useLottie = (props: LottieHookProps): LottieObject => {
         {
           name: "complete",
           handler: () => {
-            setPlayerState(PlayerState.Paused);
+            setPlayerState(PlayerState.Paused); // TODO: Should be 'stop' or 'complete'
+            triggerEvent(PlayerEvent.Complete);
           },
         },
-        { name: "loopComplete", handler: () => undefined },
+        {
+          name: "loopComplete",
+          handler: () => {
+            triggerEvent(PlayerEvent.LoopCompleted);
+          },
+        },
         {
           name: "enterFrame",
           handler: () => {
             triggerEvent(PlayerEvent.Frame);
 
-            const newCurrentFrame = Math.floor(
-              newAnimationItem.currentFrame || 0,
-            );
-
-            if (newCurrentFrame !== currentFrame) {
-              setCurrentFrame(newCurrentFrame);
+            if (newAnimationItem.currentFrame !== currentFrame) {
+              setCurrentFrame(newAnimationItem.currentFrame);
             }
           },
         },
@@ -262,7 +264,7 @@ const useLottie = (props: LottieHookProps): LottieObject => {
     if (animationItem) {
       triggerEvent(PlayerEvent.Stop);
 
-      animationItem.pause();
+      animationItem.goToAndStop(1);
 
       setPlayerState(PlayerState.Stopped);
     }
@@ -334,8 +336,8 @@ const useLottie = (props: LottieHookProps): LottieObject => {
       />
 
       <ProgressBar
-        currentFrames={currentFrame || 0}
-        totalFrames={animationItem?.totalFrames || 0}
+        currentFrames={currentFrame}
+        totalFrames={animationItem?.totalFrames || 1}
         onChange={(progress, isDraggingEnded) => {
           setSeeker(
             progress,

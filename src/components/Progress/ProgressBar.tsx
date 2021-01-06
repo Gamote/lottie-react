@@ -49,11 +49,11 @@ const ProgressBar = (props: ProgressBarProps) => {
         style={inputStyles}
         onChange={onChangeHandler}
         onMouseUp={onMouseUpHandler}
-        min="0"
+        min="1"
         max={totalFrames}
-        step="1" // TODO: should allow a bigger step?
+        step=".001"
         value={currentFrames}
-        defaultValue="0"
+        defaultValue="1"
       />
     </div>
   );

@@ -85,7 +85,7 @@ export enum PlayerEvent {
   Pause = "pause",
   Stop = "stop",
   Freeze = "freeze",
-  Loop = "loop",
+  LoopCompleted = "loop_completed",
   Complete = "complete",
   Frame = "frame",
 }
