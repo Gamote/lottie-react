@@ -67,6 +67,8 @@ Required: ☐
 
 Expects an array of length 2. First value is the initial frame, second value is the final frame. If this is set, the animation will start at this position in time instead of the exported value from AE
 
+**Gotcha**: The animation will re-run every time the segment array changes.  Therefore, to ensure that the animation behaves as expected, you must provide a stable array.
+
 ```yaml
 Type: Array
 Default: none
