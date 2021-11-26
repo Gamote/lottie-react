@@ -4,6 +4,7 @@ import React, {
   ReactElement,
 } from "react";
 import {
+  AnimationConfigWithData,
   AnimationDirection,
   AnimationEventName,
   AnimationItem,
@@ -34,20 +35,7 @@ export type LottieRefCurrentProps = {
 
 export type LottieRef = MutableRefObject<LottieRefCurrentProps | null>;
 
-export type LottieOptions = {
-  // TODO: replace this with `AnimationConfig` if possible
-  animationData: object;
-  renderer?: "svg" | "canvas" | "html";
-  loop?: boolean | number;
-  autoplay?: boolean;
-  name?: string;
-  assetsPath?: string;
-  rendererSettings?:
-    | SVGRendererConfig
-    | CanvasRendererConfig
-    | HTMLRendererConfig;
-  initialSegment?: AnimationSegment;
-} & {
+export type LottieOptions = AnimationConfigWithData & {
   lottieRef?: LottieRef;
   onComplete?: AnimationEventHandler | null;
   onLoopComplete?: AnimationEventHandler | null;

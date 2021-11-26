@@ -47,7 +47,7 @@
     "tsc:compile:watch": "tsc --watch"
   },
   "dependencies": {
-    "lottie-web": "^5.7.3"
+    "lottie-web": "^5.8.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
@@ -96,7 +96,7 @@
   },
   "peerDependencies": {
     "prop-types": "^15.5.0",
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   }
 }
