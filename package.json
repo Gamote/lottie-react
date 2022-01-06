@@ -45,6 +45,7 @@
   },
   "dependencies": {
     "lottie-web": "^5.8.1",
+    "postcss": "^8.4.5",
     "prop-types": "^15.8.1"
   },
   "devDependencies": {
