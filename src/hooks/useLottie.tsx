@@ -50,7 +50,8 @@ const useLottie = (props: LottieHookProps): LottieObject => {
 
   /**
    * Initialize the animation and listen for changes that should reinitialised the animation
-   * TODO: can we use just 'useEffect' in here?
+   * TODO: The reason of using useLayoutEffect is to wait for the 'animationContainer.current'.
+   *  Can we use somehow use 'useEffect' instead?
    */
   useLayoutEffect((): (() => any) => {
     // eslint-disable-next-line no-console
@@ -127,7 +128,7 @@ const useLottie = (props: LottieHookProps): LottieObject => {
           name: "DOMLoaded",
           handler: () => {
             triggerEvent(PlayerEvent.Load);
-            setPlayerState(PlayerState.Frozen); // TODO: is Frozen the right state
+            setPlayerState(PlayerState.Frozen); // TODO: is Frozen the right state?
           },
         },
         { name: "destroy", handler: () => undefined },
@@ -141,10 +142,6 @@ const useLottie = (props: LottieHookProps): LottieObject => {
          */
         (listener) => {
           newAnimationItem?.addEventListener(listener.name, listener.handler);
-          // TODO: to remove
-          // newAnimationItem?.addEventListener(listener.name, () => {
-          //   console.log("EVENT", listener.name);
-          // });
 
           // Return a function to deregister this listener
           return () => {
@@ -335,24 +332,54 @@ const useLottie = (props: LottieHookProps): LottieObject => {
         ref={animationContainer}
       />
 
-      <ProgressBar
-        currentFrames={currentFrame}
-        totalFrames={animationItem?.totalFrames || 1}
-        onChange={(progress, isDraggingEnded) => {
-          setSeeker(
-            progress,
-            isDraggingEnded && playerState === PlayerState.Playing,
-          );
+      <div>
+        {(playerState === PlayerState.Paused ||
+          playerState === PlayerState.Stopped) && (
+          <button type="button" onClick={() => play()}>
+            Play
+          </button>
+        )}
 
-          // If the consumer is not done dragging the progress indicator
-          // set it back to what it was, because `setSeeker()` changed it
-          // TODO: should we move the logic in `setSeeker()` and pass `isDraggingEnded`
-          //  or create an `ON_HOLD` state and keep the previous state?
-          if (!isDraggingEnded) {
-            setPlayerState(playerState, true);
-          }
-        }}
-      />
+        {playerState === PlayerState.Playing && (
+          <button type="button" onClick={() => pause()}>
+            Pause
+          </button>
+        )}
+
+        {(playerState === PlayerState.Playing ||
+          playerState === PlayerState.Paused) && (
+          <button type="button" onClick={() => stop()}>
+            Stop
+          </button>
+        )}
+
+        {(playerState === PlayerState.Playing ||
+          playerState === PlayerState.Paused) && (
+          <button type="button" onClick={() => stop()}>
+            Loop is {config.loop ? "on" : "off"}
+          </button>
+        )}
+
+        <ProgressBar
+          // TODO: add first frame
+          currentFrames={currentFrame}
+          totalFrames={(animationItem?.totalFrames || 1) - 1} // TODO: is there another way to cover the last frame?
+          onChange={(progress, isDraggingEnded) => {
+            setSeeker(
+              progress,
+              isDraggingEnded && playerState === PlayerState.Playing,
+            );
+
+            // If the consumer is not done dragging the progress indicator
+            // set it back to what it was, because `setSeeker()` changed it
+            // TODO: should we move the logic in `setSeeker()` and pass `isDraggingEnded`
+            //  or create an `ON_HOLD` state and keep the previous state?
+            if (!isDraggingEnded) {
+              setPlayerState(playerState, true);
+            }
+          }}
+        />
+      </div>
     </>
   );
 
