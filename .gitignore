@@ -1,3 +1,5 @@
+# TODO: revisit this file and update it accordingly
+
 # Coverage directory used by tools like istanbul
 coverage
 .coveralls.yml
