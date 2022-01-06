@@ -1,3 +1,5 @@
+const { peerDependencies } = require("./package.json");
+
 module.exports = {
   env: {
     /* (i) An environment provides predefined global variables */
@@ -82,6 +84,12 @@ module.exports = {
     // React Hooks rules
     "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
     "react-hooks/exhaustive-deps": "warn", // Checks hook dependencies
+
+    // Disable the `import/no-unresolved` rule for peer dependencies
+    // This is useful when you develop a React library and `react` it's not present in `dependencies`
+    // nor in `devDependencies` but it is specified in the `peerDependencies`
+    // More info: https://github.com/import-js/eslint-plugin-import/issues/825#issuecomment-542618188
+    "import/no-unresolved": ["error", { ignore: Object.keys(peerDependencies) }],
   },
   settings: {
     react: {
