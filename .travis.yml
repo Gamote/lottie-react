@@ -7,13 +7,13 @@ cache:
     - node_modules
 
 script:
-  - npm run test
+  - yarn test
 
 after_success:
-  - npm run coverage
+  - yarn coverage
 
 before_deploy:
-  - "npm run docz:build"
+  - "yarn docz:build"
 
 deploy:
   provider: pages
