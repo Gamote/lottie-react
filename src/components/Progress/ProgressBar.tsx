@@ -7,7 +7,9 @@ export type ProgressBarProps = {
 };
 
 // Styles
-const inputContainerStyles: CSSProperties = {};
+const inputContainerStyles: CSSProperties = {
+  padding: 5,
+};
 const inputStyles: CSSProperties = {
   width: "100%",
 };
