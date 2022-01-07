@@ -8,38 +8,36 @@ import TabItem from '@theme/TabItem';
 
 # Quick Start
 
-A 1-minute quickstart guide on how to install and use `lottie-react`. For additional details and explanations, check out the other sections.
+A 2-minute quickstart guide on how to install and use `lottie-react`. For additional details and explanations, check out the other sections.
 
-## 1. Installation 
+## Installation 
 
-### Install **peer dependencies**
+### Add dependencies
 
-In case you don't have them already, you have to add the `react` and `react-dom` packages.
+In case you don't have them already, you have to add the `react` and `react-dom` packages to your project.
 
 <Tabs groupId="package-manager">
 <TabItem value="yarn" label="Yarn">
 
 ```shell
-yarn add react@^16.8.0 react-dom@^16.8.0
+yarn add react react-dom
 ```
 
 </TabItem>
 <TabItem value="npm" label="npm">
 
 ```shell
-npm i react@^16.8.0 react-dom@^16.8.0
+npm i react react-dom
 ```
 
 </TabItem>
 </Tabs>
 
-:::info React version >=16.8.0
-
-This library is using React Hooks, so the minimum version required for both `react` and `react-dom` is **v16.8.0**.
-
+:::info React minimum version >=16.8.0
+This library is using React Hooks, so the minimum version required for both `react` and `react-dom` packages is **v16.8.0**.
 :::
 
-### Install **Lottie React**
+### Add Lottie React
 
 <Tabs groupId="package-manager">
 <TabItem value="yarn" label="Yarn">
@@ -59,7 +57,7 @@ npm i lottie-react
 </Tabs>
 
 
-## 2. Usage
+## Usage
 
 Now that you have installed `lottie-react` you can use it with **local** or **remove** animation `.json` files.
 
@@ -68,7 +66,7 @@ import Lottie from "./../../../src/components/Lottie";
 import groovyWalkAnimation from "./../../static/assets/animations/groovyWalk.json";
 
 <BrowserWindow bodyHeight={200}>
-    <Lottie data={groovyWalkAnimation} />
+    <Lottie source={groovyWalkAnimation} />
 </BrowserWindow>
 ```
 
@@ -79,9 +77,9 @@ import groovyWalkAnimation from "./../../static/assets/animations/groovyWalk.jso
 import Lottie from "lottie-react";
 import animation from "./assets/animation.json";
 
-const MyApp = () => <Lottie data={animation} />
+const MyApp = () => <Lottie source={animation} />
 
-export default App;
+export default MyApp;
 ```
 
 </TabItem>
@@ -90,9 +88,9 @@ export default App;
 ```tsx
 import Lottie from "lottie-react";
 
-const MyApp = () => <Lottie data={"https://myapp.com/assets/animation.json"} />;
+const MyApp = () => <Lottie source={"https://myapp.com/assets/animation.json"} />;
 
-export default App;
+export default MyApp;
 ```
 
 </TabItem>

@@ -7,7 +7,7 @@ import useLottieInteractivity, {
   getContainerCursorPosition,
   useInitInteractivity,
   InitInteractivity,
-} from "../hooks/useLottieInteractivity";
+} from "../hooks/old/useLottieInteractivity";
 import { InteractivityProps } from "../types";
 
 function renderUseLottieInteractivity(props: InteractivityProps) {

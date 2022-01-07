@@ -3,11 +3,8 @@
 
 import { AnimationSegment } from "lottie-web";
 import React, { useEffect, ReactElement, useRef } from "react";
-import { InteractivityProps } from "../types";
-import {
-  getContainerCursorPosition,
-  getContainerVisibility,
-} from "../utils/helpers";
+import { InteractivityProps } from "../../types";
+import { getContainerCursorPosition, getContainerVisibility } from "../../utils/helpers";
 
 export type InitInteractivity = {
   wrapperRef: React.RefObject<HTMLDivElement>;
@@ -39,9 +36,7 @@ export const useInitInteractivity = ({
         // Find the first action that satisfies the current position conditions
         const action = actions.find(
           ({ visibility }) =>
-            visibility &&
-            currentPercent >= visibility[0] &&
-            currentPercent <= visibility[1],
+            visibility && currentPercent >= visibility[0] && currentPercent <= visibility[1],
         );
 
         // Skip if no matching action was found!
@@ -49,11 +44,7 @@ export const useInitInteractivity = ({
           return;
         }
 
-        if (
-          action.type === "seek" &&
-          action.visibility &&
-          action.frames.length === 2
-        ) {
+        if (action.type === "seek" && action.visibility && action.frames.length === 2) {
           // Seek: Go to a frame based on player scroll position action
           const frameToGo =
             action.frames[0] +
@@ -64,10 +55,7 @@ export const useInitInteractivity = ({
             );
 
           //! goToAndStop must be relative to the start of the current segment
-          animationItem.goToAndStop(
-            frameToGo - animationItem.firstFrame - 1,
-            true,
-          );
+          animationItem.goToAndStop(frameToGo - animationItem.firstFrame - 1, true);
         }
 
         if (action.type === "loop") {
@@ -81,17 +69,11 @@ export const useInitInteractivity = ({
             // check if segments in state are equal to the frames selected by action
             if (assignedSegment !== action.frames) {
               // if they are not equal. new segments are to be loaded
-              animationItem.playSegments(
-                action.frames as AnimationSegment,
-                true,
-              );
+              animationItem.playSegments(action.frames as AnimationSegment, true);
               assignedSegment = action.frames;
             } else if (animationItem.isPaused) {
               // if they are equal the play method must be called only if lottie is paused
-              animationItem.playSegments(
-                action.frames as AnimationSegment,
-                true,
-              );
+              animationItem.playSegments(action.frames as AnimationSegment, true);
               assignedSegment = action.frames;
             }
           }
@@ -105,10 +87,7 @@ export const useInitInteractivity = ({
 
         if (action.type === "stop") {
           // Stop: Stop playback
-          animationItem.goToAndStop(
-            action.frames[0] - animationItem.firstFrame - 1,
-            true,
-          );
+          animationItem.goToAndStop(action.frames[0] - animationItem.firstFrame - 1, true);
         }
       };
 
@@ -136,24 +115,13 @@ export const useInitInteractivity = ({
 
         // Find the first action that satisfies the current position conditions
         const action = actions.find(({ position }) => {
-          if (
-            position &&
-            Array.isArray(position.x) &&
-            Array.isArray(position.y)
-          ) {
+          if (position && Array.isArray(position.x) && Array.isArray(position.y)) {
             return (
-              x >= position.x[0] &&
-              x <= position.x[1] &&
-              y >= position.y[0] &&
-              y <= position.y[1]
+              x >= position.x[0] && x <= position.x[1] && y >= position.y[0] && y <= position.y[1]
             );
           }
 
-          if (
-            position &&
-            !Number.isNaN(position.x) &&
-            !Number.isNaN(position.y)
-          ) {
+          if (position && !Number.isNaN(position.x) && !Number.isNaN(position.y)) {
             return x === position.x && y === position.y;
           }
 
@@ -175,18 +143,13 @@ export const useInitInteractivity = ({
         ) {
           // Seek: Go to a frame based on player scroll position action
           const xPercent =
-            (x - action.position.x[0]) /
-            (action.position.x[1] - action.position.x[0]);
+            (x - action.position.x[0]) / (action.position.x[1] - action.position.x[0]);
           const yPercent =
-            (y - action.position.y[0]) /
-            (action.position.y[1] - action.position.y[0]);
+            (y - action.position.y[0]) / (action.position.y[1] - action.position.y[0]);
 
           animationItem.playSegments(action.frames as AnimationSegment, true);
           animationItem.goToAndStop(
-            Math.ceil(
-              ((xPercent + yPercent) / 2) *
-                (action.frames[1] - action.frames[0]),
-            ),
+            Math.ceil(((xPercent + yPercent) / 2) * (action.frames[1] - action.frames[0])),
             true,
           );
         }

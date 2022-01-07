@@ -2,11 +2,11 @@ import { render } from "@testing-library/react";
 import { renderHook } from "@testing-library/react-hooks";
 import React, { CSSProperties } from "react";
 import useLottie from "../hooks/useLottie";
-import { LottieHookProps } from "../types";
+import { LottieHookOptions } from "../types";
 import groovyWalk from "./assets/groovyWalk.json";
 
 function initUseLottie(
-  props?: Partial<LottieHookProps>,
+  props?: Partial<LottieHookOptions>,
   style?: CSSProperties,
 ) {
   const defaultProps = {
@@ -24,7 +24,7 @@ function initUseLottie(
         style,
       ),
     {
-      initialProps: defaultProps as Partial<LottieHookProps>,
+      initialProps: defaultProps as Partial<LottieHookOptions>,
     },
   );
 }
@@ -34,7 +34,7 @@ function initUseLottie(
  * will remain 'null' so the animation will never be initialized
  * TODO: check if we can avoid a manual rerender
  */
-function renderUseLottie(hook: any, props?: Partial<LottieHookProps>) {
+function renderUseLottie(hook: any, props?: Partial<LottieHookOptions>) {
   render(hook.result.current.View);
 
   /*

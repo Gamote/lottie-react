@@ -1,15 +1,77 @@
 import {
-  AnimationConfig,
-  AnimationDirection,
-  AnimationEventName,
   AnimationItem,
   AnimationSegment,
+  CanvasRendererConfig,
+  HTMLRendererConfig,
+  SVGRendererConfig,
 } from "lottie-web";
-import React, {
-  MutableRefObject,
-  AnimationEventHandler,
-  ReactElement,
-} from "react";
+import { AnimationEventHandler, MutableRefObject, RefCallback } from "react";
+import { LottiePlayerEvent, LottiePlayerState } from "./hooks/useLottiePlayer";
+
+/**
+ * Render types that Lottie supports
+ */
+enum LottieRenderer {
+  Svg = "svg",
+  Html = "html",
+  Canvas = "canvas",
+}
+
+/**
+ * Lottie options for the `useLottie()` hook
+ *
+ * These options are wrapping Lottie's config properties and adds
+ * additional ones in order to have a better control over the animation
+ */
+export type LottieHookOptions<Renderer extends LottieRenderer = LottieRenderer.Svg> = {
+  source: string | Record<string | number | symbol, unknown>;
+  // renderer?: Renderer; // TODO: add support
+  loop?: boolean | number;
+  autoplay?: boolean;
+  initialSegment?: AnimationSegment;
+  assetsPath?: string;
+  rendererSettings?: {
+    svg: SVGRendererConfig;
+    canvas: CanvasRendererConfig;
+    html: HTMLRendererConfig;
+  }[Renderer];
+  // audioFactory?(assetPath: string): { // TODO: add support
+  //   play(): void;
+  //   seek(): void;
+  //   playing(): void;
+  //   rate(): void;
+  //   setVolume(): void;
+  // };
+
+  debug?: boolean;
+  // onPlayerEvent?: (eventName: PlayerEvent) => any;
+  // onPlayerStateChange?: (stateName: PlayerState) => any;
+  // containerProps?: HTMLProps<HTMLDivElement>; // TODO: to be moved to the LottieProps
+};
+
+/**
+ * Object returned by `useLottie()`
+ */
+export type LottieHookResult = {
+  setContainerRef: RefCallback<HTMLDivElement>;
+  // isLoading: boolean;
+  // isError: boolean;
+  animationItem: AnimationItem | null;
+};
+
+/**
+ * Properties for the `Lottie` component
+ * TODO: wip
+ */
+export type LottieProps = LottieHookOptions & {
+  // ref?: TODO: reference for the container, it needs to be combined with the one we already have
+  lottieRef?: MutableRefObject<AnimationItem | null>;
+
+  onPlayerEvent?: (playerState: LottiePlayerEvent) => void;
+  onPlayerStateChange?: (playerState: LottiePlayerState) => void;
+
+  interactivity?: Omit<InteractivityProps, "lottieObject">;
+};
 
 /**
  * Interaction methods
@@ -48,85 +110,19 @@ export type LottieRef = MutableRefObject<LottieRefCurrentProps | null>;
  * Lottie animation events
  */
 export type LottieAnimationEvents = {
-  onComplete?: AnimationEventHandler | null;
-  onLoopComplete?: AnimationEventHandler | null;
-  onEnterFrame?: AnimationEventHandler | null;
-  onSegmentStart?: AnimationEventHandler | null;
-  onConfigReady?: AnimationEventHandler | null;
-  onDataReady?: AnimationEventHandler | null;
-  onDataFailed?: AnimationEventHandler | null;
-  onLoadedImages?: AnimationEventHandler | null;
-  onDOMLoaded?: AnimationEventHandler | null;
-  onDestroy?: AnimationEventHandler | null;
+  onComplete?: AnimationEventHandler;
+  onLoopComplete?: AnimationEventHandler;
+  onEnterFrame?: AnimationEventHandler;
+  onSegmentStart?: AnimationEventHandler;
+  onConfigReady?: AnimationEventHandler;
+  onDataReady?: AnimationEventHandler;
+  onDataFailed?: AnimationEventHandler;
+  onLoadedImages?: AnimationEventHandler;
+  onDOMLoaded?: AnimationEventHandler;
+  onDestroy?: AnimationEventHandler;
 };
 
-export type Listener = {
-  name: AnimationEventName;
-  handler: AnimationEventHandler;
-};
-export type PartialListener = Omit<Listener, "handler"> & {
-  handler?: Listener["handler"] | null;
-};
-
-export enum PlayerState {
-  Loading = "loading",
-  Playing = "playing",
-  Paused = "paused",
-  Stopped = "stopped",
-  Frozen = "frozen",
-  Error = "error",
-}
-
-export enum PlayerEvent {
-  Load = "load",
-  Error = "error",
-  Ready = "ready",
-  Play = "play",
-  Pause = "pause",
-  Stop = "stop",
-  Freeze = "freeze",
-  LoopCompleted = "loop_completed",
-  Complete = "complete",
-  Frame = "frame",
-}
-
-/**
- * Lottie configuration object
- */
-type LottieConfig = Omit<AnimationConfig, "container"> & {
-  data: boolean | any; // TODO: find a better way to describe: path or object
-};
-
-/**
- * Properties for the Lottie hook
- */
-export type LottieHookProps = LottieConfig & {
-  debug?: boolean;
-  onEvent?: (eventName: PlayerEvent) => any;
-  onStateChange?: (stateName: PlayerState) => any;
-  containerProps?: React.HTMLProps<HTMLDivElement>;
-};
-
-/**
- * Properties for the Lottie component
- */
-export type LottieComponentProps = LottieHookProps & {
-  ref?: LottieRef;
-  lottieRef?: MutableRefObject<AnimationItem | null>;
-  interactivity?: Omit<InteractivityProps, "lottieObject">;
-};
-
-/**
- * Object found in `lottieRef`
- */
-export type AnimationItemRef = MutableRefObject<AnimationItem | undefined>;
-
-/**
- * Object returned by 'useLottie'
- */
-export type LottieObject = { View: ReactElement } & LottieRefCurrentProps;
-
-// Interactivity
+// Interactivity TODO: adapt
 export type Axis = "x" | "y";
 export type Position = { [key in Axis]: number | [number, number] };
 
@@ -138,7 +134,7 @@ export type Action = {
 };
 
 export type InteractivityProps = {
-  lottieObject: LottieObject;
+  lottieObject: LottieHookResult;
   actions: Action[];
   mode: "scroll" | "cursor";
 };

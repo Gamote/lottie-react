@@ -1,13 +1,7 @@
-import {
-  AnimationDirection,
-  AnimationItem,
-  AnimationSegment,
-} from "lottie-web";
-import { LottieInteractionMethods } from "../types";
+import { AnimationDirection, AnimationItem, AnimationSegment } from "lottie-web";
+import { LottieInteractionMethods } from "../../types";
 
-const useInteractionMethods = (
-  animationItem: AnimationItem | null,
-): LottieInteractionMethods => {
+const useInteractionMethods = (animationItem: AnimationItem | null): LottieInteractionMethods => {
   /**
    * Play
    */
@@ -87,8 +81,12 @@ const useInteractionMethods = (
    * Get animation duration
    * @param inFrames
    */
-  const getDuration = (inFrames?: boolean): number | undefined => {
-    return animationItem?.getDuration(inFrames);
+  const getDuration = (inFrames?: boolean): number | undefined =>
+    animationItem?.getDuration(inFrames);
+
+  // (Method) Set seeker
+  const setSeeker = (seek: number, shouldPlay = false) => {
+    // TODO:
   };
 
   /**
@@ -103,13 +101,14 @@ const useInteractionMethods = (
     stop,
     pause,
     setSpeed,
-    goToAndStop,
-    goToAndPlay,
-    setDirection,
-    playSegments,
-    setSubframe,
-    getDuration,
-    destroy,
+    setSeeker,
+    // goToAndStop,
+    // goToAndPlay,
+    // setDirection,
+    // playSegments,
+    // setSubframe,
+    // getDuration,
+    // destroy,
   };
 };
 

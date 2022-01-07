@@ -1,9 +1,10 @@
-import LottiePlayer from "lottie-web";
 import Lottie from "./components/Lottie";
 import useLottie from "./hooks/useLottie";
-import useLottieInteractivity from "./hooks/useLottieInteractivity";
+import useLottiePlayer from "./hooks/useLottiePlayer";
 
-export { LottiePlayer, Lottie, useLottie, useLottieInteractivity };
+export { Lottie, useLottie, useLottiePlayer };
+export * from "./types";
 
 export default Lottie;
-export * from "./types";
+export { LottiePlayerState } from "./hooks/useLottiePlayer";
+export { LottiePlayerEvent } from "./hooks/useLottiePlayer";
