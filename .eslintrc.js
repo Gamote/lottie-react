@@ -36,7 +36,7 @@ module.exports = {
       parser: "@typescript-eslint/parser", // Specifies the ESLint parser
       parserOptions: {
         tsconfigRootDir: __dirname, // Required by `@typescript-eslint/recommended-requiring-type-checking`
-        project: ["./tsconfig.json"], // Required by `@typescript-eslint/recommended-requiring-type-checking`
+        project: ["./tsconfig.eslint.json"], // Required by `@typescript-eslint/recommended-requiring-type-checking`
       },
       extends: [
         "plugin:@typescript-eslint/recommended", // TypeScript rules (@typescript-eslint/eslint-plugin)

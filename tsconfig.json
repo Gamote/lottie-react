@@ -18,6 +18,7 @@
 		/* Advanced Options */
 		"resolveJsonModule": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
 	},
-	"include": ["./src/**/*"],
+	"include": ["./src/**/*",
+	],
 	"exclude": ["./src/__tests__"]
 }
