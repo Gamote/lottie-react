@@ -1,5 +1,4 @@
 import lottie, { AnimationItem } from "lottie-web";
-import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
 import { LottieHookOptions, LottieHookResult } from "../types";
 import logger from "../utils/logger";
@@ -51,7 +50,6 @@ const useLottie = (options: LottieHookOptions): LottieHookResult => {
         const _animationItem = lottie.loadAnimation({
           ...normalizedAnimationSource,
           container: containerRef.current,
-          name: nanoid(),
           loop,
           autoplay,
           initialSegment,
