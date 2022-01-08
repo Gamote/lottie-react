@@ -61,12 +61,12 @@ const FullLottieTest: FC = () => {
   // }, []);
 
   // Change loop
-  useEffect(() => {
-    setTimeout(() => {
-      logger.info("> Changing the loop");
-      setLoop(false);
-    }, 4500);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     logger.info("> Changing the loop");
+  //     setLoop(false);
+  //   }, 4500);
+  // }, []);
 
   // Show missing animation
   // useEffect(() => {
@@ -93,9 +93,12 @@ const FullLottieTest: FC = () => {
                 source={source}
                 loop={loop}
                 autoplay={autoplay}
-                onPlayerStateChange={(playerState) => {
-                  console.log(playerState);
-                }}
+                // onPlayerStateChange={(playerState) => {
+                //   console.log(playerState);
+                // }}
+                // onPlayerEvent={(playerEvent) => {
+                //   console.log(playerEvent);
+                // }}
               />
               Animation 2
             </>
