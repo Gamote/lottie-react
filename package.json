@@ -44,8 +44,7 @@
     "eslint:fix": "eslint . --fix"
   },
   "dependencies": {
-    "lottie-web": "^5.8.1",
-    "nanoid": "^3.1.30"
+    "lottie-web": "^5.8.1"
   },
   "devDependencies": {
     "@babel/core": "^7.16.7",
