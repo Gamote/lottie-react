@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import { Lottie, LottieHookOptions, LottieProps } from "../../../src";
-import groovyWalkAnimation from "./../../static/assets/animations/groovyWalk.json";
 import logger from "../../../src/utils/logger";
+import groovyWalkAnimation from "./../../static/assets/animations/groovyWalk.json";
 
 const FullLottieTest: FC = () => {
   const config: LottieProps = {
@@ -69,34 +69,43 @@ const FullLottieTest: FC = () => {
   }, []);
 
   // Show missing animation
-  useEffect(() => {
-    setTimeout(() => {
-      logger.info("> Showing missing animation");
-      setShowAnimationNumber(999);
-    }, 4500);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     logger.info("> Showing missing animation");
+  //     setShowAnimationNumber(999);
+  //   }, 4500);
+  // }, []);
 
-  return <>
-    {delayAnimations && (
-      <>
-        {showAnimationNumber === 1 && (
-          <>
-            <Lottie source={source} loop={loop} autoplay={autoplay} />
-            Animation 1
-          </>
-        )}
+  return (
+    <>
+      {delayAnimations && (
+        <>
+          {showAnimationNumber === 1 && (
+            <>
+              <Lottie source={source} loop={loop} autoplay={autoplay} />
+              Animation 1
+            </>
+          )}
 
-        {showAnimationNumber === 2 && (
-          <>
-            <Lottie source={source} loop={loop} autoplay={autoplay} />
-            Animation 2
-          </>
-        )}
-      </>
-    )}
-  </>
+          {showAnimationNumber === 2 && (
+            <>
+              <Lottie
+                source={source}
+                loop={loop}
+                autoplay={autoplay}
+                onPlayerStateChange={(playerState) => {
+                  console.log(playerState);
+                }}
+              />
+              Animation 2
+            </>
+          )}
+        </>
+      )}
+    </>
+  );
 
-  return
-}
+  return;
+};
 
 export default FullLottieTest;
