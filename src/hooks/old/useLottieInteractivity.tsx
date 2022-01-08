@@ -1,5 +1,4 @@
-// TODO: refactor the whole hook and if possible split it
-//  in small hooks and attach them to 'useLottie' hook
+// TODO: refactor the whole hook and don't forget about the types 😉
 
 import { AnimationSegment } from "lottie-web";
 import React, { useEffect, ReactElement, useRef } from "react";

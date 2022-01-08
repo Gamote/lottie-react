@@ -1,7 +1,7 @@
+// TODO: delete after LottiePlayer is fully implemented
 import { AnimationDirection, AnimationItem, AnimationSegment } from "lottie-web";
-import { LottieInteractionMethods } from "../../types";
 
-const useInteractionMethods = (animationItem: AnimationItem | null): LottieInteractionMethods => {
+const useInteractionMethods = (animationItem: AnimationItem | null) => {
   /**
    * Play
    */

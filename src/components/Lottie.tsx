@@ -1,11 +1,10 @@
 import React, { forwardRef, ForwardRefRenderFunction } from "react";
-import useLottieInteractivity from "../hooks/old/useLottieInteractivity";
 import useLottie from "../hooks/useLottie";
-import useLottiePlayer, { LottiePlayerState } from "../hooks/useLottiePlayer";
-import { LottieProps } from "../types";
+import useLottiePlayer from "../hooks/useLottiePlayer";
+import { LottiePlayerState, LottieProps } from "../types";
 
 /**
- * Lottie animation
+ * Lottie's animation component
  *
  * TODO: change `Record<string, unknown>` in the actual type of the Ref
  *
@@ -18,8 +17,6 @@ const Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = (
     loop,
     autoplay,
 
-    lottieRef,
-    interactivity,
     onPlayerEvent,
     onPlayerStateChange,
     containerProps,
@@ -35,7 +32,8 @@ const Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = (
   const { setContainerRef, animationItem } = lottieObject;
 
   // Lottie Player
-  const { playerState } = useLottiePlayer(animationItem, {
+  const { playerState } = useLottiePlayer({
+    animationItem,
     onPlayerEvent,
     onPlayerStateChange,
   });
@@ -43,61 +41,10 @@ const Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = (
   const isLoading = playerState === LottiePlayerState.Loading;
   const isError = playerState === LottiePlayerState.Error;
 
-  // TODO: ref
-  // /**
-  //  * Make the player object available through the provided 'ref'
-  //  */
-  // if (ref) {
-  //   if (typeof ref === "function") {
-  //     ref(lottieObject);
-  //   } else {
-  //     ref.current = lottieObject;
-  //   }
-  // }
-
-  // TODO: lottieRef
-  // /**
-  //  * Make the lottie object available through the provided 'lottieRef'
-  //  */
-  // if (lottieRef) {
-  //   lottieRef.current = lottieObject.animationItem;
-  // }
-
-  // TODO: interactivity
-  // /**
-  //  * Interactive view
-  //  */
-  // const interactivityL = useLottieInteractivity({
-  //   lottieObject,
-  //   mode: "scroll",
-  //   actions: [
-  //     {
-  //       visibility: [0, 0.2],
-  //       type: "stop",
-  //       frames: [0],
-  //     },
-  //     {
-  //       visibility: [0.2, 0.45],
-  //       type: "seek",
-  //       frames: [0, 45],
-  //     },
-  //     {
-  //       visibility: [0.45, 1.0],
-  //       type: "loop",
-  //       frames: [45, 60],
-  //     },
-  //   ],
-  //   ...interactivity,
-  // });
-  //
-  // if (interactivity) {
-  //   return interactivityL;
-  // }
-
   return (
     <div
       style={{
-        ...containerProps,
+        ...containerProps?.style,
         height: "100%",
       }}
     >
@@ -107,6 +54,7 @@ const Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = (
       {isError && <img alt="Animation error" src="https://svgshare.com/i/Sgd.svg" title="" />}
 
       <div
+        {...containerProps}
         style={{
           height: "100%",
           ...containerProps?.style,

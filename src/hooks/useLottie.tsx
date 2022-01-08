@@ -5,6 +5,10 @@ import logger from "../utils/logger";
 import normalizeAnimationSource from "../utils/normalizeAnimationSource";
 import useCallbackRef from "./useCallbackRef";
 
+/**
+ * Lottie's animation hook
+ * @param options
+ */
 const useLottie = (options: LottieHookOptions): LottieHookResult => {
   const { source, loop, autoplay, initialSegment, assetsPath, rendererSettings, debug } = options;
 

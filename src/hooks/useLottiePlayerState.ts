@@ -1,22 +1,18 @@
 import { useEffect, useState } from "react";
+import { LottiePlayerState, LottiePlayerStateHookOptions } from "../types";
 import isFunction from "../utils/isFunction";
-import { LottiePlayerState } from "./useLottiePlayer";
 import usePreviousState from "./usePreviousState";
 
-type PlayerStateHookOptions = {
-  initialState: LottiePlayerState;
-  onChange?: (
-    previousPlayerState: undefined | LottiePlayerState,
-    newPlayerState: LottiePlayerState,
-  ) => void;
-};
-
-const usePlayerState = (options?: PlayerStateHookOptions) => {
+/**
+ * Hook that handle the state for LottiePlayer
+ * @param options
+ */
+const useLottiePlayerState = (options?: LottiePlayerStateHookOptions) => {
   const { initialState, onChange } = options ?? {};
 
   if (!initialState) {
     throw new Error(
-      `Please specify the "options.initialState" when you use the "usePlayerState" hook.`,
+      `Please specify the "options.initialState" when you use the "useLottiePlayerState" hook.`,
     );
   }
 
@@ -36,4 +32,4 @@ const usePlayerState = (options?: PlayerStateHookOptions) => {
   };
 };
 
-export default usePlayerState;
+export default useLottiePlayerState;

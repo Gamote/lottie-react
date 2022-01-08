@@ -1,49 +1,27 @@
-import { AnimationEventName, AnimationItem } from "lottie-web";
-import { AnimationEventHandler, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import {
+  LottiePlayerEvent,
+  LottiePlayerEventListener,
+  LottiePlayerOptions,
+  LottiePlayerState,
+} from "../types";
 import isFunction from "../utils/isFunction";
 import logger from "../utils/logger";
-import usePlayerState from "./usePlayerState";
+import useLottiePlayerState from "./useLottiePlayerState";
 
-export type LottiePlayerEventListener = {
-  name: AnimationEventName;
-  handler: AnimationEventHandler;
-};
-export type LottiePlayerEventPartialListener = Omit<LottiePlayerEventListener, "handler"> & {
-  handler?: LottiePlayerEventListener["handler"];
-};
-
-export enum LottiePlayerState {
-  Loading = "loading",
-  Playing = "playing",
-  Paused = "paused",
-  Stopped = "stopped",
-  Frozen = "frozen",
-  Error = "error",
-}
-
-export enum LottiePlayerEvent {
-  Load = "load",
-  Error = "error",
-  Ready = "ready",
-  Play = "play",
-  Pause = "pause",
-  Stop = "stop",
-  Freeze = "freeze",
-  LoopCompleted = "loop_completed",
-  Complete = "complete",
-  Frame = "frame",
-}
-
-type LottiePlayerOptions = {
-  onPlayerEvent?: (playerState: LottiePlayerEvent) => void;
-  onPlayerStateChange?: (playerState: LottiePlayerState) => void;
-};
-
-const useLottiePlayer = (animationItem: AnimationItem | null, options?: LottiePlayerOptions) => {
-  const { onPlayerEvent, onPlayerStateChange } = options ?? {};
+/**
+ * Hook that take offer player capabilities to animation
+ *
+ * It takes care of registering event listeners and then
+ * use them to create an easy-to-use Player state that
+ * can later be used by the UI
+ * @param options
+ */
+const useLottiePlayer = (options?: LottiePlayerOptions) => {
+  const { animationItem, onPlayerEvent, onPlayerStateChange } = options ?? {};
 
   // State of the player
-  const { previousPlayerState, playerState, setPlayerState } = usePlayerState({
+  const { previousPlayerState, playerState, setPlayerState } = useLottiePlayerState({
     initialState: LottiePlayerState.Loading,
     onChange: (previousPlayerState, newPlayerState) => {
       if (onPlayerStateChange && isFunction(onPlayerStateChange)) {
@@ -178,45 +156,39 @@ const useLottiePlayer = (animationItem: AnimationItem | null, options?: LottiePl
   /**
    * Interaction methods
    */
-  // (Method) Play
+  // Play
   const play = () => {
     if (animationItem) {
-      triggerEvent(LottiePlayerEvent.Play);
-
       animationItem.play();
-
       setPlayerState(LottiePlayerState.Playing);
+      triggerEvent(LottiePlayerEvent.Play);
     }
   };
 
-  // (Method) Pause
+  // Pause
   const pause = () => {
     if (animationItem) {
-      triggerEvent(LottiePlayerEvent.Pause);
-
       animationItem.pause();
-
       setPlayerState(LottiePlayerState.Paused);
+      triggerEvent(LottiePlayerEvent.Pause);
     }
   };
 
-  // (Method) Stop
+  // Stop
   const stop = () => {
     if (animationItem) {
-      triggerEvent(LottiePlayerEvent.Stop);
-
       animationItem.goToAndStop(1);
-
       setPlayerState(LottiePlayerState.Stopped);
+      triggerEvent(LottiePlayerEvent.Stop);
     }
   };
 
-  // (Method) Set player speed
+  // Set player speed
   const setSpeed = (speed: number) => {
     animationItem?.setSpeed(speed);
   };
 
-  // (Method) Set seeker
+  // Set seeker
   const setSeeker = (seek: number, shouldPlay = false) => {
     if (!shouldPlay || playerState !== LottiePlayerState.Playing) {
       animationItem?.goToAndStop(seek, true);
