@@ -8,7 +8,8 @@
     "lottie animation",
     "react animation",
     "lottie component",
-    "lottie hook"
+    "lottie hook",
+    "lottie player"
   ],
   "homepage": "https://github.com/Gamote/lottie-react",
   "bugs": {

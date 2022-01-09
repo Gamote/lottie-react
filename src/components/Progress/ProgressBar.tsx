@@ -1,9 +1,9 @@
-import React, { CSSProperties, useState } from "react";
+import { ChangeEventHandler, CSSProperties, MouseEventHandler, useState } from "react";
 
 export type ProgressBarProps = {
   totalFrames: number;
   currentFrames: number;
-  onChange?: (progress: number, isDraggingEnded?: boolean) => any;
+  onChange?: (progress: number, isDraggingEnded?: boolean) => void;
 };
 
 // Styles
@@ -23,9 +23,7 @@ const ProgressBar = (props: ProgressBarProps) => {
    * Handle any changes
    * @param event
    */
-  const onChangeHandler: React.ChangeEventHandler<HTMLInputElement> = (
-    event,
-  ) => {
+  const onChangeHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
     const newFrame = Number(event.target.value);
 
     if (isListeningForChanges) {
@@ -37,7 +35,7 @@ const ProgressBar = (props: ProgressBarProps) => {
   /**
    * Handle the last change
    */
-  const onMouseUpHandler: React.MouseEventHandler<HTMLInputElement> = () => {
+  const onMouseUpHandler: MouseEventHandler<HTMLInputElement> = () => {
     if (isListeningForChanges && selectedFrame) {
       onChange?.(selectedFrame, true);
       setSelectedFrame(null);

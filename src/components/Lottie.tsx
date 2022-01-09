@@ -103,7 +103,7 @@ const Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = (
             setSeeker(20, true);
           }}
         >
-          Drag ended
+          Drag to and end
         </button>
 
         <ProgressBar
