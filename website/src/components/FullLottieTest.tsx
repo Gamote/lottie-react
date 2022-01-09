@@ -1,5 +1,5 @@
+import { Lottie, LottieHookOptions, LottieProps } from "lottie-react";
 import React, { FC, useEffect, useState } from "react";
-import { Lottie, LottieHookOptions, LottieProps } from "../../../src";
 import logger from "../../../src/utils/logger";
 import groovyWalkAnimation from "./../../static/assets/animations/groovyWalk.json";
 

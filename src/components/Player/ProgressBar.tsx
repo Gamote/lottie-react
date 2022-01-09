@@ -54,7 +54,6 @@ const ProgressBar = (props: ProgressBarProps) => {
         max={totalFrames}
         step={0.001}
         value={currentFrames}
-        defaultValue={0}
       />
     </div>
   );
