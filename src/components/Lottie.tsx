@@ -2,7 +2,7 @@ import React, { forwardRef, ForwardRefRenderFunction } from "react";
 import useLottie from "../hooks/useLottie";
 import useLottiePlayer from "../hooks/useLottiePlayer";
 import { LottiePlayerState, LottieProps } from "../types";
-import ProgressBar from "./Progress/ProgressBar";
+import ProgressBar from "./Player/ProgressBar";
 
 /**
  * Lottie's animation component
