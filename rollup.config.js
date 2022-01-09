@@ -31,7 +31,6 @@ const reusablePluginList = [
   postcss({
     plugins: [autoprefixer],
     use: ["sass"],
-    extract: true,
   }),
   babel({
     exclude: "node_modules/**",
