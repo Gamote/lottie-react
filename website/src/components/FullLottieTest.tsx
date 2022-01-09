@@ -15,34 +15,34 @@ const FullLottieTest: FC = () => {
   const [autoplay, setAutoplay] = useState<LottieHookOptions["autoplay"]>(config.autoplay);
 
   // Delay
-  const [delayAnimations, setDelayAnimations] = useState(false);
+  const [delayAnimations, setDelayAnimations] = useState(true);
 
   // Show different animations
-  const [showAnimationNumber, setShowAnimationNumber] = useState(0);
+  const [showAnimationNumber, setShowAnimationNumber] = useState(2);
 
-  // Show animations after x milliseconds
-  useEffect(() => {
-    setTimeout(() => {
-      logger.info("> Showing animations");
-      setDelayAnimations(true);
-    }, 500);
-  }, []);
-
-  // Show animation 1
-  useEffect(() => {
-    setTimeout(() => {
-      logger.info("> Showing div 1");
-      setShowAnimationNumber(1);
-    }, 1500);
-  }, []);
-
-  // Show animation 2
-  useEffect(() => {
-    setTimeout(() => {
-      logger.info("> Showing div 2");
-      setShowAnimationNumber(2);
-    }, 2500);
-  }, []);
+  // // Show animations after x milliseconds
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     logger.info("> Showing animations");
+  //     setDelayAnimations(true);
+  //   }, 500);
+  // }, []);
+  //
+  // // Show animation 1
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     logger.info("> Showing div 1");
+  //     setShowAnimationNumber(1);
+  //   }, 1500);
+  // }, []);
+  //
+  // // Show animation 2
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     logger.info("> Showing div 2");
+  //     setShowAnimationNumber(2);
+  //   }, 2500);
+  // }, []);
 
   // Change autoplay
   // useEffect(() => {
