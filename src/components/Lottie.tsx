@@ -33,7 +33,13 @@ const Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = (
 
   return (
     <Player animationItem={animationItem} lottiePlayer={lottiePlayer}>
-      <div ref={setContainerRef} />
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+        }}
+        ref={setContainerRef}
+      />
     </Player>
   );
 };
