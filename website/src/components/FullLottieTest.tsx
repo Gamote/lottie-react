@@ -91,6 +91,7 @@ const FullLottieTest: FC = () => {
             <>
               <Lottie
                 source={source}
+                // source={"https://assets4.lottiefiles.com/packages/lf20_hslwihoj.json"}
                 loop={loop}
                 autoplay={autoplay}
                 // onPlayerStateChange={(playerState) => {

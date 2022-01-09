@@ -92,10 +92,36 @@ const Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = (
         <button
           type="button"
           onClick={() => {
+            setSeeker(0, false);
+          }}
+        >
+          Drag to 0
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setSeeker(31, false);
+          }}
+        >
+          Drag to 31
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setSeeker(32, false);
+          }}
+        >
+          Drag to 32
+        </button>
+        <button
+          type="button"
+          onClick={() => {
             setSeeker(10, false);
           }}
         >
-          Drag to 10 and stop
+          Drag to 10
         </button>
         <button
           type="button"
@@ -103,7 +129,7 @@ const Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = (
             setSeeker(20, true);
           }}
         >
-          Drag to 20 and end
+          Set to 20
         </button>
         <button
           type="button"
@@ -111,13 +137,29 @@ const Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = (
             setSeeker("50%", false);
           }}
         >
-          Drag to 50% and stop
+          Set to 50%
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setSeeker("50%", false);
+          }}
+        >
+          {currentFrame.toFixed(0)}
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setSeeker("50%", false);
+          }}
+        >
+          {animationItem?.totalFrames}
         </button>
 
         <ProgressBar
           // TODO: add first frame
           currentFrames={currentFrame}
-          totalFrames={(animationItem?.totalFrames || 1) - 1} // TODO: is there another way to cover the last frame?
+          totalFrames={animationItem?.totalFrames || 1} // TODO: is there another way to cover the last frame?
           onChange={(progress, isDraggingEnded) => {
             setSeeker(progress, !!isDraggingEnded);
           }}

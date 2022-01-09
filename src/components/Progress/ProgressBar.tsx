@@ -1,4 +1,5 @@
 import React, { ChangeEventHandler, CSSProperties, MouseEventHandler, useState } from "react";
+import isFunction from "../../utils/isFunction";
 
 export type ProgressBarProps = {
   totalFrames: number;
@@ -16,7 +17,7 @@ const inputStyles: CSSProperties = {
 
 const ProgressBar = (props: ProgressBarProps) => {
   const { totalFrames, currentFrames, onChange } = props;
-  const isListeningForChanges = onChange && typeof onChange === "function";
+  const isListeningForChanges = isFunction(onChange);
   const [selectedFrame, setSelectedFrame] = useState<number | null>(null);
 
   /**
@@ -36,7 +37,7 @@ const ProgressBar = (props: ProgressBarProps) => {
    * Handle the last change
    */
   const onMouseUpHandler: MouseEventHandler<HTMLInputElement> = () => {
-    if (isListeningForChanges && selectedFrame) {
+    if (isListeningForChanges && selectedFrame !== null) {
       onChange?.(selectedFrame, true);
       setSelectedFrame(null);
     }
@@ -49,11 +50,11 @@ const ProgressBar = (props: ProgressBarProps) => {
         style={inputStyles}
         onChange={onChangeHandler}
         onMouseUp={onMouseUpHandler}
-        min="1"
+        min={0}
         max={totalFrames}
-        step=".001"
+        step={0.001}
         value={currentFrames}
-        defaultValue="1"
+        defaultValue={0}
       />
     </div>
   );
