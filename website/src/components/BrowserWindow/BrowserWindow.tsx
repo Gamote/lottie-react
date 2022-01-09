@@ -6,14 +6,13 @@
  */
 
 import React, { FC } from "react";
-
 import styles from "./BrowserWindow.module.css";
 
 type BrowserWindowProps = {
   minBodyHeight?: number;
   maxBodyHeight?: number;
   bodyHeight?: number;
-  url: string;
+  url?: string;
 };
 
 const BrowserWindow: FC<BrowserWindowProps> = ({
