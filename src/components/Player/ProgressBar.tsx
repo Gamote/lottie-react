@@ -1,24 +1,18 @@
-import React, { ChangeEventHandler, CSSProperties, MouseEventHandler, useState } from "react";
+import React, { ChangeEventHandler, MouseEventHandler, useState } from "react";
 import isFunction from "../../utils/isFunction";
 
 export type ProgressBarProps = {
-  totalFrames: number;
-  currentFrames: number;
+  currentFrame?: number;
+  totalFrames?: number;
   onChange?: (progress: number, isDraggingEnded?: boolean) => void;
 };
 
-// Styles
-const inputContainerStyles: CSSProperties = {
-  padding: 5,
-};
-const inputStyles: CSSProperties = {
-  width: "100%",
-};
-
 const ProgressBar = (props: ProgressBarProps) => {
-  const { totalFrames, currentFrames, onChange } = props;
-  const isListeningForChanges = isFunction(onChange);
   const [selectedFrame, setSelectedFrame] = useState<number | null>(null);
+  const { totalFrames, currentFrame, onChange } = props;
+  const _currentFrame = currentFrame ?? 0;
+  const _totalFrames = totalFrames ?? 0;
+  const isListeningForChanges = isFunction(onChange);
 
   /**
    * Handle any changes
@@ -44,17 +38,24 @@ const ProgressBar = (props: ProgressBarProps) => {
   };
 
   return (
-    <div style={inputContainerStyles}>
+    <div style={{ flex: 1 }}>
       <input
         type="range"
-        style={inputStyles}
+        style={{
+          width: "100%",
+        }}
         onChange={onChangeHandler}
         onMouseUp={onMouseUpHandler}
         min={0}
-        max={totalFrames}
+        max={_totalFrames}
         step={0.001}
-        value={currentFrames}
+        value={_currentFrame}
       />
+
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <span>{_currentFrame?.toFixed(0)}</span>
+        <span>{_totalFrames}</span>
+      </div>
     </div>
   );
 };
