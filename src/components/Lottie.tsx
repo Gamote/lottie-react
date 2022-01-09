@@ -2,6 +2,7 @@ import React, { forwardRef, ForwardRefRenderFunction } from "react";
 import useLottie from "../hooks/useLottie";
 import useLottiePlayer from "../hooks/useLottiePlayer";
 import { LottiePlayerState, LottieProps } from "../types";
+import ProgressBar from "./Progress/ProgressBar";
 
 /**
  * Lottie's animation component
@@ -32,7 +33,7 @@ const Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = (
   const { setContainerRef, animationItem } = lottieObject;
 
   // Lottie Player
-  const { playerState } = useLottiePlayer({
+  const { playerState, currentFrame, play, pause, stop, setSeeker, setSpeed } = useLottiePlayer({
     animationItem,
     onPlayerEvent,
     onPlayerStateChange,
@@ -63,44 +64,57 @@ const Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = (
         ref={setContainerRef}
       />
 
-      {/*TODO: move to player*/}
-      {/*<div>*/}
-      {/*  {(playerState === PlayerState.Paused || playerState === PlayerState.Stopped) && (*/}
-      {/*    <button type="button" onClick={() => play()}>*/}
-      {/*      Play*/}
-      {/*    </button>*/}
-      {/*  )}*/}
-      {/*  {playerState === PlayerState.Playing && (*/}
-      {/*    <button type="button" onClick={() => pause()}>*/}
-      {/*      Pause*/}
-      {/*    </button>*/}
-      {/*  )}*/}
-      {/*  {(playerState === PlayerState.Playing || playerState === PlayerState.Paused) && (*/}
-      {/*    <button type="button" onClick={() => stop()}>*/}
-      {/*      Stop*/}
-      {/*    </button>*/}
-      {/*  )}*/}
-      {/*  {(playerState === PlayerState.Playing || playerState === PlayerState.Paused) && (*/}
-      {/*    <button type="button" onClick={() => stop()}>*/}
-      {/*      Loop is {config.loop ? "on" : "off"}*/}
-      {/*    </button>*/}
-      {/*  )}*/}
-      {/*  <ProgressBar*/}
-      {/*    // TODO: add first frame*/}
-      {/*    currentFrames={currentFrame}*/}
-      {/*    totalFrames={(animationItem?.totalFrames || 1) - 1} // TODO: is there another way to cover the last frame?*/}
-      {/*    onChange={(progress, isDraggingEnded) => {*/}
-      {/*      setSeeker(progress, isDraggingEnded && playerState === PlayerState.Playing);*/}
-      {/*      // If the consumer is not done dragging the progress indicator*/}
-      {/*      // set it back to what it was, because `setSeeker()` changed it*/}
-      {/*      // TODO: should we move the logic in `setSeeker()` and pass `isDraggingEnded`*/}
-      {/*      //  or create an `ON_HOLD` state and keep the previous state?*/}
-      {/*      if (!isDraggingEnded) {*/}
-      {/*        setPlayerState(playerState, true);*/}
-      {/*      }*/}
-      {/*    }}*/}
-      {/*  />*/}
-      {/*</div>*/}
+      {/*TODO: move to the player's UI*/}
+      <div style={{ height: 30 }}>
+        {(playerState === LottiePlayerState.Paused ||
+          playerState === LottiePlayerState.Stopped) && (
+          <button type="button" onClick={() => play()}>
+            Play
+          </button>
+        )}
+        {playerState === LottiePlayerState.Playing && (
+          <button type="button" onClick={() => pause()}>
+            Pause
+          </button>
+        )}
+        {(playerState === LottiePlayerState.Playing ||
+          playerState === LottiePlayerState.Paused) && (
+          <button type="button" onClick={() => stop()}>
+            Stop
+          </button>
+        )}
+        {(playerState === LottiePlayerState.Playing ||
+          playerState === LottiePlayerState.Paused ||
+          playerState === LottiePlayerState.Stopped) && (
+          <button type="button">Loop is {loop ? "on" : "off"}</button>
+        )}
+
+        <button
+          type="button"
+          onClick={() => {
+            setSeeker(10, false);
+          }}
+        >
+          Drag to
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setSeeker(20, true);
+          }}
+        >
+          Drag ended
+        </button>
+
+        <ProgressBar
+          // TODO: add first frame
+          currentFrames={currentFrame}
+          totalFrames={(animationItem?.totalFrames || 1) - 1} // TODO: is there another way to cover the last frame?
+          onChange={(progress, isDraggingEnded) => {
+            setSeeker(progress, !!isDraggingEnded);
+          }}
+        />
+      </div>
     </div>
   );
 };

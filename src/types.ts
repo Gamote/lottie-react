@@ -119,6 +119,19 @@ export type LottiePlayerOptions = {
 };
 
 /**
+ * Object returned by `useLottiePlayer()`
+ */
+export type LottiePlayerHookResult = {
+  playerState: LottiePlayerState;
+  currentFrame: number;
+  play: () => void;
+  pause: () => void;
+  stop: () => void;
+  setSpeed: (speed: number) => void;
+  setSeeker: (seek: number, isSeekingEnded: boolean) => void;
+};
+
+/**
  * Properties for the `Lottie` component
  */
 export type LottieProps = LottieHookOptions & {

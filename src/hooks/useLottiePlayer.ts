@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import {
   LottiePlayerEvent,
   LottiePlayerEventListener,
+  LottiePlayerHookResult,
   LottiePlayerOptions,
   LottiePlayerState,
 } from "../types";
@@ -17,7 +18,7 @@ import useLottiePlayerState from "./useLottiePlayerState";
  * can later be used by the UI
  * @param options
  */
-const useLottiePlayer = (options?: LottiePlayerOptions) => {
+const useLottiePlayer = (options?: LottiePlayerOptions): LottiePlayerHookResult => {
   const { animationItem, onPlayerEvent, onPlayerStateChange } = options ?? {};
 
   // State of the player
@@ -32,6 +33,8 @@ const useLottiePlayer = (options?: LottiePlayerOptions) => {
 
   // State of the current frame
   const [currentFrame, setCurrentFrame] = useState<number>(0);
+  const [playerStateBeforeSeeking, setPlayerStateBeforeSeeking] =
+    useState<LottiePlayerState | null>(null);
 
   /**
    * Trigger an event
@@ -189,18 +192,34 @@ const useLottiePlayer = (options?: LottiePlayerOptions) => {
   };
 
   // Set seeker
-  const setSeeker = (seek: number, shouldPlay = false) => {
-    if (!shouldPlay || playerState !== LottiePlayerState.Playing) {
-      animationItem?.goToAndStop(seek, true);
-      setPlayerState(LottiePlayerState.Paused);
-    } else {
+  const setSeeker = (seek: number, isSeekingEnded = false) => {
+    // Remember the state before seeking, so we can set it back when the seeking is done
+    if (!isSeekingEnded && !playerStateBeforeSeeking) {
+      setPlayerStateBeforeSeeking(playerState);
+    } else if (isSeekingEnded && playerStateBeforeSeeking) {
+      setPlayerStateBeforeSeeking(null);
+    }
+
+    const shouldPlayAfter =
+      isSeekingEnded &&
+      (playerState === LottiePlayerState.Playing ||
+        playerStateBeforeSeeking === LottiePlayerState.Playing);
+
+    if (shouldPlayAfter) {
       animationItem?.goToAndPlay(seek, true);
       setPlayerState(LottiePlayerState.Playing);
+    } else {
+      animationItem?.goToAndStop(seek, true);
+
+      if (playerState !== LottiePlayerState.Stopped) {
+        setPlayerState(LottiePlayerState.Paused);
+      }
     }
   };
 
   return {
     playerState,
+    currentFrame,
     play,
     pause,
     stop,

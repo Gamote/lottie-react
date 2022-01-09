@@ -100,7 +100,6 @@ const FullLottieTest: FC = () => {
                 //   console.log(playerEvent);
                 // }}
               />
-              Animation 2
             </>
           )}
         </>
