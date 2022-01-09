@@ -4,7 +4,6 @@
 		"allowJs": true,
 		"jsx": "react-jsx",
 		"declaration": true,
-		"outDir": "./compiled",
 		"strict": true,
 		"moduleResolution": "node",
 		"allowSyntheticDefaultImports": true,
