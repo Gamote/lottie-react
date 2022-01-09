@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, MouseEventHandler, useState } from "react";
+import React, { ChangeEventHandler, CSSProperties, MouseEventHandler, useState } from "react";
 import isFunction from "../../utils/isFunction";
 
 export type ProgressBarProps = {
@@ -7,12 +7,25 @@ export type ProgressBarProps = {
   onChange?: (progress: number, isDraggingEnded?: boolean) => void;
 };
 
+const styles: Record<string, CSSProperties> = {
+  frameBox: {
+    padding: "2px 2px",
+    minWidth: 30,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+  },
+};
+
 const ProgressBar = (props: ProgressBarProps) => {
   const [selectedFrame, setSelectedFrame] = useState<number | null>(null);
   const { totalFrames, currentFrame, onChange } = props;
   const _currentFrame = currentFrame ?? 0;
   const _totalFrames = totalFrames ?? 0;
   const isListeningForChanges = isFunction(onChange);
+
+  const frameBoxMinWidth = 15 + String(_totalFrames).length * 5;
 
   /**
    * Handle any changes
@@ -38,7 +51,54 @@ const ProgressBar = (props: ProgressBarProps) => {
   };
 
   return (
-    <div style={{ flex: 1 }}>
+    <div
+      style={{
+        display: "flex",
+        flex: 1,
+        position: "relative",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          background: "#3f3f3f",
+          fontSize: 12,
+          fontWeight: "500",
+          color: "white",
+          justifyContent: "center",
+          borderRadius: 3,
+        }}
+      >
+        <span
+          style={{
+            ...styles.frameBox,
+            minWidth: frameBoxMinWidth,
+          }}
+        >
+          {_currentFrame?.toFixed(0)}
+        </span>
+        <span
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center",
+          }}
+        >
+          /
+        </span>
+        <span
+          style={{
+            ...styles.frameBox,
+            minWidth: frameBoxMinWidth,
+          }}
+        >
+          {_totalFrames}
+        </span>
+      </div>
+
       <input
         type="range"
         style={{
@@ -52,10 +112,24 @@ const ProgressBar = (props: ProgressBarProps) => {
         value={_currentFrame}
       />
 
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <span>{_currentFrame?.toFixed(0)}</span>
-        <span>{_totalFrames}</span>
-      </div>
+      {/*<div style={{ display: "flex", justifyContent: "space-between" }}>*/}
+      {/*  <span*/}
+      {/*    style={{*/}
+      {/*      ...styles.frameBox,*/}
+      {/*      left: 10,*/}
+      {/*    }}*/}
+      {/*  >*/}
+      {/*    {_currentFrame?.toFixed(0)}*/}
+      {/*  </span>*/}
+      {/*  <span*/}
+      {/*    style={{*/}
+      {/*      ...styles.frameBox,*/}
+      {/*      right: 10,*/}
+      {/*    }}*/}
+      {/*  >*/}
+      {/*    {_totalFrames}*/}
+      {/*  </span>*/}
+      {/*</div>*/}
     </div>
   );
 };

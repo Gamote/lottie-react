@@ -13,7 +13,7 @@ type PlayerProps = {
  * TODO: add view for loading and error
  */
 const Player: FC<PlayerProps> = ({ children, animationItem, lottiePlayer }) => {
-  const { playerState, currentFrame, play, pause, stop, setSeeker, setSpeed } = lottiePlayer;
+  const { playerState, currentFrame, play, pause, setSeeker } = lottiePlayer;
 
   const animationView = (
     <div
@@ -34,24 +34,25 @@ const Player: FC<PlayerProps> = ({ children, animationItem, lottiePlayer }) => {
       <div
         style={{
           display: "flex",
+          paddingLeft: 10,
+          paddingRight: 10,
+          paddingTop: 10,
+          paddingBottom: 10,
         }}
       >
         {(playerState === LottiePlayerState.Paused ||
           playerState === LottiePlayerState.Stopped) && (
           <button type="button" onClick={() => play()}>
-            Play
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path d="M2 24v-24l20 12-20 12z" />
+            </svg>
           </button>
         )}
         {playerState === LottiePlayerState.Playing && (
           <button type="button" onClick={() => pause()}>
-            Pause
-          </button>
-        )}
-
-        {(playerState === LottiePlayerState.Playing ||
-          playerState === LottiePlayerState.Paused) && (
-          <button type="button" onClick={() => stop()}>
-            Stop
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path d="M10 24h-6v-24h6v24zm10-24h-6v24h6v-24z" />
+            </svg>
           </button>
         )}
 
@@ -63,7 +64,11 @@ const Player: FC<PlayerProps> = ({ children, animationItem, lottiePlayer }) => {
           }}
         />
 
-        <button>Loop</button>
+        <button>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M2 12c0 .999.381 1.902.989 2.604l-1.098.732-.587.392c-.814-1.025-1.304-2.318-1.304-3.728 0-3.313 2.687-6 6-6h9v-3l6 4-6 4v-3h-9c-2.206 0-4 1.794-4 4zm20.696-3.728l-.587.392-1.098.732c.608.702.989 1.605.989 2.604 0 2.206-1.795 4-4 4h-9v-3l-6 4 6 4v-3h9c3.313 0 6-2.687 6-6 0-1.41-.489-2.703-1.304-3.728z" />
+          </svg>
+        </button>
         <button>Speed</button>
         <button>Fullscreen</button>
       </div>
@@ -72,8 +77,14 @@ const Player: FC<PlayerProps> = ({ children, animationItem, lottiePlayer }) => {
 
   return (
     <div
-      className="lottie-player1"
-      style={{ height: 200, display: "flex", flexDirection: "column" }}
+      style={{
+        width: "100%",
+        height: "100%",
+        minHeight: 0,
+        minWidth: 0,
+        display: "flex",
+        flexDirection: "column",
+      }}
     >
       {animationView}
 
