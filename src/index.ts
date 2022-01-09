@@ -6,5 +6,3 @@ export { Lottie, useLottie, useLottiePlayer };
 export * from "./types";
 
 export default Lottie;
-export { LottiePlayerEvent } from "./types";
-export { LottiePlayerState } from "./types";

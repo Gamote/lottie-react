@@ -9,8 +9,6 @@ import postcss from "rollup-plugin-postcss";
 import { terser } from "rollup-plugin-terser";
 import packageJSON from "./package.json";
 
-const input = "./src/index.tsx";
-
 /**
  * Get the extension for the minified files
  * @param pathToFile
@@ -42,6 +40,8 @@ const reusablePluginList = [
   resolve(),
   commonjs(),
 ];
+
+const input = "./src/index.ts";
 
 /**
  * Definition of the rollup configurations
