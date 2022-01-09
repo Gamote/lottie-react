@@ -1,24 +1,16 @@
 {
 	"compilerOptions": {
-		/* Basic Options */
-		"target": "ES2018" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'. */,
-		"allowJs": true /* Allow javascript files to be compiled. */,
-		"jsx": "react-jsx" /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */,
-		"declaration": true /* Generates corresponding '.d.ts' file. */,
-		"outDir": "./compiled" /* Redirect output structure to the directory. */,
-
-		/* Strict Type-Checking Options */
-		"strict": true /* Enable all strict type-checking options. */,
-
-		/* Module Resolution Options */
-		"moduleResolution": "node" /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */,
+		"target": "ESNext",
+		"allowJs": true,
+		"jsx": "react-jsx",
+		"declaration": true,
+		"outDir": "./compiled",
+		"strict": true,
+		"moduleResolution": "node",
 		"allowSyntheticDefaultImports": true,
-		"esModuleInterop": true /* Enabled for compatibility with Jest (and Babel) */,
-
-		/* Advanced Options */
-		"resolveJsonModule": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
+		"esModuleInterop": true,
+		"resolveJsonModule": true
 	},
-	"include": ["./src/**/*",
-	],
+	"include": ["./src/**/*"],
 	"exclude": ["./src/__tests__"]
 }
