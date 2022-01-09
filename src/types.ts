@@ -128,7 +128,7 @@ export type LottiePlayerHookResult = {
   pause: () => void;
   stop: () => void;
   setSpeed: (speed: number) => void;
-  setSeeker: (seek: number, isSeekingEnded: boolean) => void;
+  setSeeker: (value: number | string, isSeekingEnded: boolean) => void;
 };
 
 /**

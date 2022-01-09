@@ -95,7 +95,7 @@ const Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = (
             setSeeker(10, false);
           }}
         >
-          Drag to
+          Drag to 10 and stop
         </button>
         <button
           type="button"
@@ -103,7 +103,15 @@ const Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = (
             setSeeker(20, true);
           }}
         >
-          Drag to and end
+          Drag to 20 and end
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setSeeker("50%", false);
+          }}
+        >
+          Drag to 50% and stop
         </button>
 
         <ProgressBar

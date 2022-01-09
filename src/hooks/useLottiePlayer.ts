@@ -6,6 +6,7 @@ import {
   LottiePlayerOptions,
   LottiePlayerState,
 } from "../types";
+import getNumberFromNumberOrPercentage from "../utils/getNumberFromNumberOrPercentage";
 import isFunction from "../utils/isFunction";
 import logger from "../utils/logger";
 import useLottiePlayerState from "./useLottiePlayerState";
@@ -191,8 +192,26 @@ const useLottiePlayer = (options?: LottiePlayerOptions): LottiePlayerHookResult 
     animationItem?.setSpeed(speed);
   };
 
-  // Set seeker
-  const setSeeker = (seek: number, isSeekingEnded = false) => {
+  /**
+   * Change the current frame from the animation
+   * @param value
+   * @param isSeekingEnded
+   */
+  const setSeeker = (value: number | string, isSeekingEnded = false) => {
+    if (!animationItem) {
+      return;
+    }
+
+    const seekInfo = getNumberFromNumberOrPercentage(value);
+
+    if (!seekInfo) {
+      return;
+    }
+
+    const frame = seekInfo.isPercentage
+      ? (animationItem.totalFrames * seekInfo.number) / 100
+      : seekInfo.number;
+
     // Remember the state before seeking, so we can set it back when the seeking is done
     if (!isSeekingEnded && !playerStateBeforeSeeking) {
       setPlayerStateBeforeSeeking(playerState);
@@ -206,10 +225,10 @@ const useLottiePlayer = (options?: LottiePlayerOptions): LottiePlayerHookResult 
         playerStateBeforeSeeking === LottiePlayerState.Playing);
 
     if (shouldPlayAfter) {
-      animationItem?.goToAndPlay(seek, true);
+      animationItem?.goToAndPlay(frame, true);
       setPlayerState(LottiePlayerState.Playing);
     } else {
-      animationItem?.goToAndStop(seek, true);
+      animationItem?.goToAndStop(frame, true);
 
       if (playerState !== LottiePlayerState.Stopped) {
         setPlayerState(LottiePlayerState.Paused);

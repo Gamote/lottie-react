@@ -1,4 +1,4 @@
-import { ChangeEventHandler, CSSProperties, MouseEventHandler, useState } from "react";
+import React, { ChangeEventHandler, CSSProperties, MouseEventHandler, useState } from "react";
 
 export type ProgressBarProps = {
   totalFrames: number;
