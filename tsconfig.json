@@ -3,7 +3,7 @@
 		/* Basic Options */
 		"target": "ES2018" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'. */,
 		"allowJs": true /* Allow javascript files to be compiled. */,
-		"jsx": "react" /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */,
+		"jsx": "react-jsx" /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */,
 		"declaration": true /* Generates corresponding '.d.ts' file. */,
 		"outDir": "./compiled" /* Redirect output structure to the directory. */,
 
