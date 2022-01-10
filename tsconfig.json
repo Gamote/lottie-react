@@ -1,17 +1,17 @@
 {
-	// This file used by ESLint and Rollup.
-	"compilerOptions": {
-		"target": "ESNext",
-		"allowJs": true,
-		"jsx": "react-jsx",
-		"declaration": true,
-		"declarationDir": "./dts-declarations",
-		"strict": true,
-		"moduleResolution": "node",
-		"allowSyntheticDefaultImports": true,
-		"esModuleInterop": true,
-		"resolveJsonModule": true
-	},
-	"include": ["./src/**/*"],
-	"exclude": ["./src/__tests__"]
+  // This file used by ESLint and Rollup.
+  "compilerOptions": {
+    "target": "ESNext",
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "declaration": true,
+    "declarationDir": "./dts-declarations",
+    "strict": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true
+  },
+  "include": ["./src/**/*"],
+  "exclude": ["./src/__tests__"]
 }
