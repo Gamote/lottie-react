@@ -61,7 +61,7 @@ const config = {
       },
       footer: {
         style: "dark",
-        copyright: `© ${new Date().getFullYear()} Lottie React`,
+        copyright: `© ${new Date().getFullYear()} Lottie React. Made with 💚 by David Gamote.`,
       },
       prism: {
         theme: lightCodeTheme,
