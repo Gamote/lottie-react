@@ -43,14 +43,24 @@ const ProgressBar = (props: ProgressBarProps) => {
       className={"progress-bar"}
       type="range"
       style={{
-        width: "100%",
+        /**
+         * Set the current progress percentage as a CSS var, so it can be used in the style
+         * to properly customize the input range styling across browsers
+         *
+         * Source: https://toughengineer.github.io/demo/slider-styler/slider-styler.html
+         */
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        "--min": 0,
+        "--max": _totalFrames,
+        "--value": _currentFrame,
       }}
       onChange={onChangeHandler}
       onMouseUp={onMouseUpHandler}
       min={0}
       max={_totalFrames}
-      step={0.001}
       value={_currentFrame}
+      step={0.001}
     />
   );
 };

@@ -7,7 +7,7 @@ const FullLottieTest: FC = () => {
   const config: LottieProps = {
     source: groovyWalkAnimation,
     loop: true,
-    autoplay: true,
+    autoplay: false,
   };
 
   const [source, setSource] = useState<LottieHookOptions["source"]>(config.source);
@@ -90,7 +90,8 @@ const FullLottieTest: FC = () => {
           {showAnimationNumber === 2 && (
             <>
               <Lottie
-                source={source}
+                // source={source}
+                source={"https://assets5.lottiefiles.com/private_files/lf30_3ezlslmp.json"}
                 // source={"https://assets4.lottiefiles.com/packages/lf20_hslwihoj.json"}
                 loop={loop}
                 autoplay={autoplay}

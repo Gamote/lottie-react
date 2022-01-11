@@ -1,29 +1,41 @@
-// Source: https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css
-@track-color: #00d1c1;
+/**
+ *  TODO: improve this to reuse config, best to do it after IE it's fully supported
+ *
+ *  Sources:
+ *  - https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css
+ *  - https://toughengineer.github.io/demo/slider-styler/slider-styler.html
+ *  - https://dev.to/munkacsimark/styled-range-input-a-way-out-of-range-input-nightmare-jeo
+ */
+@track-progress-color: #00d1c1;
+@track-background-color: rgb(77 77 77);
 @thumb-color: #007a87;
 
-@thumb-radius: 10px;
-@thumb-height: 20px;
-@thumb-width: 20px;
-@thumb-shadow-size: 0px;
-@thumb-shadow-blur: 0px;
-@thumb-shadow-color: transparent;
-@thumb-border-width: 0px;
-@thumb-border-color: transparent;
+@contrast: 5%;
 
 @track-width: 100%;
 @track-height: 10px;
+@track-radius: 5px;
 @track-shadow-size: 0px;
 @track-shadow-blur: 0px;
 @track-shadow-color: transparent;
 @track-border-width: 0px;
 @track-border-color: transparent;
 
-@track-radius: 5px;
-@contrast: 5%;
+@thumb-width: 20px;
+@thumb-height: 20px;
+@thumb-radius: 10px;
+@thumb-shadow-size: 0px;
+@thumb-shadow-blur: 0px;
+@thumb-shadow-color: transparent;
+@thumb-border-width: 0px;
+@thumb-border-color: transparent;
 
-.shadow(@shadow-size,@shadow-blur,@shadow-color) {
-  box-shadow: @shadow-size @shadow-size @shadow-blur @shadow-color, 0 0 @shadow-size lighten(@shadow-color,5%);
+/**
+  Reusable functions
+ */
+.shadow(@shadow-size, @shadow-blur, @shadow-color) {
+  box-shadow: @shadow-size @shadow-size @shadow-blur @shadow-color,
+    0 0 @shadow-size lighten(@shadow-color, 5%);
 }
 
 .track() {
@@ -33,7 +45,7 @@
 }
 
 .thumb() {
-.shadow(@thumb-shadow-size,@thumb-shadow-blur,@thumb-shadow-color);
+  .shadow(@thumb-shadow-size, @thumb-shadow-blur, @thumb-shadow-color);
   border: @thumb-border-width solid @thumb-border-color;
   height: @thumb-height;
   width: @thumb-width;
@@ -42,9 +54,16 @@
   cursor: pointer;
 }
 
-input[type=range] {
-  -webkit-appearance: none;
-  margin: @thumb-height/2 0;
+input[type="range"].progress-bar {
+  // Calculate variables
+  --range: calc(var(--max) - var(--min));
+  --ratio: calc((var(--value) - var(--min)) / var(--range));
+  --sx: calc(0.5 * 2em + var(--ratio) * (100% - 2em));
+
+  -webkit-appearance: none; // No special styling
+  margin: 0;
+  padding: 0;
+  background: none; // Remove the default input background
   width: @track-width;
 
   &:focus {
@@ -52,14 +71,38 @@ input[type=range] {
   }
 
   /**
-    WebKit based browsers
+    WebKit (Chrome, Safari)
    */
   &::-webkit-slider-runnable-track {
     .track();
     .shadow(@track-shadow-size,@track-shadow-blur,@track-shadow-color);
-    background: @track-color;
+    background: linear-gradient(@track-progress-color, @track-progress-color) 0 / var(--sx) 100%
+        no-repeat,
+      @track-background-color;
     border-radius: @track-radius;
     border: @track-border-width solid @track-border-color;
+  }
+
+  &:hover::-webkit-slider-runnable-track {
+    background: linear-gradient(
+          lighten(@track-progress-color, @contrast),
+          lighten(@track-progress-color, @contrast)
+        )
+        0 / var(--sx) 100% no-repeat,
+      lighten(@track-background-color, @contrast);
+  }
+
+  &:focus::-webkit-slider-runnable-track {
+    // no styling
+  }
+
+  &:active::-webkit-slider-runnable-track {
+    background: linear-gradient(
+          lighten(@track-progress-color, @contrast),
+          lighten(@track-progress-color, @contrast)
+        )
+        0 / var(--sx) 100% no-repeat,
+      lighten(@track-background-color, @contrast);
   }
 
   &::-webkit-slider-thumb {
@@ -68,35 +111,60 @@ input[type=range] {
     margin-top: ((-@track-border-width * 2 + @track-height) / 2) - (@thumb-height / 2);
   }
 
-  &:focus::-webkit-slider-runnable-track {
-    background: lighten(@track-color, @contrast);
+  &::-webkit-slider-thumb:hover {
+    background: lighten(@thumb-color, @contrast);
   }
 
   /**
-    FireFox
-    TODO: needs polishing
+    Mozilla (Firefox)
    */
   &::-moz-range-track {
     .track();
     .shadow(@track-shadow-size,@track-shadow-blur,@track-shadow-color);
-    background: @track-color;
+    background: linear-gradient(@track-progress-color, @track-progress-color) 0 / var(--sx) 100%
+        no-repeat,
+      @track-background-color;
     border-radius: @track-radius;
     border: @track-border-width solid @track-border-color;
+  }
+
+  &:hover::-moz-range-track {
+    background: linear-gradient(
+          lighten(@track-progress-color, @contrast),
+          lighten(@track-progress-color, @contrast)
+        )
+        0 / var(--sx) 100% no-repeat,
+      lighten(@track-background-color, @contrast);
+  }
+
+  &:focus::-moz-range-track {
+    // no styling
+  }
+
+  &:active::-moz-range-track {
+    background: linear-gradient(
+          lighten(@track-progress-color, @contrast),
+          lighten(@track-progress-color, @contrast)
+        )
+        0 / var(--sx) 100% no-repeat,
+      lighten(@track-background-color, @contrast);
+  }
+
+  &::-moz-range-progress {
+    cursor: pointer;
   }
 
   &::-moz-range-thumb {
     .thumb();
   }
 
-  &::-moz-range-progress {
-    background: darken(@track-color, @contrast);
-    //border: @track-border-width solid @track-border-color;
-    //border-radius: @track-radius*2;
-    //.shadow(@track-shadow-size,@track-shadow-blur,@track-shadow-color);
+  &::-moz-range-thumb:hover {
+    background: lighten(@thumb-color, @contrast);
   }
 
   /**
-    Inter
+    MS (Internet Explorer)
+    TODO: finish
    */
   &::-ms-track {
     .track();
@@ -107,28 +175,28 @@ input[type=range] {
   }
 
   &::-ms-fill-lower {
-    background: darken(@track-color, @contrast);
+    background: darken(@track-progress-color, @contrast);
     border: @track-border-width solid @track-border-color;
     border-radius: @track-radius*2;
     .shadow(@track-shadow-size,@track-shadow-blur,@track-shadow-color);
   }
 
+  &:focus::-ms-fill-lower {
+    background: @track-progress-color;
+  }
+
   &::-ms-fill-upper {
-    background: @track-color;
+    background: @track-progress-color;
     border: @track-border-width solid @track-border-color;
     border-radius: @track-radius*2;
     .shadow(@track-shadow-size,@track-shadow-blur,@track-shadow-color);
+  }
+
+  &:focus::-ms-fill-upper {
+    background: lighten(@track-progress-color, @contrast);
   }
 
   &::-ms-thumb {
     .thumb();
-  }
-
-  &:focus::-ms-fill-lower {
-    background: @track-color;
-  }
-
-  &:focus::-ms-fill-upper {
-    background: lighten(@track-color, @contrast);
   }
 }

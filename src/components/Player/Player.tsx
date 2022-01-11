@@ -59,6 +59,7 @@ const Player: FC<PlayerProps> = ({ children, animationItem, lottiePlayer }) => {
           <Spacer size={10} />
         </>
       )}
+
       <PlayerFrameIndicator
         currentFrame={currentFrame}
         totalFrames={animationItem?.totalFrames || 0}
@@ -68,7 +69,6 @@ const Player: FC<PlayerProps> = ({ children, animationItem, lottiePlayer }) => {
 
       <ProgressBar
         currentFrame={currentFrame}
-        // currentFrame={15}
         totalFrames={animationItem?.totalFrames}
         onChange={(progress, isDraggingEnded) => {
           setSeeker(progress, !!isDraggingEnded);
@@ -93,7 +93,6 @@ const Player: FC<PlayerProps> = ({ children, animationItem, lottiePlayer }) => {
       }}
     >
       {animationView}
-
       {controls}
     </div>
   );
