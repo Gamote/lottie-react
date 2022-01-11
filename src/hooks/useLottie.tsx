@@ -281,87 +281,93 @@ const useLottie = (options: LottieHookOptions): LottieHookResult => {
    * Interaction methods
    */
   // Play
-  const play = () => {
+  const play = useCallback(() => {
     if (animationItem) {
       animationItem.play();
       setState(LottieState.Playing);
       triggerEvent(LottieEvent.Play);
     }
-  };
+  }, [animationItem, setState, triggerEvent]);
 
   // Pause
-  const pause = () => {
+  const pause = useCallback(() => {
     if (animationItem) {
       animationItem.pause();
       setState(LottieState.Paused);
       triggerEvent(LottieEvent.Pause);
     }
-  };
+  }, [animationItem, setState, triggerEvent]);
 
   // Stop
-  const stop = () => {
+  const stop = useCallback(() => {
     if (animationItem) {
       animationItem.goToAndStop(1);
       setState(LottieState.Stopped);
       triggerEvent(LottieEvent.Stop);
     }
-  };
+  }, [animationItem, setState, triggerEvent]);
 
   // Toggle looping
   // TODO: doesn't update children if the animation is paused, check the other components
-  const toggleLoop = () => {
+  const toggleLoop = useCallback(() => {
     if (animationItem) {
       animationItem.loop = !animationItem.loop;
     }
-  };
+  }, [animationItem]);
 
   // Set player speed
-  const setSpeed = (speed: number) => {
-    animationItem?.setSpeed(speed);
-  };
+  const setSpeed = useCallback(
+    (speed: number) => {
+      animationItem?.setSpeed(speed);
+    },
+    [animationItem],
+  );
 
   /**
    * Change the current frame from the animation
    * @param value
    * @param isSeekingEnded
    */
-  const seek = (value: number | string, isSeekingEnded = false) => {
-    if (!animationItem) {
-      return;
-    }
-
-    const seekInfo = getNumberFromNumberOrPercentage(value);
-
-    if (!seekInfo) {
-      return;
-    }
-
-    const frame = seekInfo.isPercentage
-      ? (animationItem.totalFrames * seekInfo.number) / 100
-      : seekInfo.number;
-
-    // Remember the state before seeking, so we can set it back when the seeking is done
-    if (!isSeekingEnded && !stateBeforeSeeking) {
-      setStateBeforeSeeking(state);
-    } else if (isSeekingEnded && stateBeforeSeeking) {
-      setStateBeforeSeeking(null);
-    }
-
-    const shouldPlayAfter =
-      isSeekingEnded &&
-      (state === LottieState.Playing || stateBeforeSeeking === LottieState.Playing);
-
-    if (shouldPlayAfter) {
-      animationItem?.goToAndPlay(frame, true);
-      setState(LottieState.Playing);
-    } else {
-      animationItem?.goToAndStop(frame, true);
-
-      if (state !== LottieState.Stopped) {
-        setState(LottieState.Paused);
+  const seek = useCallback(
+    (value: number | string, isSeekingEnded = false) => {
+      if (!animationItem) {
+        return;
       }
-    }
-  };
+
+      const seekInfo = getNumberFromNumberOrPercentage(value);
+
+      if (!seekInfo) {
+        return;
+      }
+
+      const frame = seekInfo.isPercentage
+        ? (animationItem.totalFrames * seekInfo.number) / 100
+        : seekInfo.number;
+
+      // Remember the state before seeking, so we can set it back when the seeking is done
+      if (!isSeekingEnded && !stateBeforeSeeking) {
+        setStateBeforeSeeking(state);
+      } else if (isSeekingEnded && stateBeforeSeeking) {
+        setStateBeforeSeeking(null);
+      }
+
+      const shouldPlayAfter =
+        isSeekingEnded &&
+        (state === LottieState.Playing || stateBeforeSeeking === LottieState.Playing);
+
+      if (shouldPlayAfter) {
+        animationItem?.goToAndPlay(frame, true);
+        setState(LottieState.Playing);
+      } else {
+        animationItem?.goToAndStop(frame, true);
+
+        if (state !== LottieState.Stopped) {
+          setState(LottieState.Paused);
+        }
+      }
+    },
+    [animationItem, setState, state, stateBeforeSeeking],
+  );
 
   return {
     setContainerRef,
