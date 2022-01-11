@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { LottieState, LottiePlayerStateHookOptions } from "../types";
+import { LottieState, LottieStateHookOptions } from "../types";
 import isFunction from "../utils/isFunction";
 import usePreviousState from "./usePreviousState";
 
@@ -7,7 +7,7 @@ import usePreviousState from "./usePreviousState";
  * Hook that handle the state for LottiePlayer
  * @param options
  */
-const useLottieState = (options?: LottiePlayerStateHookOptions) => {
+const useLottieState = (options?: LottieStateHookOptions) => {
   const { initialState, onChange } = options ?? {};
 
   if (!initialState) {

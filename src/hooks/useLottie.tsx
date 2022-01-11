@@ -325,7 +325,7 @@ const useLottie = (options: LottieHookOptions): LottieHookResult => {
    * @param value
    * @param isSeekingEnded
    */
-  const setSeeker = (value: number | string, isSeekingEnded = false) => {
+  const seek = (value: number | string, isSeekingEnded = false) => {
     if (!animationItem) {
       return;
     }
@@ -373,7 +373,7 @@ const useLottie = (options: LottieHookOptions): LottieHookResult => {
     stop,
     toggleLoop,
     setSpeed,
-    setSeeker,
+    seek,
   };
 };
 

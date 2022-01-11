@@ -6,7 +6,7 @@ import {
   HTMLRendererConfig,
   SVGRendererConfig,
 } from "lottie-web";
-import { AnimationEventHandler, HTMLProps, RefCallback, RefObject } from "react";
+import { AnimationEventHandler, RefCallback, RefObject } from "react";
 
 /**
  * Object returned by `useCallbackRef()`
@@ -105,13 +105,13 @@ export type LottieHookResult = {
   stop: () => void;
   toggleLoop: () => void;
   setSpeed: (speed: number) => void;
-  setSeeker: (value: number | string, isSeekingEnded: boolean) => void;
+  seek: (value: number | string, isSeekingEnded: boolean) => void;
 };
 
 /**
- * Options for the LottiePlayer's state hook
+ * Options for the `useLottieState()` hook
  */
-export type LottiePlayerStateHookOptions = {
+export type LottieStateHookOptions = {
   initialState: LottieState;
   onChange?: (previousState: undefined | LottieState, newState: LottieState) => void;
 };
@@ -120,9 +120,7 @@ export type LottiePlayerStateHookOptions = {
  * Properties for the `Lottie` component
  */
 export type LottieProps = LottieHookOptions & {
-  onPlayerEvent?: (playerEvent: LottieEvent) => void;
-  onPlayerStateChange?: (playerState: LottieState) => void;
-  containerProps?: HTMLProps<HTMLDivElement>;
+  controls?: boolean; // TODO: add array with what to display, e.g ["play", "pause" etc.]
 };
 
 // Interactivity TODO: adapt once the interactivity is rewritten
