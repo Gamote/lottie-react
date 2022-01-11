@@ -26,6 +26,42 @@ export enum LottieRenderer {
 }
 
 /**
+ * Enum with the LottiePlayer's states
+ */
+export enum LottieState {
+  Loading = "loading",
+  Playing = "playing",
+  Paused = "paused",
+  Stopped = "stopped",
+  Frozen = "frozen",
+  Error = "error",
+}
+
+/**
+ * Enum with the LottiePlayer's events
+ */
+export enum LottieEvent {
+  Load = "load",
+  Error = "error",
+  Ready = "ready",
+  Play = "play",
+  Pause = "pause",
+  Stop = "stop",
+  Freeze = "freeze",
+  LoopCompleted = "loop_completed",
+  Complete = "complete",
+  Frame = "frame",
+}
+
+/**
+ * Shape of the LottiePlayer's event listeners
+ */
+export type LottieEventListener = {
+  name: AnimationEventName;
+  handler: AnimationEventHandler;
+};
+
+/**
  * Options for the `useLottie()` hook
  *
  * These options are wrapping Lottie's config properties and adds
@@ -52,6 +88,8 @@ export type LottieHookOptions<Renderer extends LottieRenderer = LottieRenderer.S
   // };
 
   debug?: boolean;
+  onEvent?: (event: LottieEvent) => void;
+  onStateChange?: (state: LottieState) => void;
 };
 
 /**
@@ -60,83 +98,30 @@ export type LottieHookOptions<Renderer extends LottieRenderer = LottieRenderer.S
 export type LottieHookResult = {
   setContainerRef: RefCallback<HTMLDivElement>;
   animationItem: AnimationItem | null;
+  state: LottieState;
+  currentFrame: number;
+  play: () => void;
+  pause: () => void;
+  stop: () => void;
+  toggleLoop: () => void;
+  setSpeed: (speed: number) => void;
+  setSeeker: (value: number | string, isSeekingEnded: boolean) => void;
 };
-
-/**
- * Enum with the LottiePlayer's states
- */
-export enum LottiePlayerState {
-  Loading = "loading",
-  Playing = "playing",
-  Paused = "paused",
-  Stopped = "stopped",
-  Frozen = "frozen",
-  Error = "error",
-}
 
 /**
  * Options for the LottiePlayer's state hook
  */
 export type LottiePlayerStateHookOptions = {
-  initialState: LottiePlayerState;
-  onChange?: (
-    previousPlayerState: undefined | LottiePlayerState,
-    newPlayerState: LottiePlayerState,
-  ) => void;
-};
-
-/**
- * Shape of the LottiePlayer's event listeners
- */
-export type LottiePlayerEventListener = {
-  name: AnimationEventName;
-  handler: AnimationEventHandler;
-};
-
-/**
- * Enum with the LottiePlayer's events
- */
-export enum LottiePlayerEvent {
-  Load = "load",
-  Error = "error",
-  Ready = "ready",
-  Play = "play",
-  Pause = "pause",
-  Stop = "stop",
-  Freeze = "freeze",
-  LoopCompleted = "loop_completed",
-  Complete = "complete",
-  Frame = "frame",
-}
-
-/**
- * Options for the `useLottiePlayer()` hook
- */
-export type LottiePlayerOptions = {
-  animationItem: AnimationItem | null;
-  onPlayerEvent?: (playerState: LottiePlayerEvent) => void;
-  onPlayerStateChange?: (playerState: LottiePlayerState) => void;
-};
-
-/**
- * Object returned by `useLottiePlayer()`
- */
-export type LottiePlayerHookResult = {
-  playerState: LottiePlayerState;
-  currentFrame: number;
-  play: () => void;
-  pause: () => void;
-  stop: () => void;
-  setSpeed: (speed: number) => void;
-  setSeeker: (value: number | string, isSeekingEnded: boolean) => void;
+  initialState: LottieState;
+  onChange?: (previousState: undefined | LottieState, newState: LottieState) => void;
 };
 
 /**
  * Properties for the `Lottie` component
  */
 export type LottieProps = LottieHookOptions & {
-  onPlayerEvent?: (playerEvent: LottiePlayerEvent) => void;
-  onPlayerStateChange?: (playerState: LottiePlayerState) => void;
+  onPlayerEvent?: (playerEvent: LottieEvent) => void;
+  onPlayerStateChange?: (playerState: LottieState) => void;
   containerProps?: HTMLProps<HTMLDivElement>;
 };
 

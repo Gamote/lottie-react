@@ -7,7 +7,7 @@ const FullLottieTest: FC = () => {
   const config: LottieProps = {
     source: groovyWalkAnimation,
     loop: true,
-    autoplay: false,
+    autoplay: true,
   };
 
   const [source, setSource] = useState<LottieHookOptions["source"]>(config.source);
