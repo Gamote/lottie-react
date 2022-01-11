@@ -1,9 +1,9 @@
 import React, { FC } from "react";
 import { LottieState } from "../../types";
-import Spacer from "../Spacer";
 import LoopButton from "../buttons/LoopButton";
 import PauseButton from "../buttons/PauseButton";
 import PlayButton from "../buttons/PlayButton";
+import Spacer from "../misc/Spacer";
 import PlayerControlsProgress from "./PlayerControlsProgress";
 import PlayerFrameIndicator from "./PlayerFrameIndicator";
 
