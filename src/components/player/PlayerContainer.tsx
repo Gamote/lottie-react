@@ -3,7 +3,9 @@ import React, {
   forwardRef,
   ForwardRefRenderFunction,
   HTMLAttributes,
+  useEffect,
 } from "react";
+import logger from "../../utils/logger";
 
 export type PlayerContainerProps = DetailedHTMLProps<
   HTMLAttributes<HTMLDivElement>,
@@ -23,6 +25,15 @@ const PlayerContainer: ForwardRefRenderFunction<HTMLDivElement, PlayerContainerP
   ref,
 ) => {
   const { children, ...rest } = props;
+
+  // Warn about missing `ref` property
+  useEffect(() => {
+    if (!ref) {
+      logger.warn(
+        "😬 Seems like you forgot to pass the `ref` property to the `PlayerContainer` component.",
+      );
+    }
+  }, [ref]);
 
   return (
     <div
