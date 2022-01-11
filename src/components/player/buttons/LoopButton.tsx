@@ -1,6 +1,6 @@
 import React, { FC } from "react";
-import config from "../../config";
-import SvgButton, { SvgButtonProps } from "./SvgButton";
+import config from "../../../config";
+import SvgButton, { SvgButtonProps } from "../../misc/SvgButton";
 
 type LoopButtonProps = SvgButtonProps & {
   isOn?: boolean | number;

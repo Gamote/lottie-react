@@ -1,4 +1,4 @@
-import "./PlayerControlsProgress.less";
+import "./PlayerControlsProgressBar.less";
 import React, { ChangeEventHandler, MouseEventHandler, useState } from "react";
 import isFunction from "../../utils/isFunction";
 
@@ -8,7 +8,7 @@ export type ProgressBarProps = {
   onChange?: (progress: number, isDraggingEnded?: boolean) => void;
 };
 
-const PlayerControlsProgress = (props: ProgressBarProps) => {
+const PlayerControlsProgressBar = (props: ProgressBarProps) => {
   const [selectedFrame, setSelectedFrame] = useState<number | null>(null);
   const { totalFrames, currentFrame, onChange } = props;
   const _currentFrame = currentFrame ?? 0;
@@ -16,7 +16,7 @@ const PlayerControlsProgress = (props: ProgressBarProps) => {
   const isListeningForChanges = isFunction(onChange);
 
   /**
-   * Handle any changes
+   * Handle any changes of the progress bar
    * @param event
    */
   const onChangeHandler: ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -29,7 +29,7 @@ const PlayerControlsProgress = (props: ProgressBarProps) => {
   };
 
   /**
-   * Handle the last change
+   * Handle mouse up on progress bar
    */
   const onMouseUpHandler: MouseEventHandler<HTMLInputElement> = () => {
     if (isListeningForChanges && selectedFrame !== null) {
@@ -40,7 +40,7 @@ const PlayerControlsProgress = (props: ProgressBarProps) => {
 
   return (
     <input
-      className={"progress-bar"}
+      className={"player-controls-progress-bar"}
       type="range"
       style={{
         /**
@@ -65,4 +65,4 @@ const PlayerControlsProgress = (props: ProgressBarProps) => {
   );
 };
 
-export default PlayerControlsProgress;
+export default PlayerControlsProgressBar;

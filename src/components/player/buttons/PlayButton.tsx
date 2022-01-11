@@ -1,6 +1,6 @@
 import React, { FC } from "react";
-import config from "../../config";
-import SvgButton, { SvgButtonProps } from "./SvgButton";
+import config from "../../../config";
+import SvgButton, { SvgButtonProps } from "../../misc/SvgButton";
 
 const PlayButton: FC<SvgButtonProps> = ({ onClick }) => (
   <SvgButton onClick={onClick}>

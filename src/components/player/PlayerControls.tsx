@@ -1,11 +1,11 @@
 import React, { FC } from "react";
 import { LottieState } from "../../types";
-import LoopButton from "../buttons/LoopButton";
-import PauseButton from "../buttons/PauseButton";
-import PlayButton from "../buttons/PlayButton";
 import Spacer from "../misc/Spacer";
-import PlayerControlsProgress from "./PlayerControlsProgress";
-import PlayerFrameIndicator from "./PlayerFrameIndicator";
+import PlayerControlsFrameIndicator from "./PlayerControlsFrameIndicator";
+import PlayerControlsProgressBar from "./PlayerControlsProgressBar";
+import LoopButton from "./buttons/LoopButton";
+import PauseButton from "./buttons/PauseButton";
+import PlayButton from "./buttons/PlayButton";
 
 // TODO: adapt type, maybe use reference to the original ones already defined
 type PlayerControlsProps = {
@@ -48,11 +48,11 @@ const PlayerControls: FC<PlayerControlsProps> = (props) => {
         </>
       )}
 
-      <PlayerFrameIndicator currentFrame={currentFrame} totalFrames={totalFrames || 0} />
+      <PlayerControlsFrameIndicator currentFrame={currentFrame} totalFrames={totalFrames || 0} />
 
       <Spacer size={10} />
 
-      <PlayerControlsProgress
+      <PlayerControlsProgressBar
         currentFrame={currentFrame}
         totalFrames={totalFrames}
         onChange={(progress, isDraggingEnded) => {
