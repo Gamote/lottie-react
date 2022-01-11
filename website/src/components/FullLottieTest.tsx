@@ -1,16 +1,15 @@
 import { Lottie, LottieHookOptions, LottieProps } from "lottie-react";
-import React, { FC, useEffect, useState } from "react";
-import logger from "../../../src/utils/logger";
+import React, { FC, useState } from "react";
 import groovyWalkAnimation from "./../../static/assets/animations/groovyWalk.json";
 
 const FullLottieTest: FC = () => {
   const config: LottieProps = {
-    source: groovyWalkAnimation,
+    src: groovyWalkAnimation,
     loop: true,
     autoplay: true,
   };
 
-  const [source, setSource] = useState<LottieHookOptions["source"]>(config.source);
+  const [src, setSrc] = useState<LottieHookOptions["src"]>(config.src);
   const [loop, setLoop] = useState<LottieHookOptions["loop"]>(config.loop);
   const [autoplay, setAutoplay] = useState<LottieHookOptions["autoplay"]>(config.autoplay);
 
@@ -82,7 +81,7 @@ const FullLottieTest: FC = () => {
         <>
           {showAnimationNumber === 1 && (
             <>
-              <Lottie source={source} loop={loop} autoplay={autoplay} />
+              <Lottie src={src} loop={loop} autoplay={autoplay} />
               Animation 1
             </>
           )}
@@ -90,15 +89,16 @@ const FullLottieTest: FC = () => {
           {showAnimationNumber === 2 && (
             <>
               <Lottie
-                // source={source}
-                source={"https://assets5.lottiefiles.com/private_files/lf30_3ezlslmp.json"}
-                // source={"https://assets4.lottiefiles.com/packages/lf20_hslwihoj.json"}
+                src={"https://assets5.lottiefiles.com/private_files/lf30_3ezlslmp.json"}
+                // src={source}
+                // src={"https://assets4.lottiefiles.com/packages/lf20_hslwihoj.json"}
+                controls
                 loop={loop}
                 autoplay={autoplay}
-                // onPlayerStateChange={(playerState) => {
+                // onStateChange={(playerState) => {
                 //   console.log(playerState);
                 // }}
-                // onPlayerEvent={(playerEvent) => {
+                // onEvent={(playerEvent) => {
                 //   console.log(playerEvent);
                 // }}
               />
@@ -108,8 +108,6 @@ const FullLottieTest: FC = () => {
       )}
     </>
   );
-
-  return;
 };
 
 export default FullLottieTest;

@@ -68,7 +68,7 @@ export type LottieEventListener = {
  * additional ones in order to have a better control over the animation
  */
 export type LottieHookOptions<Renderer extends LottieRenderer = LottieRenderer.Svg> = {
-  source: string | Record<string | number | symbol, unknown>;
+  src: string | Record<string | number | symbol, unknown>;
   // renderer?: Renderer; // TODO: add support
   loop?: boolean | number;
   autoplay?: boolean;

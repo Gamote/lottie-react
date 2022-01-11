@@ -20,7 +20,7 @@ import useLottieState from "./useLottieState";
  */
 const useLottie = (options: LottieHookOptions): LottieHookResult => {
   const {
-    source,
+    src,
     loop,
     autoplay,
     initialSegment,
@@ -95,7 +95,7 @@ const useLottie = (options: LottieHookOptions): LottieHookResult => {
       // TODO: look into web-workers
 
       // Checks if the animation's source have the right format
-      const normalizedAnimationSource = normalizeAnimationSource(source);
+      const normalizedAnimationSource = normalizeAnimationSource(src);
 
       if (!normalizedAnimationSource) {
         logger.log("😥 Animation source is not valid");
@@ -220,7 +220,7 @@ const useLottie = (options: LottieHookOptions): LottieHookResult => {
     // * (re)initialise only when the container ref and/or the source change
     // ! DON'T CHANGE because we will end up having the "Maximum update depth exceeded" error
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [containerRef.current, source],
+    [containerRef.current, src],
   );
 
   /**
