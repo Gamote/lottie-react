@@ -63,12 +63,12 @@ const FullLottieTest: FC = () => {
   // }, []);
 
   // Change loop
-  useEffect(() => {
-    setTimeout(() => {
-      logger.info("> Changing the loop");
-      setLoop(false);
-    }, 4500);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     logger.info("> Changing the loop");
+  //     setLoop(false);
+  //   }, 4500);
+  // }, []);
 
   // Show missing animation
   // useEffect(() => {
@@ -92,9 +92,9 @@ const FullLottieTest: FC = () => {
           {showAnimationNumber === 2 && (
             <>
               <Lottie
-                src={"https://assets5.lottiefiles.com/private_files/lf30_3ezlslmp.json"}
+                // src={"https://assets5.lottiefiles.com/private_files/lf30_3ezlslmp.json"}
                 // src={source}
-                // src={"https://assets4.lottiefiles.com/packages/lf20_hslwihoj.json"}
+                src={"https://assets4.lottiefiles.com/packages/lf20_hslwihoj.json"}
                 initialValues={{
                   loop,
                   autoplay,

@@ -28,6 +28,7 @@ const dtsExtension = (pathToFile) => pathToFile.replace(".js", ".d.ts");
  */
 const reusablePluginList = [
   typescript(),
+  // TODO: bundle just one version of `.css` and `.min.css`
   postcss({
     plugins: [autoprefixer],
     use: ["less"],
