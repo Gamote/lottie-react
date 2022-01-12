@@ -100,6 +100,7 @@ export type LottieHookResult = {
   animationItem: AnimationItem | null;
   state: LottieState;
   currentFrame: number;
+  loop: boolean | number;
   play: () => void;
   pause: () => void;
   stop: () => void;

@@ -21,7 +21,7 @@ import useLottieState from "./useLottieState";
 const useLottie = (options: LottieHookOptions): LottieHookResult => {
   const {
     src,
-    loop,
+    loop: initialLoop,
     autoplay,
     initialSegment,
     assetsPath,
@@ -49,6 +49,9 @@ const useLottie = (options: LottieHookOptions): LottieHookResult => {
       }
     },
   });
+
+  // (State) Initial states converted to local states TODO: complete
+  const [loop, setLoop] = useState<boolean | number>(initialLoop || false);
 
   // (State) Animation's state before seeking
   // By keeping this we can pause the animation while the seeking action is
@@ -149,6 +152,9 @@ const useLottie = (options: LottieHookOptions): LottieHookResult => {
         {
           name: "enterFrame",
           handler: () => {
+            // TODO: check if we can handle this event in the player controls
+            //  take in the account the consumer that might want to use it when
+            //  the hook is used outside of the predefined UI
             triggerEvent(LottieEvent.Frame);
             if (_animationItem && _animationItem.currentFrame !== currentFrame) {
               setCurrentFrame(_animationItem.currentFrame);
@@ -224,16 +230,18 @@ const useLottie = (options: LottieHookOptions): LottieHookResult => {
   );
 
   /**
-   * Animation's effects
+   * Listen for changes to the initial values
+   *
+   * TODO: change all when we implement initialValues
    *
    * Each effect is taking care of updating individual settings
    */
   // Loop
   useEffect(() => {
     if (animationItem) {
-      animationItem.loop = !!loop;
+      animationItem.loop = !!initialLoop;
     }
-  }, [animationItem, loop]);
+  }, [animationItem, initialLoop]);
 
   // Autoplay
   useEffect(() => {
@@ -312,6 +320,7 @@ const useLottie = (options: LottieHookOptions): LottieHookResult => {
   const toggleLoop = useCallback(() => {
     if (animationItem) {
       animationItem.loop = !animationItem.loop;
+      setLoop(animationItem.loop);
     }
   }, [animationItem]);
 
@@ -329,7 +338,7 @@ const useLottie = (options: LottieHookOptions): LottieHookResult => {
    * @param isSeekingEnded
    */
   const seek = useCallback(
-    (value: number | string, isSeekingEnded = false) => {
+    (value: number | string, isSeekingEnded: boolean) => {
       if (!animationItem) {
         return;
       }
@@ -374,6 +383,7 @@ const useLottie = (options: LottieHookOptions): LottieHookResult => {
     animationItem,
     state,
     currentFrame,
+    loop,
     play,
     pause,
     stop,

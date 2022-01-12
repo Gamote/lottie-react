@@ -12,16 +12,25 @@ import Player from "./player";
  * @param ref
  */
 const Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = (props, ref) => {
-  const { src, loop, autoplay, onEvent, onStateChange, controls } = props;
+  const { src, loop: initialLoop, autoplay, onEvent, onStateChange, controls } = props;
 
-  const { setContainerRef, animationItem, state, currentFrame, play, pause, toggleLoop, seek } =
-    useLottie({
-      src,
-      loop,
-      autoplay,
-      onEvent,
-      onStateChange,
-    });
+  const {
+    setContainerRef,
+    animationItem,
+    state,
+    loop,
+    currentFrame,
+    play,
+    pause,
+    toggleLoop,
+    seek,
+  } = useLottie({
+    src,
+    loop: initialLoop,
+    autoplay,
+    onEvent,
+    onStateChange,
+  });
 
   return (
     <Player>
