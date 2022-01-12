@@ -8,6 +8,12 @@ export type ProgressBarProps = {
   onChange?: (progress: number, isDraggingEnded?: boolean) => void;
 };
 
+/**
+ * Component that show the animation's progress and offer ways to
+ * select a new frame from `0` to `totalFrames`
+ *
+ * TODO: deal with the case in witch totalFrames = 0, is breaking the designs
+ */
 const PlayerControlsProgressBar = (props: ProgressBarProps) => {
   const [selectedFrame, setSelectedFrame] = useState<number | null>(null);
   const { totalFrames, currentFrame, onChange } = props;
