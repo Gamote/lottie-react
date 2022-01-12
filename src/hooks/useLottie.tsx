@@ -128,7 +128,7 @@ const useLottie = ({
           rendererSettings: _initialValues.current?.rendererSettings,
         });
       } catch (e) {
-        logger.log("⚠️ Error while trying to load animation");
+        logger.warn("⚠️ Error while trying to load animation", e);
         // TODO: check if we need to propagate this, maybe it will be useful for the player
         //  or not, and the player can say: "No animation loaded..."
         // triggerEvent(PlayerEvent.Error);

@@ -8,7 +8,7 @@ const normalizeAnimationSource = (source: unknown) => {
     return { path: source };
   }
 
-  // If object TODO: improve the checker `.json` objects, see LottieFiles/Player
+  // If object
   if (source && typeof source === "object") {
     return { animationData: source };
   }

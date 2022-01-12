@@ -101,6 +101,7 @@ const FullLottieTest: FC = () => {
                 // src={"https://assets5.lottiefiles.com/private_files/lf30_3ezlslmp.json"}
                 // src={source}
                 src={"https://assets4.lottiefiles.com/packages/lf20_hslwihoj.json"}
+                // src={{}}
                 initialValues={{
                   loop,
                   autoplay,
