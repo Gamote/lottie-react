@@ -1,7 +1,7 @@
 import React, { FC, useCallback } from "react";
 import { LottieState, PlayerControlsElement } from "../../types";
 import Spacer from "../misc/Spacer";
-import PlayerControlsFrameIndicator from "./PlayerControlsFrameIndicator";
+import PlayerControlsFramesIndicator from "./PlayerControlsFramesIndicator";
 import PlayerControlsProgressBar from "./PlayerControlsProgressBar";
 import LoopButton from "./buttons/LoopButton";
 import PauseButton from "./buttons/PauseButton";
@@ -67,7 +67,7 @@ const PlayerControls: FC<PlayerControlsProps> = (props) => {
 
       {shouldShowElement(PlayerControlsElement.FramesIndicator) && (
         <>
-          <PlayerControlsFrameIndicator
+          <PlayerControlsFramesIndicator
             currentFrame={currentFrame}
             totalFrames={totalFrames || 0}
           />
