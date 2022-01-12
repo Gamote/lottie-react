@@ -1,6 +1,5 @@
 /**
  * Extract a number from a number or percentage
- * TODO: check if there is a more efficient way (RegEX maybe)
  * @param value
  */
 const getNumberFromNumberOrPercentage = (value: string | number) => {

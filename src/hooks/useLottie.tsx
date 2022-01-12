@@ -107,6 +107,7 @@ const useLottie = ({
 
       if (!normalizedAnimationSource) {
         logger.log("😥 Animation source is not valid");
+        // TODO: activate
         // triggerEvent(PlayerEvent.Error);
         // setPlayerState(PlayerState.Error);
         return;
