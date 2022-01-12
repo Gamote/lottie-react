@@ -50,8 +50,10 @@ const useLottie = ({
     },
   });
 
-  // (State) Initial states converted to local states
+  // (Ref) Initial values provided by the consumer
   const _initialValues = useRef(options.initialValues);
+
+  // (State) Initial states converted to local states
   const [loop, setLoop] = useState<boolean | number>(options.initialValues?.loop || false);
   const [autoplay, setAutoplay] = useState<boolean>(options.initialValues?.autoplay || false);
   const [initialSegment, setInitialSegment] = useState<AnimationSegment | undefined>(
@@ -86,7 +88,13 @@ const useLottie = ({
     () => {
       logger.log("🪄 Trying to (re)initialize the animation");
 
-      // TODO: should we set the state to "Loading" in case wasn't. Investigate.
+      // Set the state to loading until the animation is (re)initialized
+      // TODO: reset hook (e.g. reset()) where we can for example:
+      //  - set the currentFrame to 0
+      //  - set the state to loading etc
+      setState((prevState) =>
+        prevState === LottieState.Loading ? prevState : LottieState.Loading,
+      );
 
       // Checks that the container is ready
       if (!containerRef?.current) {

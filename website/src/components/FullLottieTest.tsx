@@ -55,12 +55,12 @@ const FullLottieTest: FC = () => {
   // }, []);
 
   // Change source
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     logger.info("> Changing the animation source");
-  //     setSource("https://assets1.lottiefiles.com/packages/lf20_fgltupfx.json");
-  //   }, 3500);
-  // }, []);
+  useEffect(() => {
+    setTimeout(() => {
+      logger.info("> Changing the animation source");
+      setSrc("https://assets1.lottiefiles.com/packages/lf20_fgltupfx.json");
+    }, 10000);
+  }, []);
 
   // Change loop
   // useEffect(() => {
@@ -100,8 +100,8 @@ const FullLottieTest: FC = () => {
               <Lottie
                 // src={"https://assets5.lottiefiles.com/private_files/lf30_3ezlslmp.json"}
                 // src={source}
-                src={"https://assets4.lottiefiles.com/packages/lf20_hslwihoj.json"}
-                // src={{}}
+                // src={"https://assets4.lottiefiles.com/packages/lf20_hslwihoj.json"}
+                src={src}
                 initialValues={{
                   loop,
                   autoplay,
