@@ -1,16 +1,8 @@
-# TODO: revisit this file and update it accordingly
-
-# Coverage directory used by tools like istanbul
-coverage
-.coveralls.yml
-
 # Dependency directories
-/node_modules
+node_modules
 
 # IDE directories
-/.idea
+.idea
 
-/compiled
-/.docz
-/docs-dist
-/build
+# Build
+build

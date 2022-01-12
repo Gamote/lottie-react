@@ -4,7 +4,7 @@ module.exports = {
   env: {
     /* (i) An environment provides predefined global variables */
     browser: true, // Browser global variables
-    node: true, // Node.js global variables and Node.js scoping // TODO: do we need it?
+    node: true, // Node.js global variables and Node.js scoping
     es2021: true, // Adds all ECMAScript 2021 globals and automatically sets the ecmaVersion parser option to 12
   },
   parserOptions: {

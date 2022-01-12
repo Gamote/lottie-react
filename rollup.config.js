@@ -2,7 +2,6 @@ import commonjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
 import typescript from "@rollup/plugin-typescript";
 import autoprefixer from "autoprefixer";
-import babel from "rollup-plugin-babel";
 import dts from "rollup-plugin-dts";
 import external from "rollup-plugin-peer-deps-external";
 import postcss from "rollup-plugin-postcss";
@@ -32,9 +31,6 @@ const reusablePluginList = [
   postcss({
     plugins: [autoprefixer],
     use: ["less"],
-  }),
-  babel({
-    exclude: "node_modules/**",
   }),
   external(),
   resolve(),
