@@ -84,7 +84,13 @@ const FullLottieTest: FC = () => {
         <>
           {showAnimationNumber === 1 && (
             <>
-              <Lottie src={src} loop={loop} autoplay={autoplay} />
+              <Lottie
+                src={src}
+                initialValues={{
+                  loop,
+                  autoplay,
+                }}
+              />
               Animation 1
             </>
           )}
