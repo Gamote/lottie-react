@@ -1,5 +1,6 @@
-import lottie, { AnimationItem } from "lottie-web/build/player/lottie";
-import { useCallback, useEffect, useState } from "react";
+import lottie, { AnimationSegment, AnimationItem } from "lottie-web";
+import { useCallback, useEffect, useRef, useState } from "react";
+import isEqual from "react-fast-compare";
 import {
   LottieEvent,
   LottieHookOptions,
@@ -18,18 +19,17 @@ import useLottieState from "./useLottieState";
  * Lottie's animation hook
  * @param options
  */
-const useLottie = (options: LottieHookOptions): LottieHookResult => {
-  const {
-    src,
-    loop: initialLoop,
-    autoplay,
-    initialSegment,
-    assetsPath,
-    rendererSettings,
-    debug,
-    onStateChange,
-    onEvent,
-  } = options;
+const useLottie = ({
+  src,
+  enableReinitialize = false,
+  onStateChange,
+  onEvent,
+  ...rest
+}: LottieHookOptions): LottieHookResult => {
+  const options = {
+    enableReinitialize,
+    ...rest,
+  };
 
   // (Ref) Animation's container
   // By using a callback ref, a rerender will be trigger when its value changed
@@ -51,7 +51,12 @@ const useLottie = (options: LottieHookOptions): LottieHookResult => {
   });
 
   // (State) Initial states converted to local states TODO: complete
-  const [loop, setLoop] = useState<boolean | number>(initialLoop || false);
+  const _initialValues = useRef(options.initialValues);
+  const [loop, setLoop] = useState<boolean | number>(options.initialValues?.loop || false);
+  const [autoplay, setAutoplay] = useState<boolean>(options.initialValues?.autoplay || false);
+  const [initialSegment, setInitialSegment] = useState<AnimationSegment | undefined>(
+    options.initialValues?.segment || undefined,
+  );
 
   // (State) Animation's state before seeking
   // By keeping this we can pause the animation while the seeking action is
@@ -118,8 +123,8 @@ const useLottie = (options: LottieHookOptions): LottieHookResult => {
           loop,
           autoplay,
           initialSegment,
-          assetsPath,
-          rendererSettings,
+          assetsPath: _initialValues.current?.assetsPath,
+          rendererSettings: _initialValues.current?.rendererSettings,
         });
       } catch (e) {
         logger.log("⚠️ Error while trying to load animation");
@@ -230,60 +235,82 @@ const useLottie = (options: LottieHookOptions): LottieHookResult => {
   );
 
   /**
-   * Listen for changes to the initial values
-   *
-   * TODO: change all when we implement initialValues
-   *
-   * Each effect is taking care of updating individual settings
+   * Process initial values changes and update any dependent state
    */
-  // Loop
   useEffect(() => {
-    if (animationItem) {
-      animationItem.loop = !!initialLoop;
-    }
-  }, [animationItem, initialLoop]);
-
-  // Autoplay
-  useEffect(() => {
-    if (animationItem) {
-      animationItem.autoplay = Boolean(autoplay);
-    }
-  }, [animationItem, autoplay]);
-
-  // Initial segment // TODO: to finish
-  useEffect(() => {
-    if (!animationItem) {
-      return;
-    }
-
-    // When null should reset to default animation length
-    if (!initialSegment) {
-      animationItem.resetSegments(false);
-      // TODO: find a way to increase the totalFrames to the max in the current loop
-      return;
-    }
-
-    // If it's not a valid segment, do nothing
-    if (!Array.isArray(initialSegment) || !initialSegment.length) {
-      return;
-    }
-
-    // If the current frame it's not in the new initial segment
-    // set the current frame to the first position of the initial segment
+    // Skip update if there is no animation item, reinitialization is not enabled
+    // or the initial values are equal with the previous ones
     if (
-      animationItem.currentRawFrame < initialSegment[0] ||
-      animationItem.currentRawFrame > initialSegment[1]
+      !animationItem ||
+      !enableReinitialize ||
+      isEqual(_initialValues.current, options.initialValues)
     ) {
-      animationItem.currentRawFrame = initialSegment[0];
+      return;
     }
 
-    // Update the segment
-    animationItem.setSegment(initialSegment[0], initialSegment[1]);
-  }, [animationItem, initialSegment]);
+    // Save the new values
+    _initialValues.current = options.initialValues;
 
-  // TODO: handle assetsPath change
+    // Loop
+    setLoop((prevState) => {
+      // Skip update if equal
+      if (_initialValues.current?.loop === prevState) {
+        return prevState;
+      }
 
-  // TODO: handle rendererSettings change
+      const newState = _initialValues.current?.loop ?? false;
+      // TODO: check why is accepting just boolean when the config allow numbers as well
+      animationItem.loop = !!newState;
+      return newState;
+    });
+
+    // Autoplay
+    setAutoplay((prevState) => {
+      // Skip update if equal
+      if (_initialValues.current?.autoplay === prevState) {
+        return prevState;
+      }
+
+      const newState = _initialValues.current?.autoplay ?? false;
+      animationItem.autoplay = newState;
+      return newState;
+    });
+
+    // Initial segment TODO: move into the "initial values hook" and finish implementation
+    // useEffect(() => {
+    //   if (!animationItem) {
+    //     return;
+    //   }
+    //
+    //   // When null should reset to default animation length
+    //   if (!initialSegment) {
+    //     animationItem.resetSegments(false);
+    //     // TODO: find a way to increase the totalFrames to the max in the current loop
+    //     return;
+    //   }
+    //
+    //   // If it's not a valid segment, do nothing
+    //   if (!Array.isArray(initialSegment) || !initialSegment.length) {
+    //     return;
+    //   }
+    //
+    //   // If the current frame it's not in the new initial segment
+    //   // set the current frame to the first position of the initial segment
+    //   if (
+    //     animationItem.currentRawFrame < initialSegment[0] ||
+    //     animationItem.currentRawFrame > initialSegment[1]
+    //   ) {
+    //     animationItem.currentRawFrame = initialSegment[0];
+    //   }
+    //
+    //   // Update the segment
+    //   animationItem.setSegment(initialSegment[0], initialSegment[1]);
+    // }, [animationItem, initialSegment]);
+
+    // TODO: handle assetsPath change
+
+    // TODO: handle rendererSettings change
+  }, [animationItem, enableReinitialize, options.initialValues]);
 
   /**
    * Interaction methods
@@ -316,7 +343,6 @@ const useLottie = (options: LottieHookOptions): LottieHookResult => {
   }, [animationItem, setState, triggerEvent]);
 
   // Toggle looping
-  // TODO: doesn't update children if the animation is paused, check the other components
   const toggleLoop = useCallback(() => {
     if (animationItem) {
       animationItem.loop = !animationItem.loop;
@@ -327,7 +353,9 @@ const useLottie = (options: LottieHookOptions): LottieHookResult => {
   // Set player speed
   const setSpeed = useCallback(
     (speed: number) => {
-      animationItem?.setSpeed(speed);
+      if (animationItem) {
+        animationItem?.setSpeed(speed);
+      }
     },
     [animationItem],
   );
@@ -353,29 +381,34 @@ const useLottie = (options: LottieHookOptions): LottieHookResult => {
         ? (animationItem.totalFrames * seekInfo.number) / 100
         : seekInfo.number;
 
-      // Remember the state before seeking, so we can set it back when the seeking is done
-      if (!isSeekingEnded && !stateBeforeSeeking) {
-        setStateBeforeSeeking(state);
-      } else if (isSeekingEnded && stateBeforeSeeking) {
-        setStateBeforeSeeking(null);
-      }
-
-      const shouldPlayAfter =
-        isSeekingEnded &&
-        (state === LottieState.Playing || stateBeforeSeeking === LottieState.Playing);
-
-      if (shouldPlayAfter) {
-        animationItem?.goToAndPlay(frame, true);
-        setState(LottieState.Playing);
-      } else {
-        animationItem?.goToAndStop(frame, true);
-
-        if (state !== LottieState.Stopped) {
-          setState(LottieState.Paused);
+      setState((prevState) => {
+        // Remember the state before seeking, so we can set it back when the seeking is done
+        if (!isSeekingEnded && !stateBeforeSeeking) {
+          setStateBeforeSeeking(prevState);
+        } else if (isSeekingEnded && stateBeforeSeeking) {
+          setStateBeforeSeeking(null);
         }
-      }
+
+        const shouldPlayAfter =
+          isSeekingEnded &&
+          (prevState === LottieState.Playing || stateBeforeSeeking === LottieState.Playing);
+
+        if (shouldPlayAfter) {
+          animationItem?.goToAndPlay(frame, true);
+          return LottieState.Playing;
+        } else {
+          animationItem?.goToAndStop(frame, true);
+
+          if (prevState !== LottieState.Stopped) {
+            return LottieState.Paused;
+          }
+        }
+
+        // Skip update
+        return prevState;
+      });
     },
-    [animationItem, setState, state, stateBeforeSeeking],
+    [animationItem, setState, stateBeforeSeeking],
   );
 
   return {

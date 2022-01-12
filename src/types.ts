@@ -69,27 +69,31 @@ export type LottieEventListener = {
  */
 export type LottieHookOptions<Renderer extends LottieRenderer = LottieRenderer.Svg> = {
   src: string | Record<string | number | symbol, unknown>;
-  // renderer?: Renderer; // TODO: add support
-  loop?: boolean | number;
-  autoplay?: boolean;
-  initialSegment?: AnimationSegment;
-  assetsPath?: string;
-  rendererSettings?: {
-    svg: SVGRendererConfig;
-    canvas: CanvasRendererConfig;
-    html: HTMLRendererConfig;
-  }[Renderer];
-  // audioFactory?(assetPath: string): { // TODO: add support
+  initialValues?: {
+    loop?: boolean | number;
+    autoplay?: boolean;
+    segment?: AnimationSegment;
+    assetsPath?: string;
+    rendererSettings?: {
+      svg: SVGRendererConfig;
+      canvas: CanvasRendererConfig;
+      html: HTMLRendererConfig;
+    }[Renderer];
+  };
+  enableReinitialize?: boolean;
+  debug?: boolean;
+  onEvent?: (event: LottieEvent) => void;
+  onStateChange?: (state: LottieState) => void;
+
+  // TODO: add support for the following
+  // renderer?: Renderer;
+  // audioFactory?(assetPath: string): {
   //   play(): void;
   //   seek(): void;
   //   playing(): void;
   //   rate(): void;
   //   setVolume(): void;
   // };
-
-  debug?: boolean;
-  onEvent?: (event: LottieEvent) => void;
-  onStateChange?: (state: LottieState) => void;
 };
 
 /**

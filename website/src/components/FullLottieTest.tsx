@@ -1,17 +1,20 @@
-import { Lottie, LottieHookOptions, LottieProps } from "lottie-react";
-import React, { FC, useState } from "react";
+import { Lottie, LottieProps } from "lottie-react";
+import React, { FC, useEffect, useState } from "react";
+import logger from "../../../src/utils/logger";
 import groovyWalkAnimation from "./../../static/assets/animations/groovyWalk.json";
 
 const FullLottieTest: FC = () => {
   const config: LottieProps = {
     src: groovyWalkAnimation,
-    loop: true,
-    autoplay: true,
+    initialValues: {
+      loop: true,
+      autoplay: true,
+    },
   };
 
-  const [src, setSrc] = useState<LottieHookOptions["src"]>(config.src);
-  const [loop, setLoop] = useState<LottieHookOptions["loop"]>(config.loop);
-  const [autoplay, setAutoplay] = useState<LottieHookOptions["autoplay"]>(config.autoplay);
+  const [src, setSrc] = useState(config.src);
+  const [loop, setLoop] = useState(config.initialValues.loop);
+  const [autoplay, setAutoplay] = useState(config.initialValues.autoplay);
 
   // Delay
   const [delayAnimations, setDelayAnimations] = useState(true);
@@ -60,12 +63,12 @@ const FullLottieTest: FC = () => {
   // }, []);
 
   // Change loop
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     logger.info("> Changing the loop");
-  //     setLoop(false);
-  //   }, 4500);
-  // }, []);
+  useEffect(() => {
+    setTimeout(() => {
+      logger.info("> Changing the loop");
+      setLoop(false);
+    }, 4500);
+  }, []);
 
   // Show missing animation
   // useEffect(() => {
@@ -92,9 +95,12 @@ const FullLottieTest: FC = () => {
                 src={"https://assets5.lottiefiles.com/private_files/lf30_3ezlslmp.json"}
                 // src={source}
                 // src={"https://assets4.lottiefiles.com/packages/lf20_hslwihoj.json"}
+                initialValues={{
+                  loop,
+                  autoplay,
+                }}
                 controls
-                loop={loop}
-                autoplay={autoplay}
+                enableReinitialize={true}
                 // onStateChange={(playerState) => {
                 //   console.log(playerState);
                 // }}

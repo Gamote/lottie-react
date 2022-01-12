@@ -41,7 +41,8 @@
     "coverage": "jest --coverage && cat ./coverage/lcov.info | coveralls"
   },
   "dependencies": {
-    "lottie-web": "^5.8.1"
+    "lottie-web": "^5.8.1",
+    "react-fast-compare": "^3.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.16.7",
