@@ -113,9 +113,8 @@ const useLottie = ({
 
       if (!normalizedAnimationSource) {
         logger.log("😥 Animation source is not valid");
-        // TODO: activate
-        // triggerEvent(PlayerEvent.Error);
-        // setPlayerState(PlayerState.Error);
+        triggerEvent(LottieEvent.Error);
+        setState((prevState) => (prevState === LottieState.Error ? prevState : LottieState.Error));
         return;
       }
 
@@ -135,10 +134,8 @@ const useLottie = ({
         });
       } catch (e) {
         logger.warn("⚠️ Error while trying to load animation", e);
-        // TODO: check if we need to propagate this, maybe it will be useful for the player
-        //  or not, and the player can say: "No animation loaded..."
-        // triggerEvent(PlayerEvent.Error);
-        // setPlayerState(PlayerState.Error);
+        triggerEvent(LottieEvent.Error);
+        setState((prevState) => (prevState === LottieState.Error ? prevState : LottieState.Error));
         return;
       }
 
@@ -164,6 +161,7 @@ const useLottie = ({
         {
           name: "enterFrame",
           handler: () => {
+            // ! IMPORTANT
             // TODO: check if we can handle this event in the player controls
             //  take in the account the consumer that might want to use it when
             //  the hook is used outside of the predefined UI
