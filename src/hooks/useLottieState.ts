@@ -26,7 +26,7 @@ const useLottieState = (options?: LottieStateHookOptions) => {
   }, [onChange, state, previousState]);
 
   return {
-    previousState, // TODO: test initial value
+    previousState,
     state,
     setState,
   };

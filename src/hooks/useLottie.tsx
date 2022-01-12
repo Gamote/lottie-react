@@ -50,7 +50,7 @@ const useLottie = ({
     },
   });
 
-  // (State) Initial states converted to local states TODO: complete
+  // (State) Initial states converted to local states
   const _initialValues = useRef(options.initialValues);
   const [loop, setLoop] = useState<boolean | number>(options.initialValues?.loop || false);
   const [autoplay, setAutoplay] = useState<boolean>(options.initialValues?.autoplay || false);
@@ -99,8 +99,6 @@ const useLottie = ({
         logger.log("🗑 Animation already initialized, destroying it");
         animationItem.destroy();
       }
-
-      // TODO: look into web-workers
 
       // Checks if the animation's source have the right format
       const normalizedAnimationSource = normalizeAnimationSource(src);
@@ -200,8 +198,6 @@ const useLottie = ({
           // * There might be cases in which the `animationItem` exists but
           // * it's not ready yet, and in that case `addEventListener` will
           // * throw an error. That's why we skip these errors.
-          // TODO: check if `lottie-web` offers a way to check if the animation
-          //  is able to add events
         }
 
         // Return a function to deregister this listener
@@ -212,8 +208,6 @@ const useLottie = ({
             // * There might be cases in which the `animationItem` exists but
             // * it was destroyed, and in that case `removeEventListener` will
             // * throw an error. That's why we skip these errors.
-            // TODO: check if `lottie-web` offers a way to check if the animation
-            //  is able to remove events
           }
         };
       });
@@ -277,7 +271,8 @@ const useLottie = ({
       return newState;
     });
 
-    // Initial segment TODO: move into the "initial values hook" and finish implementation
+    // TODO: handle initialSegment change
+    // Initial segment
     // useEffect(() => {
     //   if (!animationItem) {
     //     return;
