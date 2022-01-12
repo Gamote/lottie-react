@@ -1,6 +1,8 @@
 /**
  * Keep the state of the logger
  */
+import isFunction from "./isFunction";
+
 let isLoggerActive = true;
 
 /**
@@ -25,8 +27,7 @@ const prefixMessage = (message?: string) =>
 const customLogger =
   (method: typeof console.log) =>
   (message?: string, ...optionalParams: unknown[]) => {
-    // TODO: check if the `method` is valid
-    isLoggerActive && method(prefixMessage(message), ...optionalParams);
+    isLoggerActive && isFunction(method) && method(prefixMessage(message), ...optionalParams);
   };
 
 /**
