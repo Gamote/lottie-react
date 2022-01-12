@@ -1,4 +1,4 @@
-import { Lottie, LottieProps } from "lottie-react";
+import { Lottie, LottieProps, PlayerControlsElement } from "lottie-react";
 import React, { FC, useEffect, useState } from "react";
 import logger from "../../../src/utils/logger";
 import groovyWalkAnimation from "./../../static/assets/animations/groovyWalk.json";
@@ -105,8 +105,9 @@ const FullLottieTest: FC = () => {
                   loop,
                   autoplay,
                 }}
-                controls
                 enableReinitialize={true}
+                // controls={[PlayerControlsElement.Play, PlayerControlsElement.ProgressBar, PlayerControlsElement.Loop]}
+                controls
                 // onStateChange={(playerState) => {
                 //   console.log(playerState);
                 // }}

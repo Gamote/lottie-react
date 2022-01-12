@@ -38,6 +38,7 @@ const Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = (
 
       {controls && (
         <Player.Controls
+          elements={Array.isArray(controls) ? controls : undefined}
           state={state}
           currentFrame={currentFrame}
           totalFrames={animationItem?.totalFrames}

@@ -122,10 +122,21 @@ export type LottieStateHookOptions = {
 };
 
 /**
+ * Enum with the PlayerControls' elements
+ */
+export enum PlayerControlsElement {
+  Play = "play",
+  Pause = "pause",
+  FramesIndicator = "framesIndicator",
+  ProgressBar = "progressBar",
+  Loop = "loop",
+}
+
+/**
  * Properties for the `Lottie` component
  */
 export type LottieProps = LottieHookOptions & {
-  controls?: boolean; // TODO: add array with what to display, e.g ["play", "pause" etc.]
+  controls?: boolean | PlayerControlsElement[];
 };
 
 // Interactivity TODO: adapt once the interactivity is rewritten

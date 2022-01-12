@@ -1,5 +1,5 @@
-import React, { FC } from "react";
-import { LottieState } from "../../types";
+import React, { FC, useCallback } from "react";
+import { LottieState, PlayerControlsElement } from "../../types";
 import Spacer from "../misc/Spacer";
 import PlayerControlsFrameIndicator from "./PlayerControlsFrameIndicator";
 import PlayerControlsProgressBar from "./PlayerControlsProgressBar";
@@ -9,18 +9,35 @@ import PlayButton from "./buttons/PlayButton";
 
 // TODO: adapt type, maybe use reference to the original ones already defined
 type PlayerControlsProps = {
+  elements?: PlayerControlsElement[];
   state: LottieState;
   currentFrame: number;
   totalFrames?: number;
   loop?: boolean | number;
   play: () => void;
   pause: () => void;
-  seek: (frame: number, isDraggingEnded: boolean) => void; // better naming
+  seek: (frame: number, isDraggingEnded: boolean) => void; // TODO: better naming
   toggleLoop: () => void;
 };
 
 const PlayerControls: FC<PlayerControlsProps> = (props) => {
-  const { state, currentFrame, totalFrames, loop, play, pause, seek, toggleLoop } = props;
+  const { elements, state, currentFrame, totalFrames, loop, play, pause, seek, toggleLoop } = props;
+
+  /**
+   * Checks if the consumer have any preference on what elements we should display
+   */
+  const shouldShowElement = useCallback(
+    (element: PlayerControlsElement) => {
+      // If specific elements weren't specified, display all
+      if (!elements || !Array.isArray(elements)) {
+        return true;
+      }
+
+      // Otherwise, display if `element` is in `elements` array
+      return elements.includes(element);
+    },
+    [elements],
+  );
 
   return (
     <div
@@ -34,35 +51,46 @@ const PlayerControls: FC<PlayerControlsProps> = (props) => {
         paddingBottom: 10,
       }}
     >
-      {state !== LottieState.Playing && (
+      {shouldShowElement(PlayerControlsElement.Play) && state !== LottieState.Playing && (
         <>
           <PlayButton onClick={play} />
           <Spacer size={10} />
         </>
       )}
 
-      {state === LottieState.Playing && (
+      {shouldShowElement(PlayerControlsElement.Pause) && state === LottieState.Playing && (
         <>
           <PauseButton onClick={pause} />
           <Spacer size={10} />
         </>
       )}
 
-      <PlayerControlsFrameIndicator currentFrame={currentFrame} totalFrames={totalFrames || 0} />
+      {shouldShowElement(PlayerControlsElement.FramesIndicator) && (
+        <>
+          <PlayerControlsFrameIndicator
+            currentFrame={currentFrame}
+            totalFrames={totalFrames || 0}
+          />
+          <Spacer size={10} />
+        </>
+      )}
 
-      <Spacer size={10} />
+      {shouldShowElement(PlayerControlsElement.ProgressBar) && (
+        <>
+          <PlayerControlsProgressBar
+            currentFrame={currentFrame}
+            totalFrames={totalFrames}
+            onChange={(progress, isDraggingEnded) => {
+              seek(progress, !!isDraggingEnded);
+            }}
+          />
+          <Spacer size={10} />
+        </>
+      )}
 
-      <PlayerControlsProgressBar
-        currentFrame={currentFrame}
-        totalFrames={totalFrames}
-        onChange={(progress, isDraggingEnded) => {
-          seek(progress, !!isDraggingEnded);
-        }}
-      />
-
-      <Spacer size={10} />
-
-      <LoopButton isOn={loop} onClick={toggleLoop} />
+      {shouldShowElement(PlayerControlsElement.Loop) && (
+        <LoopButton isOn={loop} onClick={toggleLoop} />
+      )}
     </div>
   );
 };
