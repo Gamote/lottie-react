@@ -17,16 +17,16 @@ export type CallbackRefHookResult<T = unknown> = {
 };
 
 /**
- * Render types that Lottie supports
+ * Render types that Lottie's animation supports
  */
-export enum LottieRenderer {
+export enum AnimationRenderer {
   Svg = "svg",
   Html = "html",
   Canvas = "canvas",
 }
 
 /**
- * Enum with the LottiePlayer's states
+ * Enum with the Lottie's states
  */
 export enum LottieState {
   Loading = "loading",
@@ -38,7 +38,7 @@ export enum LottieState {
 }
 
 /**
- * Enum with the LottiePlayer's events
+ * Enum with the Lottie's events
  */
 export enum LottieEvent {
   Load = "load",
@@ -54,7 +54,7 @@ export enum LottieEvent {
 }
 
 /**
- * Shape of the LottiePlayer's event listeners
+ * Shape of the Lottie's event listeners
  */
 export type LottieEventListener = {
   name: AnimationEventName;
@@ -64,10 +64,10 @@ export type LottieEventListener = {
 /**
  * Options for the `useLottie()` hook
  *
- * These options are wrapping Lottie's config properties and adds
+ * These options are wrapping Lottie's config properties and ads
  * additional ones in order to have a better control over the animation
  */
-export type LottieHookOptions<Renderer extends LottieRenderer = LottieRenderer.Svg> = {
+export type LottieHookOptions<Renderer extends AnimationRenderer = AnimationRenderer.Svg> = {
   src: string | Record<string | number | symbol, unknown>;
   initialValues?: {
     loop?: boolean | number;
@@ -129,18 +129,18 @@ export type LottieProps = LottieHookOptions & {
 };
 
 // Interactivity TODO: adapt once the interactivity is rewritten
-export type Axis = "x" | "y";
-export type Position = { [key in Axis]: number | [number, number] };
-
-export type Action = {
-  type: "seek" | "play" | "stop" | "loop";
-  frames: [number] | [number, number];
-  visibility?: [number, number];
-  position?: Position;
-};
-
-export type InteractivityProps = {
-  lottieObject: LottieHookResult;
-  actions: Action[];
-  mode: "scroll" | "cursor";
-};
+// export type Axis = "x" | "y";
+// export type Position = { [key in Axis]: number | [number, number] };
+//
+// export type Action = {
+//   type: "seek" | "play" | "stop" | "loop";
+//   frames: [number] | [number, number];
+//   visibility?: [number, number];
+//   position?: Position;
+// };
+//
+// export type InteractivityProps = {
+//   lottieObject: LottieHookResult;
+//   actions: Action[];
+//   mode: "scroll" | "cursor";
+// };
