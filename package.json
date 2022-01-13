@@ -33,7 +33,7 @@
     "build": "rollup -c",
     "build:watch": "rollup -c -w",
     "postbuild": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz",
-    "prepublishOnly": "rm -rf build && npm run build",
+    "prepublishOnly": "rm -rf build && yarn build",
     "eslint": "eslint .",
     "eslint:fix": "eslint . --fix",
     "test": "echo TBI"
