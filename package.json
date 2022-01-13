@@ -21,14 +21,17 @@
   },
   "license": "MIT",
   "author": "David Gamote",
-  "main": "build/index.js",
-  "module": "build/index.esm.js",
-  "browser": "build/index.umd.js",
+  "main": "build/cjs/index.js",
+  "module": "build/esm/index.esm.js",
+  "browser": "build/umd/index.umd.js",
   "types": "build/index.d.ts",
-  "style": "build/index.css",
   "files": [
     "build"
   ],
+  "exports": {
+    "require": "./build/cjs/index.js",
+    "import": "./build/esm/index.js"
+  },
   "scripts": {
     "build": "rollup -c",
     "build:watch": "rollup -c -w",
@@ -62,6 +65,7 @@
     "postcss": "^8.4.5",
     "prettier": "^2.5.1",
     "rollup": "^2.63.0",
+    "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-dts": "^4.1.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",

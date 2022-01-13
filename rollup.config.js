@@ -2,6 +2,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import typescript from "@rollup/plugin-typescript";
 import autoprefixer from "autoprefixer";
+import del from "rollup-plugin-delete";
 import dts from "rollup-plugin-dts";
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
 import postcss from "rollup-plugin-postcss";
@@ -13,8 +14,6 @@ import packageJson from "./package.json";
  * TODO(s)
  *  ~ should we inject the css into each output file or we can create a single file and then inject the import, possible?
  *  ~ what output files should have a minified version
- *  ~ export the dts file
- *  ~ add del() to remove the old build
  */
 
 /**
@@ -29,13 +28,6 @@ const input = "./src/index.ts";
  * @return string
  */
 const getMinifiedName = (pathToFile) => pathToFile.replace(/\.js$/, ".min.js");
-
-/**
- * Get the extension for the TS definition files
- * @param pathToFile
- * @return string
- */
-const dtsExtension = (pathToFile) => pathToFile.replace(".js", ".d.ts");
 
 /**
  * Definition of the common plugins used in the rollup configurations
@@ -53,7 +45,7 @@ const reusablePluginList = [
   postcss({
     plugins: [autoprefixer], // add vendor prefixes to CSS rules to avoid conflicts
     use: ["less"],
-    extract: packageJson.style,
+    // extract: packageJson.style,
     minimize: true,
     // modules: true, // TODO: should we use it?
   }),
@@ -104,22 +96,21 @@ const options = [
     input,
     output: [
       {
-        file: packageJson.main,
+        dir: "build/cjs",
         format: "cjs",
         exports: "named", // TODO: add description
         sourcemap: true,
+        preserveModules: true,
       },
-      // {
-      //   file: getMinifiedName(packageJson.main),
-      //   format: "cjs",
-      //   exports: "named", // TODO: add description
-      //   plugins: [
-      //     // TODO: remove comments from minified
-      //     terser(),
-      //   ],
-      // },
     ],
-    plugins: reusablePluginList,
+    plugins: [
+      /**
+       * Clean `build` folders and files before bundling
+       * ! This should be run just ones
+       */
+      del({ targets: "build/*" }),
+      ...reusablePluginList,
+    ],
     external: externalPackages,
   },
   /**
@@ -133,21 +124,12 @@ const options = [
     input,
     output: [
       {
-        file: packageJson.module,
+        dir: "build/esm",
         format: "esm",
         exports: "named", // TODO: add description
         sourcemap: true,
+        preserveModules: true,
       },
-      // We are not minifying the es modules
-      // {
-      //   file: getMinifiedName(packageJson.module),
-      //   format: "esm",
-      //   exports: "named", // TODO: add description
-      //   plugins: [
-      //     // TODO: remove comments from minified
-      //     terser(),
-      //   ],
-      // },
     ],
     plugins: reusablePluginList,
     external: externalPackages,
