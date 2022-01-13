@@ -1,111 +1,19 @@
-import lottie, {
-  AnimationSegment,
-  AnimationItem,
-  AnimationEventName,
-  SVGRendererConfig,
-  CanvasRendererConfig,
-  HTMLRendererConfig,
-} from "lottie-web";
-import {
-  AnimationEventHandler,
-  RefCallback,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import lottie, { AnimationSegment, AnimationItem } from "lottie-web";
+import { useCallback, useEffect, useRef, useState } from "react";
 import isEqual from "react-fast-compare";
+import {
+  LottieEvent,
+  LottieHookOptions,
+  LottieHookResult,
+  LottieEventListener,
+  LottieState,
+} from "../types";
 import getNumberFromNumberOrPercentage from "../utils/getNumberFromNumberOrPercentage";
 import isFunction from "../utils/isFunction";
 import logger from "../utils/logger";
 import normalizeAnimationSource from "../utils/normalizeAnimationSource";
 import useCallbackRef from "./useCallbackRef";
-import useLottieState, { LottieState } from "./useLottieState";
-
-/**
- * Render types that Lottie's animation supports
- */
-export enum AnimationRenderer {
-  Svg = "svg",
-  Html = "html",
-  Canvas = "canvas",
-}
-
-/**
- * Enum with the Lottie's events
- */
-export enum LottieEvent {
-  Load = "load",
-  Error = "error",
-  Ready = "ready",
-  Play = "play",
-  Pause = "pause",
-  Stop = "stop",
-  Freeze = "freeze",
-  LoopCompleted = "loop_completed",
-  Complete = "complete",
-  Frame = "frame",
-}
-
-/**
- * Shape of the Lottie's event listeners
- */
-export type LottieEventListener = {
-  name: AnimationEventName;
-  handler: AnimationEventHandler;
-};
-
-/**
- * Options for the `useLottie()` hook
- *
- * These options are wrapping Lottie's config properties and ads
- * additional ones in order to have a better control over the animation
- */
-export type LottieHookOptions<Renderer extends AnimationRenderer = AnimationRenderer.Svg> = {
-  src: string | Record<string | number | symbol, unknown>;
-  initialValues?: {
-    loop?: boolean | number;
-    autoplay?: boolean;
-    segment?: AnimationSegment;
-    assetsPath?: string;
-    rendererSettings?: {
-      svg: SVGRendererConfig;
-      canvas: CanvasRendererConfig;
-      html: HTMLRendererConfig;
-    }[Renderer];
-  };
-  enableReinitialize?: boolean;
-  debug?: boolean;
-  onEvent?: (event: LottieEvent) => void;
-  onStateChange?: (state: LottieState) => void;
-
-  // TODO: add support for the following
-  // renderer?: Renderer;
-  // audioFactory?(assetPath: string): {
-  //   play(): void;
-  //   seek(): void;
-  //   playing(): void;
-  //   rate(): void;
-  //   setVolume(): void;
-  // };
-};
-
-/**
- * Object returned by `useLottie()`
- */
-export type LottieHookResult = {
-  setContainerRef: RefCallback<HTMLDivElement>;
-  animationItem: AnimationItem | null;
-  state: LottieState;
-  currentFrame: number;
-  loop: boolean | number;
-  play: () => void;
-  pause: () => void;
-  stop: () => void;
-  toggleLoop: () => void;
-  setSpeed: (speed: number) => void;
-  seek: (value: number | string, isSeekingEnded: boolean) => void;
-};
+import useLottieState from "./useLottieState";
 
 /**
  * Lottie's animation hook

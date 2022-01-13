@@ -1,19 +1,15 @@
 import React, { forwardRef, ForwardRefRenderFunction } from "react";
-import useLottie, { LottieHookOptions } from "../hooks/useLottie";
+import useLottie from "../hooks/useLottie";
+import { LottieProps } from "../types";
 import Player from "./player";
-import { PlayerControlsElement } from "./player/PlayerControls";
-
-/**
- * Properties for the `Lottie` component
- */
-export type LottieProps = LottieHookOptions & {
-  controls?: boolean | PlayerControlsElement[];
-};
 
 /**
  * Lottie's animation component
  *
  * TODO: change `Record<string, unknown>` in the actual type of the Ref
+ *
+ * @param props
+ * @param ref
  */
 const Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = (props, ref) => {
   const { src, initialValues, enableReinitialize, onEvent, onStateChange, controls } = props;

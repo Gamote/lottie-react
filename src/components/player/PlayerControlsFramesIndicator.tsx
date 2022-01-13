@@ -1,16 +1,10 @@
 import React, { CSSProperties, FC } from "react";
 
-/**
- * Properties for the `PlayerControlsFramesIndicator` component
- */
-type PlayerControlsFramesIndicatorProps = {
+type PlayerFramesIndicatorProps = {
   currentFrame: number;
   totalFrames: number;
 };
 
-/**
- * Styles to be used in the `PlayerControlsFramesIndicator` component
- */
 const styles: Record<string, CSSProperties> = {
   container: {
     display: "flex",
@@ -41,7 +35,7 @@ const styles: Record<string, CSSProperties> = {
 /**
  * Show the current frame and the total
  */
-const PlayerControlsFramesIndicator: FC<PlayerControlsFramesIndicatorProps> = ({
+const PlayerControlsFramesIndicator: FC<PlayerFramesIndicatorProps> = ({
   currentFrame,
   totalFrames,
 }) => {
