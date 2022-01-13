@@ -1,5 +1,12 @@
-import { useCallback, useState } from "react";
-import { CallbackRefHookResult } from "../types";
+import { RefCallback, RefObject, useCallback, useState } from "react";
+
+/**
+ * Object returned by `useCallbackRef()`
+ */
+export type CallbackRefHookResult<T = unknown> = {
+  ref: RefObject<T>;
+  setRef: RefCallback<T>;
+};
 
 /**
  * Ref that rerender on change

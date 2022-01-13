@@ -1,7 +1,26 @@
 import { useEffect, useState } from "react";
-import { LottieState, LottieStateHookOptions } from "../types";
 import isFunction from "../utils/isFunction";
 import usePreviousState from "./usePreviousState";
+
+/**
+ * Enum with the Lottie's states
+ */
+export enum LottieState {
+  Loading = "loading",
+  Playing = "playing",
+  Paused = "paused",
+  Stopped = "stopped",
+  Frozen = "frozen",
+  Error = "error",
+}
+
+/**
+ * Options for the `useLottieState()` hook
+ */
+export type LottieStateHookOptions = {
+  initialState: LottieState;
+  onChange?: (previousState: undefined | LottieState, newState: LottieState) => void;
+};
 
 /**
  * Hook that handle the state for LottiePlayer

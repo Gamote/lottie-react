@@ -1,5 +1,5 @@
 import React, { FC, useCallback } from "react";
-import { LottieState, PlayerControlsElement } from "../../types";
+import { LottieState } from "../../hooks/useLottieState";
 import Spacer from "../misc/Spacer";
 import PlayerControlsFramesIndicator from "./PlayerControlsFramesIndicator";
 import PlayerControlsProgressBar from "./PlayerControlsProgressBar";
@@ -7,7 +7,21 @@ import LoopButton from "./buttons/LoopButton";
 import PauseButton from "./buttons/PauseButton";
 import PlayButton from "./buttons/PlayButton";
 
-// TODO: adapt type, maybe use reference to the original ones already defined
+/**
+ * Enum with the PlayerControls' elements
+ */
+export enum PlayerControlsElement {
+  Play = "play",
+  Pause = "pause",
+  FramesIndicator = "framesIndicator",
+  ProgressBar = "progressBar",
+  Loop = "loop",
+}
+
+/**
+ * Properties for the `PlayerControls` component
+ * TODO: adapt type, maybe use reference to the original ones already defined
+ */
 type PlayerControlsProps = {
   elements?: PlayerControlsElement[];
   state: LottieState;

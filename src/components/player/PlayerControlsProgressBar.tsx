@@ -2,7 +2,10 @@ import "./PlayerControlsProgressBar.less";
 import React, { ChangeEventHandler, MouseEventHandler, useState } from "react";
 import isFunction from "../../utils/isFunction";
 
-export type ProgressBarProps = {
+/**
+ * Properties for the `PlayerControlsProgressBar` component
+ */
+export type PlayerControlsProgressProps = {
   currentFrame?: number;
   totalFrames?: number;
   onChange?: (progress: number, isDraggingEnded?: boolean) => void;
@@ -14,7 +17,7 @@ export type ProgressBarProps = {
  *
  * TODO: deal with the case in witch totalFrames = 0, is breaking the designs
  */
-const PlayerControlsProgressBar = (props: ProgressBarProps) => {
+const PlayerControlsProgressBar = (props: PlayerControlsProgressProps) => {
   const [selectedFrame, setSelectedFrame] = useState<number | null>(null);
   const { totalFrames, currentFrame, onChange } = props;
   const _currentFrame = currentFrame ?? 0;
