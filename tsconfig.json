@@ -4,8 +4,6 @@
     "target": "ESNext",
     "allowJs": true,
     "jsx": "react-jsx",
-    "declaration": true,
-    "declarationDir": "./dts-declarations",
     "strict": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
