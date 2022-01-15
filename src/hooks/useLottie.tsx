@@ -258,8 +258,10 @@ const useLottie = ({
       }
 
       const newState = _initialValues.current?.loop ?? false;
-      // TODO: check why is accepting just boolean when the config allow numbers as well
-      animationItem.loop = !!newState;
+      // * Typing is wrong in `lottie-web`; loop can accept boolean AND number
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      animationItem.loop = newState;
       return newState;
     });
 
