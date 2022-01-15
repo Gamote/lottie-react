@@ -53,6 +53,18 @@ const config = {
             label: "Getting Started",
           },
           {
+            type: "doc",
+            docId: "guides/basic",
+            position: "left",
+            label: "Guides",
+          },
+          {
+            type: "doc",
+            docId: "api/Lottie",
+            position: "left",
+            label: "API",
+          },
+          {
             href: "https://github.com/Gamote/lottie-react",
             label: "GitHub",
             position: "right",
