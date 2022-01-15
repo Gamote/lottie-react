@@ -14,7 +14,17 @@ import { PlayerLoading } from "./player/PlayerLoading/PlayerLoading";
  * @param ref
  */
 const _Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = (props, ref) => {
-  const { src, initialValues, enableReinitialize, controls, eventListeners } = props;
+  const {
+    src,
+    initialValues,
+    enableReinitialize,
+    controls,
+    eventListeners,
+    LoadingOverlay,
+    FailureOverlay,
+    LoadingOverlayContent,
+    FailureOverlayContent,
+  } = props;
 
   const {
     setContainerRef,
@@ -35,9 +45,17 @@ const _Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = 
 
   return (
     <PlayerContainer>
-      <PlayerLoading show={state === LottieState.Loading} />
+      <PlayerLoading
+        show={state === LottieState.Loading}
+        Component={LoadingOverlay}
+        Content={LoadingOverlayContent}
+      />
 
-      <PlayerFailure show={state === LottieState.Failure} />
+      <PlayerFailure
+        show={state === LottieState.Failure}
+        Component={FailureOverlay}
+        Content={FailureOverlayContent}
+      />
 
       <PlayerDisplay ref={setContainerRef} />
 

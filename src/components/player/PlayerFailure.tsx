@@ -3,20 +3,21 @@ import PlayerOverlay from "./PlayerOverlay";
 
 export type PlayerErrorProps = {
   show: boolean;
-  ErrorComponent?: JSX.Element;
+  Component?: JSX.Element;
+  Content?: JSX.Element;
 };
 
 /**
  * Component that is displayed when the player is in the Error state
  */
-export const PlayerFailure: FC<PlayerErrorProps> = ({ show, ErrorComponent }) => {
+export const PlayerFailure: FC<PlayerErrorProps> = ({ show, Component, Content }) => {
   if (!show) {
     return null;
   }
 
-  if (ErrorComponent) {
-    return ErrorComponent;
+  if (Component) {
+    return Component;
   }
 
-  return <PlayerOverlay>Couldn&apos;t load the animation</PlayerOverlay>;
+  return <PlayerOverlay>{Content ? Content : "Couldn&apos;t load the animation"}</PlayerOverlay>;
 };

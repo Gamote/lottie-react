@@ -102,6 +102,11 @@ const FullLottieTest: FC = () => {
                 // src={source}
                 // src={"https://assets4.lottiefiles.com/packages/lf20_hslwihoj.json"}
                 src={src}
+                // src={{}}
+                LoadingOverlay={"My awesome overlay"}
+                LoadingOverlayContent={"Still loading..."}
+                // FailureOverlay={`The "Something went wrong" overlay`}
+                FailureOverlayContent={"Oops, couldn't load the animation."}
                 initialValues={{
                   loop,
                   autoplay,
@@ -109,11 +114,13 @@ const FullLottieTest: FC = () => {
                 enableReinitialize={true}
                 // controls={[PlayerControlsElement.Play, PlayerControlsElement.ProgressBar, PlayerControlsElement.Loop]}
                 controls
-                listeners={{
-                  frame: ({ currentFrame }) => {
-                    console.log("currentFrame", currentFrame);
-                  },
-                }}
+                listeners={
+                  {
+                    // frame: ({ currentFrame }) => {
+                    //   console.log("currentFrame", currentFrame);
+                    // },
+                  }
+                }
                 // onStateChange={(playerState) => {
                 //   console.log(playerState);
                 // }}

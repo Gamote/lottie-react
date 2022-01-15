@@ -159,4 +159,8 @@ export enum PlayerControlsElement {
  */
 export type LottieProps = LottieHookOptions & {
   controls?: boolean | PlayerControlsElement[];
+  LoadingOverlay?: JSX.Element;
+  FailureOverlay?: JSX.Element;
+  LoadingOverlayContent?: JSX.Element;
+  FailureOverlayContent?: JSX.Element;
 };

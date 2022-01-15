@@ -4,7 +4,8 @@ import PlayerOverlay from "../PlayerOverlay";
 
 export type PlayerLoadingProps = {
   show: boolean;
-  LoadingComponent?: JSX.Element;
+  Component?: JSX.Element;
+  Content?: JSX.Element;
   color?: string;
   size?: number;
 };
@@ -14,7 +15,8 @@ export type PlayerLoadingProps = {
  */
 export const PlayerLoading: FC<PlayerLoadingProps> = ({
   show,
-  LoadingComponent,
+  Component,
+  Content,
   color = "#FFFFFF",
   size = 80,
 }) => {
@@ -22,8 +24,8 @@ export const PlayerLoading: FC<PlayerLoadingProps> = ({
     return null;
   }
 
-  if (LoadingComponent) {
-    return LoadingComponent;
+  if (Component) {
+    return Component;
   }
 
   const circles = [...Array(2).keys()].map((_, index) => (
@@ -38,9 +40,13 @@ export const PlayerLoading: FC<PlayerLoadingProps> = ({
 
   return (
     <PlayerOverlay>
-      <div className={"player-loading-spinner"} style={{ width: size, height: size }}>
-        {circles}
-      </div>
+      {Content ? (
+        Content
+      ) : (
+        <div className={"player-loading-spinner"} style={{ width: size, height: size }}>
+          {circles}
+        </div>
+      )}
     </PlayerOverlay>
   );
 };

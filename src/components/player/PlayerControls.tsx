@@ -11,12 +11,23 @@ export type PlayerControlsProps = Pick<
   LottieHookResult,
   "state" | "totalFrames" | "loop" | "play" | "pause" | "seek" | "toggleLoop" | "eventSubscriber"
 > & {
+  show: boolean;
   elements?: PlayerControlsElement[];
 };
 
 export const PlayerControls: FC<PlayerControlsProps> = (props) => {
-  const { elements, state, totalFrames, loop, play, pause, seek, toggleLoop, eventSubscriber } =
-    props;
+  const {
+    show,
+    elements,
+    state,
+    totalFrames,
+    loop,
+    play,
+    pause,
+    seek,
+    toggleLoop,
+    eventSubscriber,
+  } = props;
 
   /**
    * Checks if the consumer have any preference on what elements we should display
@@ -33,6 +44,10 @@ export const PlayerControls: FC<PlayerControlsProps> = (props) => {
     },
     [elements],
   );
+
+  if (!show) {
+    return null;
+  }
 
   return (
     <div
