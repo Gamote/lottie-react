@@ -29,8 +29,8 @@
     "build"
   ],
   "exports": {
-    "require": "./build/cjs/index.js",
-    "import": "./build/esm/index.js"
+    "require": "./build/index.js",
+    "import": "./build/index.esm.js"
   },
   "scripts": {
     "build": "rollup -c",
