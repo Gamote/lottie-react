@@ -7,7 +7,6 @@ import { LoopButton } from "./buttons/LoopButton";
 import { PauseButton } from "./buttons/PauseButton";
 import { PlayButton } from "./buttons/PlayButton";
 
-// TODO: adapt type, maybe use reference to the original ones already defined
 export type PlayerControlsProps = Pick<
   LottieHookResult,
   "state" | "totalFrames" | "loop" | "play" | "pause" | "seek" | "toggleLoop" | "eventSubscriber"
