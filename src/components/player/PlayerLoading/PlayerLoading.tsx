@@ -3,6 +3,7 @@ import React, { FC } from "react";
 import PlayerOverlay from "../PlayerOverlay";
 
 export type PlayerLoadingProps = {
+  show: boolean;
   LoadingComponent?: JSX.Element;
   color?: string;
   size?: number;
@@ -12,10 +13,15 @@ export type PlayerLoadingProps = {
  * Component that is displayed when the player is in the Loading state
  */
 export const PlayerLoading: FC<PlayerLoadingProps> = ({
+  show,
   LoadingComponent,
   color = "#FFFFFF",
   size = 80,
 }) => {
+  if (!show) {
+    return null;
+  }
+
   if (LoadingComponent) {
     return LoadingComponent;
   }

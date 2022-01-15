@@ -2,7 +2,7 @@ import React, { forwardRef, ForwardRefRenderFunction } from "react";
 import { useLottie } from "../hooks/useLottie";
 import { LottieProps, LottieState } from "../types";
 import { PlayerContainer, PlayerDisplay, PlayerControls } from "./player";
-import { PlayerError } from "./player/PlayerError";
+import { PlayerFailure } from "./player/PlayerFailure";
 import { PlayerLoading } from "./player/PlayerLoading/PlayerLoading";
 
 /**
@@ -35,25 +35,24 @@ const _Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = 
 
   return (
     <PlayerContainer>
-      {state === LottieState.Loading && <PlayerLoading />}
+      <PlayerLoading show={state === LottieState.Loading} />
 
-      {state === LottieState.Failure && <PlayerError />}
+      <PlayerFailure show={state === LottieState.Failure} />
 
       <PlayerDisplay ref={setContainerRef} />
 
-      {state !== LottieState.Loading && state !== LottieState.Failure && controls && (
-        <PlayerControls
-          elements={Array.isArray(controls) ? controls : undefined}
-          state={state}
-          totalFrames={totalFrames}
-          loop={loop}
-          play={play}
-          pause={pause}
-          seek={seek}
-          toggleLoop={toggleLoop}
-          eventSubscriber={eventSubscriber}
-        />
-      )}
+      <PlayerControls
+        show={state !== LottieState.Loading && state !== LottieState.Failure && !!controls}
+        elements={Array.isArray(controls) ? controls : undefined}
+        state={state}
+        totalFrames={totalFrames}
+        loop={loop}
+        play={play}
+        pause={pause}
+        seek={seek}
+        toggleLoop={toggleLoop}
+        eventSubscriber={eventSubscriber}
+      />
     </PlayerContainer>
   );
 };
