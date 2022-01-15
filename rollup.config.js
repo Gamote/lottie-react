@@ -10,12 +10,6 @@ import { terser } from "rollup-plugin-terser";
 import packageJson from "./package.json";
 
 /**
- * TODO(s)
- *  ~ should we inject the css into each output file or we can create a single file and then inject the import, possible?
- *  ~ what output files should have a minified version
- */
-
-/**
  * Entry point of our library
  * @type {string}
  */
@@ -39,12 +33,10 @@ const reusablePluginList = [
   peerDepsExternal(),
   /**
    * Integrates with `postcss` for bundling styles
-   * TODO: bundle just one version of `.css` and `.min.css` avoid duplicates for each output type
    */
   postcss({
     plugins: [autoprefixer], // add vendor prefixes to CSS rules to avoid conflicts
     use: ["less"],
-    // extract: packageJson.style,
     minimize: true,
     // modules: true, // TODO: should we use it?
   }),
@@ -59,11 +51,8 @@ const reusablePluginList = [
   commonjs(),
   /**
    * Transpiles TypeScript code to JavaScript for our final bundle and generates the type declarations
-   * TODO: add `d.ts` file
    */
   typescript(),
-  // TODO: do we need it?
-  // visualizer(),
 ];
 
 /**

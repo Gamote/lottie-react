@@ -138,20 +138,3 @@ export enum PlayerControlsElement {
 export type LottieProps = LottieHookOptions & {
   controls?: boolean | PlayerControlsElement[];
 };
-
-// Interactivity TODO: adapt once the interactivity is rewritten
-// export type Axis = "x" | "y";
-// export type Position = { [key in Axis]: number | [number, number] };
-//
-// export type Action = {
-//   type: "seek" | "play" | "stop" | "loop";
-//   frames: [number] | [number, number];
-//   visibility?: [number, number];
-//   position?: Position;
-// };
-//
-// export type InteractivityProps = {
-//   lottieObject: LottieHookResult;
-//   actions: Action[];
-//   mode: "scroll" | "cursor";
-// };

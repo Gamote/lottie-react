@@ -1,9 +1,46 @@
 // // TODO: refactor the whole hook and don't forget about the types 😉
 //
+// Interactivity
+// export type Axis = "x" | "y";
+// export type Position = { [key in Axis]: number | [number, number] };
+//
+// export type Action = {
+//   type: "seek" | "play" | "stop" | "loop";
+//   frames: [number] | [number, number];
+//   visibility?: [number, number];
+//   position?: Position;
+// };
+//
+// export type InteractivityProps = {
+//   lottieObject: LottieHookResult;
+//   actions: Action[];
+//   mode: "scroll" | "cursor";
+// };
+//
 // import { AnimationSegment } from "lottie-web";
 // import React, { useEffect, ReactElement, useRef } from "react";
 // import { InteractivityProps } from "../../types";
-// import { getContainerCursorPosition, getContainerVisibility } from "../../utils/helpers";
+//
+// export const getContainerVisibility = (container: Element): number => {
+//   const { top, height } = container.getBoundingClientRect();
+//
+//   const current = window.innerHeight - top;
+//   const max = window.innerHeight + height;
+//   return current / max;
+// };
+//
+// export const getContainerCursorPosition = (
+//   container: Element,
+//   cursorX: number,
+//   cursorY: number,
+// ): { x: number; y: number } => {
+//   const { top, left, width, height } = container.getBoundingClientRect();
+//
+//   const x = (cursorX - left) / width;
+//   const y = (cursorY - top) / height;
+//
+//   return { x, y };
+// };
 //
 // export type InitInteractivity = {
 //   wrapperRef: React.RefObject<HTMLDivElement>;
