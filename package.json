@@ -21,9 +21,9 @@
   },
   "license": "MIT",
   "author": "David Gamote",
-  "main": "build/cjs/index.js",
-  "module": "build/esm/index.esm.js",
-  "browser": "build/umd/index.umd.js",
+  "main": "build/index.js",
+  "module": "build/index.esm.js",
+  "browser": "build/index.umd.js",
   "types": "build/index.d.ts",
   "files": [
     "build"

@@ -96,11 +96,17 @@ const options = [
     input,
     output: [
       {
-        dir: "build/cjs",
+        file: packageJson.main,
         format: "cjs",
         exports: "named", // TODO: add description
         sourcemap: true,
-        preserveModules: true,
+      },
+      {
+        file: getMinifiedName(packageJson.main),
+        format: "cjs",
+        exports: "named", // TODO: add description
+        sourcemap: true,
+        plugins: [terser()],
       },
     ],
     plugins: [
@@ -124,11 +130,17 @@ const options = [
     input,
     output: [
       {
-        dir: "build/esm",
+        file: packageJson.module,
         format: "esm",
         exports: "named", // TODO: add description
         sourcemap: true,
-        preserveModules: true,
+      },
+      {
+        file: getMinifiedName(packageJson.module),
+        format: "esm",
+        exports: "named", // TODO: add description
+        sourcemap: true,
+        plugins: [terser()],
       },
     ],
     plugins: reusablePluginList,
@@ -148,7 +160,9 @@ const options = [
         name: "LottieReact",
         globals: {
           react: "React",
-          // "lottie-web": "Lottie", // TODO: should we add `lottie-web`
+          "lottie-web": "LottieWeb",
+          "react-fast-compare": "ReactFastCompare",
+          "react/jsx-runtime": "JsxRuntime",
         },
       },
     ],
