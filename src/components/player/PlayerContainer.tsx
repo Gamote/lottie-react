@@ -12,6 +12,7 @@ export const PlayerContainer: FC<PlayerContainerProps> = (props) => {
     <div
       {...rest}
       style={{
+        position: "relative",
         width: "100%",
         height: "100%",
         minHeight: 0,
