@@ -23,7 +23,6 @@
   "author": "David Gamote",
   "main": "build/index.js",
   "module": "build/index.esm.js",
-  "browser": "build/index.umd.js",
   "types": "build/index.d.ts",
   "files": [
     "build"

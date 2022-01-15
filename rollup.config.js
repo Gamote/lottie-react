@@ -93,7 +93,6 @@ const options = [
         file: getMinifiedName(packageJson.main),
         format: "cjs",
         exports: "named", // TODO: add description
-        sourcemap: true,
         plugins: [terser()],
       },
     ],
@@ -127,7 +126,6 @@ const options = [
         file: getMinifiedName(packageJson.module),
         format: "esm",
         exports: "named", // TODO: add description
-        sourcemap: true,
         plugins: [terser()],
       },
     ],
@@ -137,26 +135,28 @@ const options = [
   /**
    * UMD
    * Required when the consumer requires the library using a `<script/>` tag
+   *
+   * ? The UMD bundle is disabled, if it's requested start delivering it
    */
-  {
-    input,
-    output: [
-      {
-        file: getMinifiedName(packageJson.browser),
-        format: "umd",
-        exports: "named",
-        name: "LottieReact",
-        globals: {
-          react: "React",
-          "lottie-web": "LottieWeb",
-          "react-fast-compare": "ReactFastCompare",
-          "react/jsx-runtime": "JsxRuntime",
-        },
-      },
-    ],
-    plugins: [...reusablePluginList, terser()],
-    external: externalPackages,
-  },
+  // {
+  //   input,
+  //   output: [
+  //     {
+  //       file: getMinifiedName(packageJson.browser), // "browser": "build/index.umd.js",
+  //       format: "umd",
+  //       exports: "named",
+  //       name: "LottieReact",
+  //       globals: {
+  //         react: "React",
+  //         "lottie-web": "LottieWeb",
+  //         "react-fast-compare": "ReactFastCompare",
+  //         "react/jsx-runtime": "JsxRuntime",
+  //       },
+  //     },
+  //   ],
+  //   plugins: [...reusablePluginList, terser()],
+  //   external: externalPackages,
+  // },
   /**
    * `.d.ts`
    * Generates a file with the type definitions
