@@ -7,7 +7,6 @@ import dts from "rollup-plugin-dts";
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
 import postcss from "rollup-plugin-postcss";
 import { terser } from "rollup-plugin-terser";
-// import visualizer from "rollup-plugin-visualizer";
 import packageJson from "./package.json";
 
 /**
