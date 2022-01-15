@@ -24,7 +24,7 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),
-          editUrl: "https://github.com/gamote/lottie-react/tree/main/docs/",
+          editUrl: "https://github.com/gamote/lottie-react/tree/main/website/",
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
