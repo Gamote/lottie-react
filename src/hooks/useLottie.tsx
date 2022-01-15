@@ -19,7 +19,7 @@ import useLottieState from "./useLottieState";
  * Lottie's animation hook
  * @param options
  */
-const useLottie = ({
+export const useLottie = ({
   src,
   enableReinitialize = false,
   onStateChange,
@@ -427,5 +427,3 @@ const useLottie = ({
     seek,
   };
 };
-
-export default useLottie;

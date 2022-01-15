@@ -1,14 +1,14 @@
 import React, { FC, useCallback } from "react";
 import { LottieState, PlayerControlsElement } from "../../types";
 import Spacer from "../misc/Spacer";
-import PlayerControlsFramesIndicator from "./PlayerControlsFramesIndicator";
-import PlayerControlsProgressBar from "./PlayerControlsProgressBar";
-import LoopButton from "./buttons/LoopButton";
-import PauseButton from "./buttons/PauseButton";
-import PlayButton from "./buttons/PlayButton";
+import { PlayerControlsFramesIndicator } from "./PlayerControlsFramesIndicator";
+import { PlayerControlsProgressBar } from "./PlayerControlsProgressBar/PlayerControlsProgressBar";
+import { LoopButton } from "./buttons/LoopButton";
+import { PauseButton } from "./buttons/PauseButton";
+import { PlayButton } from "./buttons/PlayButton";
 
 // TODO: adapt type, maybe use reference to the original ones already defined
-type PlayerControlsProps = {
+export type PlayerControlsProps = {
   elements?: PlayerControlsElement[];
   state: LottieState;
   currentFrame: number;
@@ -20,7 +20,7 @@ type PlayerControlsProps = {
   toggleLoop: () => void;
 };
 
-const PlayerControls: FC<PlayerControlsProps> = (props) => {
+export const PlayerControls: FC<PlayerControlsProps> = (props) => {
   const { elements, state, currentFrame, totalFrames, loop, play, pause, seek, toggleLoop } = props;
 
   /**
@@ -94,5 +94,3 @@ const PlayerControls: FC<PlayerControlsProps> = (props) => {
     </div>
   );
 };
-
-export default PlayerControls;

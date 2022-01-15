@@ -1,6 +1,6 @@
 import React, { CSSProperties, FC } from "react";
 
-type PlayerFramesIndicatorProps = {
+export type PlayerFramesIndicatorProps = {
   currentFrame: number;
   totalFrames: number;
 };
@@ -35,7 +35,7 @@ const styles: Record<string, CSSProperties> = {
 /**
  * Show the current frame and the total
  */
-const PlayerControlsFramesIndicator: FC<PlayerFramesIndicatorProps> = ({
+export const PlayerControlsFramesIndicator: FC<PlayerFramesIndicatorProps> = ({
   currentFrame,
   totalFrames,
 }) => {
@@ -63,5 +63,3 @@ const PlayerControlsFramesIndicator: FC<PlayerFramesIndicatorProps> = ({
     </div>
   );
 };
-
-export default PlayerControlsFramesIndicator;

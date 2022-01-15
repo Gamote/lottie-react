@@ -7,7 +7,7 @@ type LoopButtonProps = SvgButtonProps & {
 };
 
 // TODO: add support for numbers on `isOn` (for how many times)
-const LoopButton: FC<LoopButtonProps> = ({ isOn, onClick }) => (
+export const LoopButton: FC<LoopButtonProps> = ({ isOn, onClick }) => (
   <SvgButton onClick={onClick}>
     <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24">
       <path
@@ -17,5 +17,3 @@ const LoopButton: FC<LoopButtonProps> = ({ isOn, onClick }) => (
     </svg>
   </SvgButton>
 );
-
-export default LoopButton;

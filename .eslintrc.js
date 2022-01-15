@@ -70,7 +70,6 @@ module.exports = {
       },
     ],
 
-    "import/prefer-default-export": "error", // When there is only a single export from a module, prefer using default export over named export
     "no-console": "warn", // Warning for console logging
     "arrow-body-style": ["error", "as-needed"], // Disallow the use of braces around arrow function body when is not needed
     "prefer-arrow-callback": "error", // Produce error anywhere an arrow function can be used instead of a function expression

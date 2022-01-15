@@ -1,7 +1,7 @@
 import React, { forwardRef, ForwardRefRenderFunction } from "react";
-import useLottie from "../hooks/useLottie";
+import { useLottie } from "../hooks/useLottie";
 import { LottieProps } from "../types";
-import Player from "./player";
+import { PlayerContainer, PlayerDisplay, PlayerControls } from "./player";
 
 /**
  * Lottie's animation component
@@ -11,7 +11,7 @@ import Player from "./player";
  * @param props
  * @param ref
  */
-const Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = (props, ref) => {
+const _Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = (props, ref) => {
   const { src, initialValues, enableReinitialize, onEvent, onStateChange, controls } = props;
 
   const {
@@ -33,11 +33,11 @@ const Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = (
   });
 
   return (
-    <Player>
-      <Player.Container ref={setContainerRef} />
+    <PlayerContainer>
+      <PlayerDisplay ref={setContainerRef} />
 
       {controls && (
-        <Player.Controls
+        <PlayerControls
           elements={Array.isArray(controls) ? controls : undefined}
           state={state}
           currentFrame={currentFrame}
@@ -49,8 +49,8 @@ const Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = (
           toggleLoop={toggleLoop}
         />
       )}
-    </Player>
+    </PlayerContainer>
   );
 };
 
-export default forwardRef(Lottie);
+export const Lottie = forwardRef(_Lottie);
