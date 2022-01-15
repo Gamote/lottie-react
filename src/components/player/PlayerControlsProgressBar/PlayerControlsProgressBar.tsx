@@ -1,10 +1,9 @@
 import "./PlayerControlsProgressBar.less";
-import React, { ChangeEventHandler, MouseEventHandler, useState } from "react";
+import React, { ChangeEventHandler, MouseEventHandler, useEffect, useRef } from "react";
+import { LottieEvent, LottieHookResult } from "../../../types";
 import isFunction from "../../../utils/isFunction";
 
-export type ProgressBarProps = {
-  currentFrame?: number;
-  totalFrames?: number;
+export type ProgressBarProps = Pick<LottieHookResult, "totalFrames" | "eventSubscriber"> & {
   onChange?: (progress: number, isDraggingEnded?: boolean) => void;
 };
 
@@ -15,11 +14,26 @@ export type ProgressBarProps = {
  * TODO: deal with the case in witch totalFrames = 0, is breaking the designs
  */
 export const PlayerControlsProgressBar = (props: ProgressBarProps) => {
-  const [selectedFrame, setSelectedFrame] = useState<number | null>(null);
-  const { totalFrames, currentFrame, onChange } = props;
-  const _currentFrame = currentFrame ?? 0;
+  const containerRef = useRef<HTMLInputElement>(null);
+  const { totalFrames, onChange, eventSubscriber } = props;
   const _totalFrames = totalFrames ?? 0;
   const isListeningForChanges = isFunction(onChange);
+
+  /**
+   * Listen for event regarding the `currentFrame`
+   */
+  useEffect(() => {
+    if (eventSubscriber) {
+      return eventSubscriber(LottieEvent.Frame, ({ currentFrame }) => {
+        if (containerRef.current) {
+          // Update the `value` of the input range
+          containerRef.current.value = String(currentFrame);
+          // Set the `--value` CSS value so the styling can adapt
+          containerRef.current.style.setProperty("--value", `${currentFrame}`);
+        }
+      });
+    }
+  }, [eventSubscriber]);
 
   /**
    * Handle any changes of the progress bar
@@ -29,7 +43,6 @@ export const PlayerControlsProgressBar = (props: ProgressBarProps) => {
     const newFrame = Number(event.target.value);
 
     if (isListeningForChanges) {
-      setSelectedFrame(newFrame);
       onChange?.(newFrame);
     }
   };
@@ -38,14 +51,14 @@ export const PlayerControlsProgressBar = (props: ProgressBarProps) => {
    * Handle mouse up on progress bar
    */
   const onMouseUpHandler: MouseEventHandler<HTMLInputElement> = () => {
-    if (isListeningForChanges && selectedFrame !== null) {
-      onChange?.(selectedFrame, true);
-      setSelectedFrame(null);
+    if (isListeningForChanges && containerRef.current) {
+      onChange?.(Number(containerRef.current.value), true);
     }
   };
 
   return (
     <input
+      ref={containerRef}
       className={"player-controls-progress-bar"}
       type="range"
       style={{
@@ -59,13 +72,12 @@ export const PlayerControlsProgressBar = (props: ProgressBarProps) => {
         // @ts-ignore
         "--min": 0,
         "--max": _totalFrames,
-        "--value": _currentFrame,
+        // "--value": 0,
       }}
       onChange={onChangeHandler}
       onMouseUp={onMouseUpHandler}
       min={0}
       max={_totalFrames}
-      value={_currentFrame}
       step={0.001}
     />
   );

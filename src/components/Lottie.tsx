@@ -12,24 +12,23 @@ import { PlayerContainer, PlayerDisplay, PlayerControls } from "./player";
  * @param ref
  */
 const _Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = (props, ref) => {
-  const { src, initialValues, enableReinitialize, onEvent, onStateChange, controls } = props;
+  const { src, initialValues, enableReinitialize, controls, eventListeners } = props;
 
   const {
     setContainerRef,
-    animationItem,
     state,
+    totalFrames,
     loop,
-    currentFrame,
     play,
     pause,
     toggleLoop,
     seek,
+    eventSubscriber,
   } = useLottie({
     src,
     initialValues,
     enableReinitialize,
-    onEvent,
-    onStateChange,
+    eventListeners,
   });
 
   return (
@@ -40,13 +39,13 @@ const _Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = 
         <PlayerControls
           elements={Array.isArray(controls) ? controls : undefined}
           state={state}
-          currentFrame={currentFrame}
-          totalFrames={animationItem?.totalFrames}
+          totalFrames={totalFrames}
           loop={loop}
           play={play}
           pause={pause}
           seek={seek}
           toggleLoop={toggleLoop}
+          eventSubscriber={eventSubscriber}
         />
       )}
     </PlayerContainer>

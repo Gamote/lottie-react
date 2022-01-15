@@ -109,6 +109,11 @@ const FullLottieTest: FC = () => {
                 enableReinitialize={true}
                 // controls={[PlayerControlsElement.Play, PlayerControlsElement.ProgressBar, PlayerControlsElement.Loop]}
                 controls
+                listeners={{
+                  frame: ({ currentFrame }) => {
+                    console.log("currentFrame", currentFrame);
+                  },
+                }}
                 // onStateChange={(playerState) => {
                 //   console.log(playerState);
                 // }}
@@ -116,6 +121,27 @@ const FullLottieTest: FC = () => {
                 //   console.log(playerEvent);
                 // }}
               />
+              {/*<Lottie*/}
+              {/*  src={"https://assets5.lottiefiles.com/private_files/lf30_3ezlslmp.json"}*/}
+              {/*  // src={source}*/}
+              {/*  // src={"https://assets4.lottiefiles.com/packages/lf20_hslwihoj.json"}*/}
+              {/*  // src={src}*/}
+              {/*  initialValues={*/}
+              {/*    {*/}
+              {/*      // loop,*/}
+              {/*      // autoplay,*/}
+              {/*    }*/}
+              {/*  }*/}
+              {/*  enableReinitialize={true}*/}
+              {/*  // controls={[PlayerControlsElement.Play, PlayerControlsElement.ProgressBar, PlayerControlsElement.Loop]}*/}
+              {/*  controls*/}
+              {/*  // onStateChange={(playerState) => {*/}
+              {/*  //   console.log(playerState);*/}
+              {/*  // }}*/}
+              {/*  // onEvent={(playerEvent) => {*/}
+              {/*  //   console.log(playerEvent);*/}
+              {/*  // }}*/}
+              {/*/>*/}
             </>
           )}
         </>

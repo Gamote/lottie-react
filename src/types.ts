@@ -7,6 +7,7 @@ import {
   SVGRendererConfig,
 } from "lottie-web";
 import { AnimationEventHandler, RefCallback, RefObject } from "react";
+import { LottieEventEmitter } from "./utils/LottieEventEmitter";
 
 /**
  * Object returned by `useCallbackRef()`
@@ -26,23 +27,11 @@ export enum AnimationRenderer {
 }
 
 /**
- * Enum with the Lottie's states
- */
-export enum LottieState {
-  Loading = "loading",
-  Playing = "playing",
-  Paused = "paused",
-  Stopped = "stopped",
-  Frozen = "frozen",
-  Error = "error",
-}
-
-/**
  * Enum with the Lottie's events
  */
 export enum LottieEvent {
   Load = "load",
-  Error = "error",
+  Failure = "failure",
   Ready = "ready",
   Play = "play",
   Pause = "pause",
@@ -51,12 +40,45 @@ export enum LottieEvent {
   LoopCompleted = "loop_completed",
   Complete = "complete",
   Frame = "frame",
+  NewState = "new_state",
+}
+
+/**
+ * The generic type of event's handler
+ */
+export type LottieEventHandler<T = unknown> = (event: T) => void;
+
+/**
+ * Definition on what each event is going to receive
+ */
+export type LottieEvents = {
+  [LottieEvent.Frame]: LottieEventHandler<{ currentFrame: number }>;
+  [LottieEvent.Complete]: LottieEventHandler;
+  [LottieEvent.LoopCompleted]: LottieEventHandler;
+  [LottieEvent.Ready]: LottieEventHandler;
+  [LottieEvent.Play]: LottieEventHandler;
+  [LottieEvent.Pause]: LottieEventHandler;
+  [LottieEvent.Stop]: LottieEventHandler;
+  [LottieEvent.Failure]: LottieEventHandler;
+  [LottieEvent.NewState]: LottieEventHandler<{ state: LottieState }>;
+};
+
+/**
+ * Enum with the Lottie's states
+ */
+export enum LottieState {
+  Loading = "loading",
+  Playing = "playing",
+  Paused = "paused",
+  Stopped = "stopped",
+  Frozen = "frozen",
+  Failure = "failure",
 }
 
 /**
  * Shape of the Lottie's event listeners
  */
-export type LottieEventListener = {
+export type AnimationEventListener = {
   name: AnimationEventName;
   handler: AnimationEventHandler;
 };
@@ -82,8 +104,7 @@ export type LottieHookOptions<Renderer extends AnimationRenderer = AnimationRend
   };
   enableReinitialize?: boolean;
   debug?: boolean;
-  onEvent?: (event: LottieEvent) => void;
-  onStateChange?: (state: LottieState) => void;
+  eventListeners?: Partial<LottieEvents>;
 
   // TODO: add support for the following
   // renderer?: Renderer;
@@ -103,7 +124,6 @@ export type LottieHookResult = {
   setContainerRef: RefCallback<HTMLDivElement>;
   animationItem: AnimationItem | null;
   state: LottieState;
-  currentFrame: number;
   loop: boolean | number;
   play: () => void;
   pause: () => void;
@@ -111,6 +131,8 @@ export type LottieHookResult = {
   toggleLoop: () => void;
   setSpeed: (speed: number) => void;
   seek: (value: number | string, isSeekingEnded: boolean) => void;
+  eventSubscriber: LottieEventEmitter["on"];
+  totalFrames: number;
 };
 
 /**

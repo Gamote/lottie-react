@@ -1,15 +1,15 @@
-import lottie, { AnimationSegment, AnimationItem } from "lottie-web";
+import lottie, { AnimationItem, AnimationSegment } from "lottie-web";
 import { useCallback, useEffect, useRef, useState } from "react";
 import isEqual from "react-fast-compare";
 import {
+  AnimationEventListener,
   LottieEvent,
   LottieHookOptions,
   LottieHookResult,
-  LottieEventListener,
   LottieState,
 } from "../types";
+import { LottieEventEmitter } from "../utils/LottieEventEmitter";
 import getNumberFromNumberOrPercentage from "../utils/getNumberFromNumberOrPercentage";
-import isFunction from "../utils/isFunction";
 import logger from "../utils/logger";
 import normalizeAnimationSource from "../utils/normalizeAnimationSource";
 import useCallbackRef from "./useCallbackRef";
@@ -22,8 +22,6 @@ import useLottieState from "./useLottieState";
 export const useLottie = ({
   src,
   enableReinitialize = false,
-  onStateChange,
-  onEvent,
   ...rest
 }: LottieHookOptions): LottieHookResult => {
   const options = {
@@ -40,13 +38,15 @@ export const useLottie = ({
   // (State) Animation instance
   const [animationItem, setAnimationItem] = useState<AnimationItem | null>(null);
 
+  // (State) Event emitter
+  const [eventEmitter] = useState<LottieEventEmitter>(new LottieEventEmitter());
+
   // (State) Animation's state
   const { previousState, state, setState } = useLottieState({
     initialState: LottieState.Loading,
     onChange: (previousPlayerState, newPlayerState) => {
-      if (onStateChange && isFunction(onStateChange)) {
-        onStateChange(newPlayerState);
-      }
+      // Let the consumer know about the new state
+      eventEmitter.emit(LottieEvent.NewState, { state: newPlayerState });
     },
   });
 
@@ -65,22 +65,6 @@ export const useLottie = ({
   // happening and return to it immediately, offering a smooth experience
   const [stateBeforeSeeking, setStateBeforeSeeking] = useState<LottieState | null>(null);
 
-  // (State) Animation's current frame
-  const [currentFrame, setCurrentFrame] = useState<number>(0);
-
-  /**
-   * Trigger an event
-   * @param eventName
-   */
-  const triggerEvent = useCallback(
-    (eventName: LottieEvent) => {
-      if (onEvent) {
-        onEvent(eventName);
-      }
-    },
-    [onEvent],
-  );
-
   /**
    * (Re)initialize the animation when the container and/or source change
    */
@@ -89,7 +73,6 @@ export const useLottie = ({
       logger.log("🪄 Trying to (re)initialize the animation");
 
       // Set the state to loading until the animation is (re)initialized
-      setCurrentFrame(0);
       setState((prevState) =>
         prevState === LottieState.Loading ? prevState : LottieState.Loading,
       );
@@ -111,8 +94,10 @@ export const useLottie = ({
 
       if (!normalizedAnimationSource) {
         logger.log("😥 Animation source is not valid");
-        triggerEvent(LottieEvent.Error);
-        setState((prevState) => (prevState === LottieState.Error ? prevState : LottieState.Error));
+        eventEmitter.emit(LottieEvent.Failure, undefined);
+        setState((prevState) =>
+          prevState === LottieState.Failure ? prevState : LottieState.Failure,
+        );
         return;
       }
 
@@ -132,8 +117,10 @@ export const useLottie = ({
         });
       } catch (e) {
         logger.warn("⚠️ Error while trying to load animation", e);
-        triggerEvent(LottieEvent.Error);
-        setState((prevState) => (prevState === LottieState.Error ? prevState : LottieState.Error));
+        eventEmitter.emit(LottieEvent.Failure, undefined);
+        setState((prevState) =>
+          prevState === LottieState.Failure ? prevState : LottieState.Failure,
+        );
         return;
       }
 
@@ -141,87 +128,96 @@ export const useLottie = ({
       logger.log("👌 Animation was initialized", _animationItem);
       setAnimationItem(_animationItem);
 
-      // Definitions the behaviour how to handle animation effects
-      const listeners: LottieEventListener[] = [
-        {
-          name: "complete",
-          handler: () => {
-            setState(LottieState.Stopped);
-            triggerEvent(LottieEvent.Complete);
+      // Register the internal listener for the events coming from the animation
+      const registerInternalListeners = () => {
+        const internalListeners: AnimationEventListener[] = [
+          {
+            name: "complete",
+            handler: () => {
+              setState(LottieState.Stopped);
+              eventEmitter.emit(LottieEvent.Complete, undefined);
+            },
           },
-        },
-        {
-          name: "loopComplete",
-          handler: () => {
-            triggerEvent(LottieEvent.LoopCompleted);
+          {
+            name: "loopComplete",
+            handler: () => {
+              eventEmitter.emit(LottieEvent.LoopCompleted, undefined);
+            },
           },
-        },
-        {
-          name: "enterFrame",
-          handler: () => {
-            // ! IMPORTANT
-            // TODO: check if we can handle this event in the player controls
-            //  take in the account the consumer that might want to use it when
-            //  the hook is used outside of the predefined UI
-            triggerEvent(LottieEvent.Frame);
-            if (_animationItem && _animationItem.currentFrame !== currentFrame) {
-              setCurrentFrame(_animationItem.currentFrame);
-            }
+          {
+            name: "enterFrame",
+            handler: () => {
+              if (_animationItem) {
+                eventEmitter.emit(LottieEvent.Frame, {
+                  currentFrame: _animationItem.currentFrame,
+                });
+              }
+            },
           },
-        },
-        { name: "segmentStart", handler: () => undefined },
-        { name: "config_ready", handler: () => undefined },
-        {
-          name: "data_ready",
-          handler: () => {
-            triggerEvent(LottieEvent.Ready);
+          { name: "segmentStart", handler: () => undefined },
+          { name: "config_ready", handler: () => undefined },
+          {
+            name: "data_ready",
+            handler: () => {
+              eventEmitter.emit(LottieEvent.Ready, undefined);
+            },
           },
-        },
-        {
-          name: "data_failed",
-          handler: () => {
-            setState(LottieState.Error);
+          {
+            name: "data_failed",
+            handler: () => {
+              setState(LottieState.Failure);
+            },
           },
-        },
-        { name: "loaded_images", handler: () => undefined },
-        {
-          name: "DOMLoaded",
-          handler: () => {
-            triggerEvent(LottieEvent.Load);
-            setState(_animationItem?.autoplay ? LottieState.Playing : LottieState.Stopped);
+          { name: "loaded_images", handler: () => undefined },
+          {
+            name: "DOMLoaded",
+            handler: () => {
+              setState(_animationItem?.autoplay ? LottieState.Playing : LottieState.Stopped);
+            },
           },
-        },
-        { name: "destroy", handler: () => undefined },
-      ];
+          { name: "destroy", handler: () => undefined },
+        ];
 
-      // Attach event listeners and return functions to deregister them
-      const listenerDeregisterList = listeners.map((listener) => {
-        try {
-          _animationItem?.addEventListener(listener.name, listener.handler);
-        } catch (e) {
-          // * There might be cases in which the `animationItem` exists but
-          // * it's not ready yet, and in that case `addEventListener` will
-          // * throw an error. That's why we skip these errors.
-        }
-
-        // Return a function to deregister this listener
-        return () => {
+        const internalListenerRemovers = internalListeners.map((listener) => {
           try {
-            _animationItem?.removeEventListener(listener.name, listener.handler);
+            _animationItem?.addEventListener(listener.name, listener.handler);
           } catch (e) {
             // * There might be cases in which the `animationItem` exists but
-            // * it was destroyed, and in that case `removeEventListener` will
+            // * it's not ready yet, and in that case `addEventListener` will
             // * throw an error. That's why we skip these errors.
           }
-        };
-      });
 
-      logger.log("👂 Event listeners were registered");
+          // Return a function to deregister this listener
+          return () => {
+            try {
+              _animationItem?.removeEventListener(listener.name, listener.handler);
+            } catch (e) {
+              // * There might be cases in which the `animationItem` exists but
+              // * it was destroyed, and in that case `removeEventListener` will
+              // * throw an error. That's why we skip these errors.
+            }
+          };
+        });
+
+        logger.log("👂 Internal event listeners were registered");
+
+        // Return a function to unregister all the events
+        return () => {
+          internalListenerRemovers.forEach((deregister) => deregister());
+        };
+      };
+
+      const unregisterInternalListeners = registerInternalListeners();
+
+      // Register consumer's event listeners
+      const unregisterConsumerListeners = eventEmitter.onBatch(options.eventListeners);
+      logger.log("👂 Consumer event listeners were registered");
 
       // Cleanup sequence on unmount
       return () => {
         logger.log("🧹 Animation is unloading, cleaning up...");
-        listenerDeregisterList.forEach((deregister) => deregister());
+        unregisterInternalListeners();
+        unregisterConsumerListeners();
         _animationItem.destroy();
         setAnimationItem(null);
       };
@@ -322,27 +318,27 @@ export const useLottie = ({
     if (animationItem) {
       animationItem.play();
       setState(LottieState.Playing);
-      triggerEvent(LottieEvent.Play);
+      eventEmitter.emit(LottieEvent.Play, undefined);
     }
-  }, [animationItem, setState, triggerEvent]);
+  }, [animationItem, eventEmitter, setState]);
 
   // Pause
   const pause = useCallback(() => {
     if (animationItem) {
       animationItem.pause();
       setState(LottieState.Paused);
-      triggerEvent(LottieEvent.Pause);
+      eventEmitter.emit(LottieEvent.Pause, undefined);
     }
-  }, [animationItem, setState, triggerEvent]);
+  }, [animationItem, eventEmitter, setState]);
 
   // Stop
   const stop = useCallback(() => {
     if (animationItem) {
       animationItem.goToAndStop(1);
       setState(LottieState.Stopped);
-      triggerEvent(LottieEvent.Stop);
+      eventEmitter.emit(LottieEvent.Stop, undefined);
     }
-  }, [animationItem, setState, triggerEvent]);
+  }, [animationItem, eventEmitter, setState]);
 
   // Toggle looping
   const toggleLoop = useCallback(() => {
@@ -417,7 +413,8 @@ export const useLottie = ({
     setContainerRef,
     animationItem,
     state,
-    currentFrame,
+    eventSubscriber: eventEmitter.on,
+    totalFrames: animationItem?.totalFrames ?? 0,
     loop,
     play,
     pause,

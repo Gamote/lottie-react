@@ -1,5 +1,5 @@
 import React, { FC, useCallback } from "react";
-import { LottieState, PlayerControlsElement } from "../../types";
+import { LottieHookResult, LottieState, PlayerControlsElement } from "../../types";
 import Spacer from "../misc/Spacer";
 import { PlayerControlsFramesIndicator } from "./PlayerControlsFramesIndicator";
 import { PlayerControlsProgressBar } from "./PlayerControlsProgressBar/PlayerControlsProgressBar";
@@ -8,20 +8,16 @@ import { PauseButton } from "./buttons/PauseButton";
 import { PlayButton } from "./buttons/PlayButton";
 
 // TODO: adapt type, maybe use reference to the original ones already defined
-export type PlayerControlsProps = {
+export type PlayerControlsProps = Pick<
+  LottieHookResult,
+  "state" | "totalFrames" | "loop" | "play" | "pause" | "seek" | "toggleLoop" | "eventSubscriber"
+> & {
   elements?: PlayerControlsElement[];
-  state: LottieState;
-  currentFrame: number;
-  totalFrames?: number;
-  loop?: boolean | number;
-  play: () => void;
-  pause: () => void;
-  seek: (frame: number, isDraggingEnded: boolean) => void; // TODO: better naming
-  toggleLoop: () => void;
 };
 
 export const PlayerControls: FC<PlayerControlsProps> = (props) => {
-  const { elements, state, currentFrame, totalFrames, loop, play, pause, seek, toggleLoop } = props;
+  const { elements, state, totalFrames, loop, play, pause, seek, toggleLoop, eventSubscriber } =
+    props;
 
   /**
    * Checks if the consumer have any preference on what elements we should display
@@ -68,7 +64,7 @@ export const PlayerControls: FC<PlayerControlsProps> = (props) => {
       {shouldShowElement(PlayerControlsElement.FramesIndicator) && (
         <>
           <PlayerControlsFramesIndicator
-            currentFrame={currentFrame}
+            eventSubscriber={eventSubscriber}
             totalFrames={totalFrames || 0}
           />
           <Spacer size={10} />
@@ -78,7 +74,7 @@ export const PlayerControls: FC<PlayerControlsProps> = (props) => {
       {shouldShowElement(PlayerControlsElement.ProgressBar) && (
         <>
           <PlayerControlsProgressBar
-            currentFrame={currentFrame}
+            eventSubscriber={eventSubscriber}
             totalFrames={totalFrames}
             onChange={(progress, isDraggingEnded) => {
               seek(progress, !!isDraggingEnded);
