@@ -59,7 +59,7 @@ const FullLottieTest: FC = () => {
     setTimeout(() => {
       logger.info("> Changing the animation source");
       setSrc("https://assets1.lottiefiles.com/packages/lf20_fgltupfx.json");
-    }, 10000);
+    }, 4000);
   }, []);
 
   // Change loop

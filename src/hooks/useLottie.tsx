@@ -89,9 +89,7 @@ const useLottie = ({
       logger.log("🪄 Trying to (re)initialize the animation");
 
       // Set the state to loading until the animation is (re)initialized
-      // TODO: reset hook (e.g. reset()) where we can for example:
-      //  - set the currentFrame to 0
-      //  - set the state to loading etc
+      setCurrentFrame(0);
       setState((prevState) =>
         prevState === LottieState.Loading ? prevState : LottieState.Loading,
       );
