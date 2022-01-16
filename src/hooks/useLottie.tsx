@@ -360,7 +360,7 @@ export const useLottie = ({
   // Stop
   const stop = useCallback(() => {
     if (animationItem) {
-      animationItem.goToAndStop(1);
+      animationItem.goToAndStop(0);
       setState(LottieState.Stopped);
       subscriptionManager.notify(LottieSubscription.Stop, undefined);
     }
@@ -386,8 +386,8 @@ export const useLottie = ({
 
   /**
    * Change the current frame from the animation
-   * @param value
-   * @param isSeekingEnded
+   * @param value Can be a frame number on a percentage (e.g. 12 or "14%")
+   * @param isSeekingEnded Indicate if we should resume the player state from before seeking
    */
   const seek = useCallback(
     (value: number | string, isSeekingEnded: boolean) => {
@@ -424,6 +424,11 @@ export const useLottie = ({
           animationItem?.goToAndStop(frame, true);
 
           if (prevState !== LottieState.Stopped) {
+            // If the seeking ended at frame `0` set the state to `Stopped`
+            if (isSeekingEnded && frame === 0) {
+              return LottieState.Stopped;
+            }
+
             return LottieState.Paused;
           }
         }

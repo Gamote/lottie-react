@@ -6,18 +6,30 @@ import { PlayerControlsProgressBar } from "./PlayerControlsProgressBar/PlayerCon
 import { LoopButton } from "./buttons/LoopButton";
 import { PauseButton } from "./buttons/PauseButton";
 import { PlayButton } from "./buttons/PlayButton";
+import { StopButton } from "./buttons/StopButton";
 
 export type PlayerControlsProps = Pick<
   LottieHookResult,
-  "state" | "totalFrames" | "loop" | "play" | "pause" | "seek" | "toggleLoop" | "subscribe"
+  "state" | "totalFrames" | "loop" | "play" | "pause" | "stop" | "seek" | "toggleLoop" | "subscribe"
 > & {
   show: boolean;
   elements?: PlayerControlsElement[];
 };
 
 export const PlayerControls: FC<PlayerControlsProps> = (props) => {
-  const { show, elements, state, totalFrames, loop, play, pause, seek, toggleLoop, subscribe } =
-    props;
+  const {
+    show,
+    elements,
+    state,
+    totalFrames,
+    loop,
+    play,
+    pause,
+    stop,
+    seek,
+    toggleLoop,
+    subscribe,
+  } = props;
 
   /**
    * Checks if the consumer have any preference on what elements we should display
@@ -61,6 +73,13 @@ export const PlayerControls: FC<PlayerControlsProps> = (props) => {
       {shouldShowElement(PlayerControlsElement.Pause) && state === LottieState.Playing && (
         <>
           <PauseButton onClick={pause} />
+          <Spacer size={10} />
+        </>
+      )}
+
+      {shouldShowElement(PlayerControlsElement.Stop) && state !== LottieState.Stopped && (
+        <>
+          <StopButton onClick={stop} />
           <Spacer size={10} />
         </>
       )}

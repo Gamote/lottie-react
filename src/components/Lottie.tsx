@@ -26,13 +26,23 @@ const _Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = 
     FailureOverlayContent,
   } = props;
 
-  const { setContainerRef, state, totalFrames, loop, play, pause, toggleLoop, seek, subscribe } =
-    useLottie({
-      src,
-      initialValues,
-      enableReinitialize,
-      subscriptions,
-    });
+  const {
+    setContainerRef,
+    state,
+    totalFrames,
+    loop,
+    play,
+    pause,
+    stop,
+    toggleLoop,
+    seek,
+    subscribe,
+  } = useLottie({
+    src,
+    initialValues,
+    enableReinitialize,
+    subscriptions,
+  });
 
   return (
     <PlayerContainer>
@@ -58,6 +68,7 @@ const _Lottie: ForwardRefRenderFunction<Record<string, unknown>, LottieProps> = 
         loop={loop}
         play={play}
         pause={pause}
+        stop={stop}
         seek={seek}
         toggleLoop={toggleLoop}
         subscribe={subscribe}

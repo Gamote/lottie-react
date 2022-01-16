@@ -149,6 +149,7 @@ export type LottieStateHookOptions = {
 export enum PlayerControlsElement {
   Play = "play",
   Pause = "pause",
+  Stop = "stop",
   FramesIndicator = "framesIndicator",
   ProgressBar = "progressBar",
   Loop = "loop",
