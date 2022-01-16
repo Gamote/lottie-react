@@ -167,6 +167,7 @@ const options = [
       file: packageJson.types,
       format: "esm",
     },
+    external: [/\.less$/u],
     plugins: [dts()],
   },
 ];
