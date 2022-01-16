@@ -11,11 +11,8 @@ export type PlayerDisplayProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement
 
 /**
  * Container for displaying the animation
- *
- * TODO: implement loading and error state
  * @param props
  * @param ref
- * @constructor
  */
 const _PlayerDisplay: ForwardRefRenderFunction<HTMLDivElement, PlayerDisplayProps> = (
   props,
