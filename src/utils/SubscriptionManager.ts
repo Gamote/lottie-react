@@ -9,7 +9,9 @@ import { EventEmitter } from "events";
  * * This way we avoid rerender all the components on evey new frame and the consumer
  * * can pass it directly to elements (e.g. `<input>`) using `Ref`s.
  *
- * TODO: revisit the typing and see if we can do better
+ * TODO:
+ *  - Should we use https://github.com/primus/eventemitter3?
+ *  - revisit the typing and see if we can do better
  *
  * @internal
  */
