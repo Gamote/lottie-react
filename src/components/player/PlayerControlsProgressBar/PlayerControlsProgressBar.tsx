@@ -4,6 +4,7 @@ import { LottieSubscription, LottieHookResult } from "../../../types";
 import isFunction from "../../../utils/isFunction";
 
 export type ProgressBarProps = Pick<LottieHookResult, "totalFrames" | "subscribe"> & {
+  disabled?: boolean;
   onChange?: (progress: number, isDraggingEnded?: boolean) => void;
 };
 
@@ -13,7 +14,7 @@ export type ProgressBarProps = Pick<LottieHookResult, "totalFrames" | "subscribe
  */
 export const PlayerControlsProgressBar = (props: ProgressBarProps) => {
   const containerRef = useRef<HTMLInputElement>(null);
-  const { totalFrames, onChange, subscribe } = props;
+  const { totalFrames, subscribe, disabled, onChange } = props;
   const _totalFrames = totalFrames ?? 0;
   const isListeningForChanges = isFunction(onChange);
 
@@ -56,31 +57,30 @@ export const PlayerControlsProgressBar = (props: ProgressBarProps) => {
 
   return (
     <div style={{ flex: 1 }}>
-      {!!_totalFrames && (
-        <input
-          ref={containerRef}
-          className={"player-controls-progress-bar"}
-          type="range"
-          style={{
-            /**
-             * Set the current progress percentage as a CSS var, so it can be used in the style
-             * to properly customize the input range styling across browsers
-             *
-             * Source: https://toughengineer.github.io/demo/slider-styler/slider-styler.html
-             */
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            "--min": 0,
-            "--max": _totalFrames,
-            // "--value": 0,
-          }}
-          onChange={onChangeHandler}
-          onMouseUp={onMouseUpHandler}
-          min={0}
-          max={_totalFrames}
-          step={0.001}
-        />
-      )}
+      <input
+        ref={containerRef}
+        disabled={disabled || !!_totalFrames}
+        className={"player-controls-progress-bar"}
+        type="range"
+        style={{
+          /**
+           * Set the current progress percentage as a CSS var, so it can be used in the style
+           * to properly customize the input range styling across browsers
+           *
+           * Source: https://toughengineer.github.io/demo/slider-styler/slider-styler.html
+           */
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          "--min": 0,
+          "--max": _totalFrames,
+          // "--value": 0,
+        }}
+        onChange={onChangeHandler}
+        onMouseUp={onMouseUpHandler}
+        min={0}
+        max={_totalFrames}
+        step={0.001}
+      />
     </div>
   );
 };

@@ -1,5 +1,7 @@
 /**
- *  TODO: improve this to reuse config, best to do it after IE it's fully supported
+ *  TODO:
+ *    - improve this to reuse config, best to do it after IE it's fully supported
+ *    - add styling for when disabled=true
  *
  *  Sources:
  *  - https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css
@@ -65,6 +67,10 @@ input[type="range"].player-controls-progress-bar {
   padding: 0;
   background: none; // Remove the default input background
   width: @track-width;
+
+  &:disabled {
+    cursor: default;
+  }
 
   &:focus {
     outline: none;
