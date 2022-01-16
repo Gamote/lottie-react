@@ -1,14 +1,15 @@
 import lottie, { AnimationItem, AnimationSegment } from "lottie-web";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import isEqual from "react-fast-compare";
 import {
-  AnimationEventListener,
-  LottieEvent,
+  InternalListener,
+  LottieSubscription,
+  LottieSubscriptions,
   LottieHookOptions,
   LottieHookResult,
   LottieState,
 } from "../types";
-import { LottieEventEmitter } from "../utils/LottieEventEmitter";
+import { SubscriptionManager } from "../utils/SubscriptionManager";
 import getNumberFromNumberOrPercentage from "../utils/getNumberFromNumberOrPercentage";
 import logger from "../utils/logger";
 import normalizeAnimationSource from "../utils/normalizeAnimationSource";
@@ -38,20 +39,21 @@ export const useLottie = ({
   // (State) Animation instance
   const [animationItem, setAnimationItem] = useState<AnimationItem | null>(null);
 
-  // (State) Event emitter
-  const [eventEmitter] = useState<LottieEventEmitter>(new LottieEventEmitter());
+  // (State) Subscription manager
+  const subscriptionManager = useMemo(() => new SubscriptionManager<LottieSubscriptions>(), []);
 
   // (State) Animation's state
   const { previousState, state, setState } = useLottieState({
     initialState: LottieState.Loading,
     onChange: (previousPlayerState, newPlayerState) => {
-      // Let the consumer know about the new state
-      eventEmitter.emit(LottieEvent.NewState, { state: newPlayerState });
+      // Let the subscribers know about the new state
+      subscriptionManager.notify(LottieSubscription.NewState, { state: newPlayerState });
     },
   });
 
   // (Ref) Initial values provided by the consumer
   const _initialValues = useRef(options.initialValues);
+  const _subscriptions = useRef<Partial<LottieSubscriptions> | undefined>(undefined);
 
   // (State) Initial states converted to local states
   const [loop, setLoop] = useState<boolean | number>(options.initialValues?.loop || false);
@@ -94,7 +96,7 @@ export const useLottie = ({
 
       if (!normalizedAnimationSource) {
         logger.log("😥 Animation source is not valid");
-        eventEmitter.emit(LottieEvent.Failure, undefined);
+        subscriptionManager.notify(LottieSubscription.Failure, undefined);
         setState((prevState) =>
           prevState === LottieState.Failure ? prevState : LottieState.Failure,
         );
@@ -117,7 +119,7 @@ export const useLottie = ({
         });
       } catch (e) {
         logger.warn("⚠️ Error while trying to load animation", e);
-        eventEmitter.emit(LottieEvent.Failure, undefined);
+        subscriptionManager.notify(LottieSubscription.Failure, undefined);
         setState((prevState) =>
           prevState === LottieState.Failure ? prevState : LottieState.Failure,
         );
@@ -128,27 +130,27 @@ export const useLottie = ({
       logger.log("👌 Animation was initialized", _animationItem);
       setAnimationItem(_animationItem);
 
-      // Register the internal listener for the events coming from the animation
+      // Register the internal listeners for the animation's events
       const registerInternalListeners = () => {
-        const internalListeners: AnimationEventListener[] = [
+        const internalListeners: InternalListener[] = [
           {
             name: "complete",
             handler: () => {
               setState(LottieState.Stopped);
-              eventEmitter.emit(LottieEvent.Complete, undefined);
+              subscriptionManager.notify(LottieSubscription.Complete, undefined);
             },
           },
           {
             name: "loopComplete",
             handler: () => {
-              eventEmitter.emit(LottieEvent.LoopCompleted, undefined);
+              subscriptionManager.notify(LottieSubscription.LoopCompleted, undefined);
             },
           },
           {
             name: "enterFrame",
             handler: () => {
               if (_animationItem) {
-                eventEmitter.emit(LottieEvent.Frame, {
+                subscriptionManager.notify(LottieSubscription.Frame, {
                   currentFrame: _animationItem.currentFrame,
                 });
               }
@@ -159,7 +161,7 @@ export const useLottie = ({
           {
             name: "data_ready",
             handler: () => {
-              eventEmitter.emit(LottieEvent.Ready, undefined);
+              subscriptionManager.notify(LottieSubscription.Ready, undefined);
             },
           },
           {
@@ -199,9 +201,9 @@ export const useLottie = ({
           };
         });
 
-        logger.log("👂 Internal event listeners were registered");
+        logger.log("👂 Internal listeners were registered");
 
-        // Return a function to unregister all the events
+        // Return a function to unregister all the listeners
         return () => {
           internalListenerRemovers.forEach((deregister) => deregister());
         };
@@ -209,15 +211,10 @@ export const useLottie = ({
 
       const unregisterInternalListeners = registerInternalListeners();
 
-      // Register consumer's event listeners
-      const unregisterConsumerListeners = eventEmitter.onBatch(options.eventListeners);
-      logger.log("👂 Consumer event listeners were registered");
-
       // Cleanup sequence on unmount
       return () => {
         logger.log("🧹 Animation is unloading, cleaning up...");
         unregisterInternalListeners();
-        unregisterConsumerListeners();
         _animationItem.destroy();
         setAnimationItem(null);
       };
@@ -234,7 +231,7 @@ export const useLottie = ({
    */
   useEffect(() => {
     // Skip update if there is no animation item, reinitialization is not enabled
-    // or the initial values are equal with the previous ones
+    // or the initial values are the same with the previous ones
     if (
       !animationItem ||
       !enableReinitialize ||
@@ -311,6 +308,32 @@ export const useLottie = ({
   }, [animationItem, enableReinitialize, options.initialValues]);
 
   /**
+   * Checks for and (re)register the consumer's subscriptions
+   */
+  useEffect(() => {
+    // Skip update if there is no subscription manager
+    // or the new subscriptions are the same with the previous ones
+    if (!subscriptionManager || isEqual(_subscriptions.current, options.subscriptions)) {
+      return;
+    }
+
+    // Save the new subscriptions
+    _subscriptions.current = options.subscriptions;
+
+    // Register consumer's subscriptions
+    const unregisterConsumerSubscriptions = subscriptionManager.addSubscriptions(
+      options.subscriptions,
+    );
+
+    logger.log("👂 Consumer's subscriptions were registered");
+
+    return () => {
+      logger.log("🧹 Unregistering consumer's subscriptions...");
+      unregisterConsumerSubscriptions();
+    };
+  }, [subscriptionManager, options.subscriptions]);
+
+  /**
    * Interaction methods
    */
   // Play
@@ -318,27 +341,27 @@ export const useLottie = ({
     if (animationItem) {
       animationItem.play();
       setState(LottieState.Playing);
-      eventEmitter.emit(LottieEvent.Play, undefined);
+      subscriptionManager.notify(LottieSubscription.Play, undefined);
     }
-  }, [animationItem, eventEmitter, setState]);
+  }, [animationItem, subscriptionManager, setState]);
 
   // Pause
   const pause = useCallback(() => {
     if (animationItem) {
       animationItem.pause();
       setState(LottieState.Paused);
-      eventEmitter.emit(LottieEvent.Pause, undefined);
+      subscriptionManager.notify(LottieSubscription.Pause, undefined);
     }
-  }, [animationItem, eventEmitter, setState]);
+  }, [animationItem, subscriptionManager, setState]);
 
   // Stop
   const stop = useCallback(() => {
     if (animationItem) {
       animationItem.goToAndStop(1);
       setState(LottieState.Stopped);
-      eventEmitter.emit(LottieEvent.Stop, undefined);
+      subscriptionManager.notify(LottieSubscription.Stop, undefined);
     }
-  }, [animationItem, eventEmitter, setState]);
+  }, [animationItem, subscriptionManager, setState]);
 
   // Toggle looping
   const toggleLoop = useCallback(() => {
@@ -413,7 +436,7 @@ export const useLottie = ({
     setContainerRef,
     animationItem,
     state,
-    eventSubscriber: eventEmitter.on,
+    subscribe: subscriptionManager.subscribe,
     totalFrames: animationItem?.totalFrames ?? 0,
     loop,
     play,

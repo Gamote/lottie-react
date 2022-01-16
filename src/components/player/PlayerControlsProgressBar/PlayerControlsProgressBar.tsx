@@ -1,9 +1,9 @@
 import "./PlayerControlsProgressBar.less";
 import React, { ChangeEventHandler, MouseEventHandler, useEffect, useRef } from "react";
-import { LottieEvent, LottieHookResult } from "../../../types";
+import { LottieSubscription, LottieHookResult } from "../../../types";
 import isFunction from "../../../utils/isFunction";
 
-export type ProgressBarProps = Pick<LottieHookResult, "totalFrames" | "eventSubscriber"> & {
+export type ProgressBarProps = Pick<LottieHookResult, "totalFrames" | "subscribe"> & {
   onChange?: (progress: number, isDraggingEnded?: boolean) => void;
 };
 
@@ -13,7 +13,7 @@ export type ProgressBarProps = Pick<LottieHookResult, "totalFrames" | "eventSubs
  */
 export const PlayerControlsProgressBar = (props: ProgressBarProps) => {
   const containerRef = useRef<HTMLInputElement>(null);
-  const { totalFrames, onChange, eventSubscriber } = props;
+  const { totalFrames, onChange, subscribe } = props;
   const _totalFrames = totalFrames ?? 0;
   const isListeningForChanges = isFunction(onChange);
 
@@ -21,8 +21,8 @@ export const PlayerControlsProgressBar = (props: ProgressBarProps) => {
    * Listen for event regarding the `currentFrame`
    */
   useEffect(() => {
-    if (eventSubscriber) {
-      return eventSubscriber(LottieEvent.Frame, ({ currentFrame }) => {
+    if (subscribe) {
+      return subscribe(LottieSubscription.Frame, ({ currentFrame }) => {
         if (containerRef.current) {
           // Update the `value` of the input range
           containerRef.current.value = String(currentFrame);
@@ -31,7 +31,7 @@ export const PlayerControlsProgressBar = (props: ProgressBarProps) => {
         }
       });
     }
-  }, [eventSubscriber]);
+  }, [subscribe]);
 
   /**
    * Handle any changes of the progress bar

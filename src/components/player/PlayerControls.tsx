@@ -9,25 +9,15 @@ import { PlayButton } from "./buttons/PlayButton";
 
 export type PlayerControlsProps = Pick<
   LottieHookResult,
-  "state" | "totalFrames" | "loop" | "play" | "pause" | "seek" | "toggleLoop" | "eventSubscriber"
+  "state" | "totalFrames" | "loop" | "play" | "pause" | "seek" | "toggleLoop" | "subscribe"
 > & {
   show: boolean;
   elements?: PlayerControlsElement[];
 };
 
 export const PlayerControls: FC<PlayerControlsProps> = (props) => {
-  const {
-    show,
-    elements,
-    state,
-    totalFrames,
-    loop,
-    play,
-    pause,
-    seek,
-    toggleLoop,
-    eventSubscriber,
-  } = props;
+  const { show, elements, state, totalFrames, loop, play, pause, seek, toggleLoop, subscribe } =
+    props;
 
   /**
    * Checks if the consumer have any preference on what elements we should display
@@ -77,10 +67,7 @@ export const PlayerControls: FC<PlayerControlsProps> = (props) => {
 
       {shouldShowElement(PlayerControlsElement.FramesIndicator) && (
         <>
-          <PlayerControlsFramesIndicator
-            eventSubscriber={eventSubscriber}
-            totalFrames={totalFrames || 0}
-          />
+          <PlayerControlsFramesIndicator subscribe={subscribe} totalFrames={totalFrames || 0} />
           <Spacer size={10} />
         </>
       )}
@@ -88,7 +75,7 @@ export const PlayerControls: FC<PlayerControlsProps> = (props) => {
       {shouldShowElement(PlayerControlsElement.ProgressBar) && (
         <>
           <PlayerControlsProgressBar
-            eventSubscriber={eventSubscriber}
+            subscribe={subscribe}
             totalFrames={totalFrames}
             onChange={(progress, isDraggingEnded) => {
               seek(progress, !!isDraggingEnded);

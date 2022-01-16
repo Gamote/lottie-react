@@ -7,7 +7,7 @@ import {
   SVGRendererConfig,
 } from "lottie-web";
 import { AnimationEventHandler, RefCallback, RefObject } from "react";
-import { LottieEventEmitter } from "./utils/LottieEventEmitter";
+import { SubscriptionManager } from "./utils/SubscriptionManager";
 
 /**
  * Object returned by `useCallbackRef()`
@@ -27,9 +27,17 @@ export enum AnimationRenderer {
 }
 
 /**
- * Enum with the Lottie's events
+ * Shape of the internal listener
  */
-export enum LottieEvent {
+export type InternalListener = {
+  name: AnimationEventName;
+  handler: AnimationEventHandler;
+};
+
+/**
+ * Enum with Lottie's subscription types
+ */
+export enum LottieSubscription {
   Load = "load",
   Failure = "failure",
   Ready = "ready",
@@ -44,23 +52,23 @@ export enum LottieEvent {
 }
 
 /**
- * The generic type of event's handler
+ * The generic type for the subscription's action
  */
-export type LottieEventHandler<T = unknown> = (event: T) => void;
+export type LottieSubscriptionAction<T = unknown> = (event: T) => void;
 
 /**
- * Definition on what each event is going to receive
+ * Describing the action to take for each subscription type
  */
-export type LottieEvents = {
-  [LottieEvent.Frame]: LottieEventHandler<{ currentFrame: number }>;
-  [LottieEvent.Complete]: LottieEventHandler;
-  [LottieEvent.LoopCompleted]: LottieEventHandler;
-  [LottieEvent.Ready]: LottieEventHandler;
-  [LottieEvent.Play]: LottieEventHandler;
-  [LottieEvent.Pause]: LottieEventHandler;
-  [LottieEvent.Stop]: LottieEventHandler;
-  [LottieEvent.Failure]: LottieEventHandler;
-  [LottieEvent.NewState]: LottieEventHandler<{ state: LottieState }>;
+export type LottieSubscriptions = {
+  [LottieSubscription.Frame]: LottieSubscriptionAction<{ currentFrame: number }>;
+  [LottieSubscription.Complete]: LottieSubscriptionAction;
+  [LottieSubscription.LoopCompleted]: LottieSubscriptionAction;
+  [LottieSubscription.Ready]: LottieSubscriptionAction;
+  [LottieSubscription.Play]: LottieSubscriptionAction;
+  [LottieSubscription.Pause]: LottieSubscriptionAction;
+  [LottieSubscription.Stop]: LottieSubscriptionAction;
+  [LottieSubscription.Failure]: LottieSubscriptionAction;
+  [LottieSubscription.NewState]: LottieSubscriptionAction<{ state: LottieState }>;
 };
 
 /**
@@ -74,14 +82,6 @@ export enum LottieState {
   Frozen = "frozen",
   Failure = "failure",
 }
-
-/**
- * Shape of the Lottie's event listeners
- */
-export type AnimationEventListener = {
-  name: AnimationEventName;
-  handler: AnimationEventHandler;
-};
 
 /**
  * Options for the `useLottie()` hook
@@ -104,7 +104,7 @@ export type LottieHookOptions<Renderer extends AnimationRenderer = AnimationRend
   };
   enableReinitialize?: boolean;
   debug?: boolean;
-  eventListeners?: Partial<LottieEvents>;
+  subscriptions?: Partial<LottieSubscriptions>;
 
   // TODO: add support for the following
   // renderer?: Renderer;
@@ -131,7 +131,7 @@ export type LottieHookResult = {
   toggleLoop: () => void;
   setSpeed: (speed: number) => void;
   seek: (value: number | string, isSeekingEnded: boolean) => void;
-  eventSubscriber: LottieEventEmitter["on"];
+  subscribe: SubscriptionManager<LottieSubscriptions>["subscribe"];
   totalFrames: number;
 };
 

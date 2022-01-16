@@ -1,5 +1,5 @@
-import { Lottie, LottieProps, PlayerControlsElement } from "lottie-react";
-import React, { FC, useEffect, useState } from "react";
+import { Lottie, LottieProps, PlayerControlsElement, LottieEvents } from "lottie-react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import logger from "../../../src/utils/logger";
 import groovyWalkAnimation from "./../../static/assets/animations/groovyWalk.json";
 
@@ -15,6 +15,7 @@ const FullLottieTest: FC = () => {
   const [src, setSrc] = useState(config.src);
   const [loop, setLoop] = useState(config.initialValues.loop);
   const [autoplay, setAutoplay] = useState(config.initialValues.autoplay);
+  const [testText, setTestText] = useState("Something");
 
   // Delay
   const [delayAnimations, setDelayAnimations] = useState(true);
@@ -55,10 +56,18 @@ const FullLottieTest: FC = () => {
   // }, []);
 
   // Change source
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     logger.info("> Changing the animation source");
+  //     setSrc("https://assets1.lottiefiles.com/packages/lf20_fgltupfx.json");
+  //   }, 4000);
+  // }, []);
+
+  // Change test text
   useEffect(() => {
     setTimeout(() => {
-      logger.info("> Changing the animation source");
-      setSrc("https://assets1.lottiefiles.com/packages/lf20_fgltupfx.json");
+      logger.info("> Changing the test text");
+      setTestText("New value!!!");
     }, 4000);
   }, []);
 
@@ -77,6 +86,15 @@ const FullLottieTest: FC = () => {
   //     setShowAnimationNumber(999);
   //   }, 4500);
   // }, []);
+
+  const subscribers = useMemo<Partial<LottieEvents>>(
+    () => ({
+      frame: ({ currentFrame }) => {
+        // console.log("Now we show", testText);
+      },
+    }),
+    [testText],
+  );
 
   return (
     <>
@@ -103,10 +121,10 @@ const FullLottieTest: FC = () => {
                 // src={"https://assets4.lottiefiles.com/packages/lf20_hslwihoj.json"}
                 src={src}
                 // src={{}}
-                LoadingOverlay={"My awesome overlay"}
-                LoadingOverlayContent={"Still loading..."}
-                // FailureOverlay={`The "Something went wrong" overlay`}
-                FailureOverlayContent={"Oops, couldn't load the animation."}
+                LoadingOverlay={<>My awesome overlay</>}
+                LoadingOverlayContent={<>Still loading...</>}
+                // FailureOverlay={<>The "Something went wrong" overlay</>}
+                FailureOverlayContent={<>Oops, couldn&apos;t load the animation.</>}
                 initialValues={{
                   loop,
                   autoplay,
@@ -114,13 +132,7 @@ const FullLottieTest: FC = () => {
                 enableReinitialize={true}
                 // controls={[PlayerControlsElement.Play, PlayerControlsElement.ProgressBar, PlayerControlsElement.Loop]}
                 controls
-                listeners={
-                  {
-                    // frame: ({ currentFrame }) => {
-                    //   console.log("currentFrame", currentFrame);
-                    // },
-                  }
-                }
+                subscribers={subscribers}
                 // onStateChange={(playerState) => {
                 //   console.log(playerState);
                 // }}

@@ -1,7 +1,7 @@
 import React, { CSSProperties, FC, useEffect, useRef } from "react";
-import { LottieEvent, LottieHookResult } from "../../types";
+import { LottieSubscription, LottieHookResult } from "../../types";
 
-export type PlayerFramesIndicatorProps = Pick<LottieHookResult, "totalFrames" | "eventSubscriber">;
+export type PlayerFramesIndicatorProps = Pick<LottieHookResult, "totalFrames" | "subscribe">;
 
 const styles: Record<string, CSSProperties> = {
   container: {
@@ -34,7 +34,7 @@ const styles: Record<string, CSSProperties> = {
  * Show the current frame and the total
  */
 export const PlayerControlsFramesIndicator: FC<PlayerFramesIndicatorProps> = ({
-  eventSubscriber,
+  subscribe,
   totalFrames,
 }) => {
   const containerRef = useRef<HTMLSpanElement>(null);
@@ -44,14 +44,14 @@ export const PlayerControlsFramesIndicator: FC<PlayerFramesIndicatorProps> = ({
    * Listen for event regarding the `currentFrame`
    */
   useEffect(() => {
-    if (eventSubscriber) {
-      return eventSubscriber(LottieEvent.Frame, ({ currentFrame }) => {
+    if (subscribe) {
+      return subscribe(LottieSubscription.Frame, ({ currentFrame }) => {
         if (containerRef.current) {
           containerRef.current.innerText = currentFrame?.toFixed(0);
         }
       });
     }
-  }, [eventSubscriber]);
+  }, [subscribe]);
 
   return (
     <div style={styles.container}>
