@@ -35,6 +35,18 @@ export type InternalListener = {
 };
 
 /**
+ * Enum with the Lottie's states
+ */
+export enum LottieState {
+  Loading = "loading",
+  Playing = "playing",
+  Paused = "paused",
+  Stopped = "stopped",
+  Frozen = "frozen",
+  Failure = "failure",
+}
+
+/**
  * Enum with Lottie's subscription types
  */
 export enum LottieSubscription {
@@ -70,18 +82,6 @@ export type LottieSubscriptions = {
   [LottieSubscription.Failure]: LottieSubscriptionAction;
   [LottieSubscription.NewState]: LottieSubscriptionAction<{ state: LottieState }>;
 };
-
-/**
- * Enum with the Lottie's states
- */
-export enum LottieState {
-  Loading = "loading",
-  Playing = "playing",
-  Paused = "paused",
-  Stopped = "stopped",
-  Frozen = "frozen",
-  Failure = "failure",
-}
 
 /**
  * Options for the `useLottie()` hook
