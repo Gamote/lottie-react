@@ -136,6 +136,9 @@ export const useLottie = ({
           {
             name: "complete",
             handler: () => {
+              // Reset the current frame to `0`
+              _animationItem.goToAndStop(0);
+
               setState(LottieState.Stopped);
               subscriptionManager.notify(LottieSubscription.Complete, undefined);
             },

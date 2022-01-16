@@ -89,9 +89,12 @@ const FullLottieTest: FC = () => {
 
   const subscriptions = useMemo<Partial<LottieSubscriptions>>(
     () => ({
-      frame: ({ currentFrame }) => {
-        // console.log("Now we show", testText);
-      },
+      // frame: ({ currentFrame }) => {
+      //   // console.log("Now we show", testText);
+      // },
+      // complete: () => {
+      //   console.log("Completed");
+      // },
     }),
     [testText],
   );
