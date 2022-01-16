@@ -1,4 +1,4 @@
-import { Lottie, LottieProps, PlayerControlsElement, LottieEvents } from "lottie-react";
+import { Lottie, LottieProps, PlayerControlsElement, LottieSubscriptions } from "lottie-react";
 import React, { FC, useEffect, useMemo, useState } from "react";
 import logger from "../../../src/utils/logger";
 import groovyWalkAnimation from "./../../static/assets/animations/groovyWalk.json";
@@ -87,7 +87,7 @@ const FullLottieTest: FC = () => {
   //   }, 4500);
   // }, []);
 
-  const subscribers = useMemo<Partial<LottieEvents>>(
+  const subscriptions = useMemo<Partial<LottieSubscriptions>>(
     () => ({
       frame: ({ currentFrame }) => {
         // console.log("Now we show", testText);
@@ -132,7 +132,7 @@ const FullLottieTest: FC = () => {
                 enableReinitialize={true}
                 // controls={[PlayerControlsElement.Play, PlayerControlsElement.ProgressBar, PlayerControlsElement.Loop]}
                 controls
-                subscribers={subscribers}
+                subscriptions={subscriptions}
                 // onStateChange={(playerState) => {
                 //   console.log(playerState);
                 // }}
