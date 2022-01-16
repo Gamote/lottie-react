@@ -1,5 +1,5 @@
 import { LottiePlayer } from "lottie-web";
-import React, { forwardRef, ForwardRefRenderFunction } from "react";
+import React, { forwardRef, ForwardRefRenderFunction, useImperativeHandle } from "react";
 import { useLottieFactory } from "../hooks/useLottieFactory";
 import { LottieProps, LottieRef, LottieState, LottieVersion } from "../types";
 import { PlayerContainer, PlayerControls, PlayerDisplay } from "./player";
@@ -13,10 +13,7 @@ import { PlayerLoading } from "./player/PlayerLoading/PlayerLoading";
  * @param lottie
  */
 export const lottieHoc = <Version extends LottieVersion>(lottie: LottiePlayer) => {
-  const Lottie: ForwardRefRenderFunction<LottieRef<Version>, LottieProps<Version>> = (
-    props,
-    ref,
-  ) => {
+  const Lottie: ForwardRefRenderFunction<LottieRef, LottieProps<Version>> = (props, ref) => {
     const {
       controls,
       LoadingOverlay,
@@ -26,20 +23,17 @@ export const lottieHoc = <Version extends LottieVersion>(lottie: LottiePlayer) =
       ...hookOptions
     } = props;
 
-    const {
-      setContainerRef,
-      state,
-      totalFrames,
-      loop,
-      play,
-      pause,
-      stop,
-      toggleLoop,
-      seek,
-      subscribe,
-    } = useLottieFactory<Version>(lottie, {
+    const { setContainerRef, ...lottieFactoryResult } = useLottieFactory<Version>(lottie, {
       ...hookOptions,
     });
+
+    /**
+     * Make the hook variables/methods available through the provided 'lottieRef'
+     */
+    useImperativeHandle(ref, () => lottieFactoryResult);
+
+    const { state, totalFrames, loop, play, pause, stop, toggleLoop, seek, subscribe } =
+      lottieFactoryResult;
 
     return (
       <PlayerContainer>

@@ -176,8 +176,7 @@ export enum PlayerControlsElement {
 /**
  * Type for Lottie's `ref` property
  */
-export type LottieRef<Version extends LottieVersion = LottieVersion.Full> =
-  UseLottieFactoryOptions<Version>;
+export type LottieRef = Omit<UseLottieFactoryResult, "setContainerRef">;
 
 /**
  * Properties for the `Lottie` & `LottieLight` components

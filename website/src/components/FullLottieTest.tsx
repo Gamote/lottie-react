@@ -5,8 +5,9 @@ import {
   LottieProps,
   PlayerControlsElement,
   LottieSubscriptions,
+  LottieRef,
 } from "lottie-react";
-import React, { FC, useEffect, useMemo, useState } from "react";
+import React, { FC, useEffect, useMemo, useRef, useState } from "react";
 import logger from "../../../src/utils/logger";
 import groovyWalkAnimation from "./../../static/assets/animations/groovyWalk.json";
 
@@ -19,6 +20,7 @@ const FullLottieTest: FC = () => {
     },
   };
 
+  const ref = useRef<LottieRef>(null);
   const [src, setSrc] = useState(config.src);
   const [loop, setLoop] = useState(config.initialValues.loop);
   const [autoplay, setAutoplay] = useState(config.initialValues.autoplay);
@@ -94,6 +96,14 @@ const FullLottieTest: FC = () => {
   //   }, 4500);
   // }, []);
 
+  // User `ref`
+  useEffect(() => {
+    setTimeout(() => {
+      logger.info("> Using the ref to pause");
+      ref.current.pause();
+    }, 4500);
+  }, []);
+
   const subscriptions = useMemo<Partial<LottieSubscriptions>>(
     () => ({
       // frame: ({ currentFrame }) => {
@@ -126,6 +136,7 @@ const FullLottieTest: FC = () => {
           {showAnimationNumber === 2 && (
             <>
               <Lottie
+                ref={ref}
                 src={src}
                 initialValues={{ autoplay: true, loop: true }}
                 controls
