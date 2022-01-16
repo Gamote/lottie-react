@@ -12,9 +12,13 @@
     "component",
     "hook"
   ],
-  "homepage": "https://github.com/Gamote/lottie-react",
+  "homepage": "https://lottiereact.com",
   "bugs": {
     "url": "https://github.com/Gamote/lottie-react/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gamote/lottie-react.git"
   },
   "license": "MIT",
   "author": "David Gamote",
@@ -34,7 +38,7 @@
     "docz:build": "docz build",
     "docz:dev": "docz dev",
     "docz:serve": "docz build && docz serve",
-    "prepublishOnly": "rm -rf build && npm run build",
+    "prepublishOnly": "rm -rf build && yarn build",
     "rollup:compile": "rollup -c",
     "rollup:compile:watch": "rollup -c -w",
     "test": "jest",
@@ -70,6 +74,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
+    "get-pkg-repo": "^5.0.0",
     "jest": "^27.4.7",
     "jest-canvas-mock": "^2.3.1",
     "node-sass": "^7.0.1",
