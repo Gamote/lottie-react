@@ -12,19 +12,10 @@ import { SubscriptionManager } from "./utils/SubscriptionManager";
 /**
  * Object returned by `useCallbackRef()`
  */
-export type CallbackRefHookResult<T = unknown> = {
+export type UseCallbackRefResult<T = unknown> = {
   ref: RefObject<T>;
   setRef: RefCallback<T>;
 };
-
-/**
- * Render types that Lottie's animation supports
- */
-export enum AnimationRenderer {
-  Svg = "svg",
-  Html = "html",
-  Canvas = "canvas",
-}
 
 /**
  * Shape of the internal listener
@@ -84,30 +75,41 @@ export type LottieSubscriptions = {
 };
 
 /**
- * Options for the `useLottie()` hook
+ * Enum with animation's versions which are `full` and `light`
+ */
+export enum LottieVersion {
+  Full = "full",
+  Light = "light",
+}
+
+/**
+ * Render types that animation supports
+ */
+export enum LottieRenderer {
+  Svg = "svg",
+  Html = "html",
+  Canvas = "canvas",
+}
+
+/**
+ * Options for the `useLottieFactory()` hook
  *
  * These options are wrapping Lottie's config properties and ads
  * additional ones in order to have a better control over the animation
  */
-export type LottieHookOptions<Renderer extends AnimationRenderer = AnimationRenderer.Svg> = {
+export type UseLottieFactoryOptions<Version extends LottieVersion = LottieVersion.Full> = {
   src: string | Record<string | number | symbol, unknown>;
   initialValues?: {
     loop?: boolean | number;
     autoplay?: boolean;
     segment?: AnimationSegment;
     assetsPath?: string;
-    rendererSettings?: {
-      svg: SVGRendererConfig;
-      canvas: CanvasRendererConfig;
-      html: HTMLRendererConfig;
-    }[Renderer];
   };
   enableReinitialize?: boolean;
   debug?: boolean;
   subscriptions?: Partial<LottieSubscriptions>;
 
   // TODO: add support for the following
-  // renderer?: Renderer;
   // audioFactory?(assetPath: string): {
   //   play(): void;
   //   seek(): void;
@@ -115,12 +117,28 @@ export type LottieHookOptions<Renderer extends AnimationRenderer = AnimationRend
   //   rate(): void;
   //   setVolume(): void;
   // };
-};
+} & (
+  | {
+      renderer?: LottieRenderer.Svg;
+      rendererSettings?: SVGRendererConfig;
+    }
+  | (Version extends LottieVersion.Full
+      ?
+          | {
+              renderer?: LottieRenderer.Canvas;
+              rendererSettings?: CanvasRendererConfig;
+            }
+          | {
+              renderer?: LottieRenderer.Html;
+              rendererSettings?: HTMLRendererConfig;
+            }
+      : never)
+);
 
 /**
- * Object returned by `useLottie()`
+ * Object returned by `useLottieFactory()`
  */
-export type LottieHookResult = {
+export type UseLottieFactoryResult = {
   setContainerRef: RefCallback<HTMLDivElement>;
   animationItem: AnimationItem | null;
   state: LottieState;
@@ -138,7 +156,7 @@ export type LottieHookResult = {
 /**
  * Options for the `useLottieState()` hook
  */
-export type LottieStateHookOptions = {
+export type UseLottieStateOptions = {
   initialState: LottieState;
   onChange?: (previousState: undefined | LottieState, newState: LottieState) => void;
 };
@@ -156,12 +174,19 @@ export enum PlayerControlsElement {
 }
 
 /**
- * Properties for the `Lottie` component
+ * Type for Lottie's `ref` property
  */
-export type LottieProps = LottieHookOptions & {
-  controls?: boolean | PlayerControlsElement[];
-  LoadingOverlay?: JSX.Element;
-  FailureOverlay?: JSX.Element;
-  LoadingOverlayContent?: JSX.Element;
-  FailureOverlayContent?: JSX.Element;
-};
+export type LottieRef<Version extends LottieVersion = LottieVersion.Full> =
+  UseLottieFactoryOptions<Version>;
+
+/**
+ * Properties for the `Lottie` & `LottieLight` components
+ */
+export type LottieProps<Version extends LottieVersion = LottieVersion.Full> =
+  UseLottieFactoryOptions<Version> & {
+    controls?: boolean | PlayerControlsElement[];
+    LoadingOverlay?: JSX.Element;
+    FailureOverlay?: JSX.Element;
+    LoadingOverlayContent?: JSX.Element;
+    FailureOverlayContent?: JSX.Element;
+  };

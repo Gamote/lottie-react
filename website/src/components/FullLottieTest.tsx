@@ -1,4 +1,11 @@
-import { Lottie, LottieProps, PlayerControlsElement, LottieSubscriptions } from "lottie-react";
+import {
+  Lottie,
+  LottieLight,
+  LottieRenderer,
+  LottieProps,
+  PlayerControlsElement,
+  LottieSubscriptions,
+} from "lottie-react";
 import React, { FC, useEffect, useMemo, useState } from "react";
 import logger from "../../../src/utils/logger";
 import groovyWalkAnimation from "./../../static/assets/animations/groovyWalk.json";
@@ -119,30 +126,37 @@ const FullLottieTest: FC = () => {
           {showAnimationNumber === 2 && (
             <>
               <Lottie
-                // src={"https://assets5.lottiefiles.com/private_files/lf30_3ezlslmp.json"}
-                // src={source}
-                // src={"https://assets4.lottiefiles.com/packages/lf20_hslwihoj.json"}
                 src={src}
-                // src={{}}
-                LoadingOverlay={<>My awesome overlay</>}
-                LoadingOverlayContent={<>Still loading...</>}
-                // FailureOverlay={<>The "Something went wrong" overlay</>}
-                FailureOverlayContent={<>Oops, couldn&apos;t load the animation.</>}
-                initialValues={{
-                  loop,
-                  autoplay,
-                }}
-                enableReinitialize={true}
-                // controls={[PlayerControlsElement.Play, PlayerControlsElement.ProgressBar, PlayerControlsElement.Loop]}
+                initialValues={{ autoplay: true, loop: true }}
                 controls
-                subscriptions={subscriptions}
-                // onStateChange={(playerState) => {
-                //   console.log(playerState);
-                // }}
-                // onEvent={(playerEvent) => {
-                //   console.log(playerEvent);
-                // }}
+                // renderer={LottieRenderer.Canvas}
+                rendererSettings={{ clearCanvas: true }}
               />
+              {/*<Lottie*/}
+              {/*  // src={"https://assets5.lottiefiles.com/private_files/lf30_3ezlslmp.json"}*/}
+              {/*  // src={source}*/}
+              {/*  // src={"https://assets4.lottiefiles.com/packages/lf20_hslwihoj.json"}*/}
+              {/*  src={src}*/}
+              {/*  // src={{}}*/}
+              {/*  LoadingOverlay={<>My awesome overlay</>}*/}
+              {/*  LoadingOverlayContent={<>Still loading...</>}*/}
+              {/*  // FailureOverlay={<>The "Something went wrong" overlay</>}*/}
+              {/*  FailureOverlayContent={<>Oops, couldn&apos;t load the animation.</>}*/}
+              {/*  initialValues={{*/}
+              {/*    loop,*/}
+              {/*    autoplay,*/}
+              {/*  }}*/}
+              {/*  enableReinitialize={true}*/}
+              {/*  // controls={[PlayerControlsElement.Play, PlayerControlsElement.ProgressBar, PlayerControlsElement.Loop]}*/}
+              {/*  controls*/}
+              {/*  subscriptions={subscriptions}*/}
+              {/*  // onStateChange={(playerState) => {*/}
+              {/*  //   console.log(playerState);*/}
+              {/*  // }}*/}
+              {/*  // onEvent={(playerEvent) => {*/}
+              {/*  //   console.log(playerEvent);*/}
+              {/*  // }}*/}
+              {/*/>*/}
               {/*<Lottie*/}
               {/*  src={"https://assets5.lottiefiles.com/private_files/lf30_3ezlslmp.json"}*/}
               {/*  // src={source}*/}

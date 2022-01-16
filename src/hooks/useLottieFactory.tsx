@@ -1,13 +1,15 @@
-import lottie, { AnimationItem, AnimationSegment } from "lottie-web";
+import { AnimationConfig, AnimationItem, AnimationSegment, LottiePlayer } from "lottie-web";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import isEqual from "react-fast-compare";
 import {
   InternalListener,
+  LottieRenderer,
+  LottieState,
   LottieSubscription,
   LottieSubscriptions,
-  LottieHookOptions,
-  LottieHookResult,
-  LottieState,
+  LottieVersion,
+  UseLottieFactoryOptions,
+  UseLottieFactoryResult,
 } from "../types";
 import { SubscriptionManager } from "../utils/SubscriptionManager";
 import getNumberFromNumberOrPercentage from "../utils/getNumberFromNumberOrPercentage";
@@ -17,14 +19,14 @@ import useCallbackRef from "./useCallbackRef";
 import useLottieState from "./useLottieState";
 
 /**
- * Lottie's animation hook
+ * Lottie's animation factory hook
  * @param options
+ * @param lottie
  */
-export const useLottie = ({
-  src,
-  enableReinitialize = false,
-  ...rest
-}: LottieHookOptions): LottieHookResult => {
+export const useLottieFactory = <Version extends LottieVersion = LottieVersion.Full>(
+  lottie: LottiePlayer,
+  { src, enableReinitialize = false, ...rest }: UseLottieFactoryOptions<Version>,
+): UseLottieFactoryResult => {
   const options = {
     enableReinitialize,
     ...rest,
@@ -43,7 +45,7 @@ export const useLottie = ({
   const subscriptionManager = useMemo(() => new SubscriptionManager<LottieSubscriptions>(), []);
 
   // (State) Animation's state
-  const { previousState, state, setState } = useLottieState({
+  const { state, setState } = useLottieState({
     initialState: LottieState.Loading,
     onChange: (previousPlayerState, newPlayerState) => {
       // Let the subscribers know about the new state
@@ -110,13 +112,13 @@ export const useLottie = ({
         _animationItem = lottie.loadAnimation({
           ...normalizedAnimationSource,
           container: containerRef.current,
-          renderer: "svg",
+          renderer: options.renderer ?? LottieRenderer.Svg, // TODO: rerender when changes
+          rendererSettings: options.rendererSettings, // TODO: rerender when changes?
           loop,
           autoplay,
           initialSegment,
           assetsPath: _initialValues.current?.assetsPath,
-          rendererSettings: _initialValues.current?.rendererSettings,
-        });
+        } as AnimationConfig); // TODO: remove the type annotation when `lottie-web` allow us to use generics
       } catch (e) {
         logger.warn("⚠️ Error while trying to load animation", e);
         subscriptionManager.notify(LottieSubscription.Failure, undefined);

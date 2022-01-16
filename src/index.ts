@@ -1,9 +1,11 @@
 import { Lottie } from "./components/Lottie";
-import { useLottie } from "./hooks/useLottie";
+import { LottieLight } from "./components/LottieLight";
+import { lottieHoc } from "./components/lottieHoc";
+import { useLottieFactory } from "./hooks/useLottieFactory";
 
 export * from "./components/player";
 export * from "./types";
 
-export { Lottie, useLottie };
+export { Lottie, LottieLight, lottieHoc, useLottieFactory };
 
 export default Lottie;

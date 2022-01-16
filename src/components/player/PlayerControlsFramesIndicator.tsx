@@ -1,7 +1,10 @@
 import React, { CSSProperties, FC, useCallback, useEffect, useMemo, useRef } from "react";
-import { LottieSubscription, LottieHookResult } from "../../types";
+import { LottieSubscription, UseLottieFactoryResult } from "../../types";
 
-export type PlayerFramesIndicatorProps = Pick<LottieHookResult, "totalFrames" | "subscribe"> & {
+export type PlayerFramesIndicatorProps = Pick<
+  UseLottieFactoryResult,
+  "totalFrames" | "subscribe"
+> & {
   decimals?: number;
 };
 

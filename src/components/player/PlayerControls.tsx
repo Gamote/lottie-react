@@ -1,5 +1,5 @@
 import React, { FC, useCallback } from "react";
-import { LottieHookResult, LottieState, PlayerControlsElement } from "../../types";
+import { UseLottieFactoryResult, LottieState, PlayerControlsElement } from "../../types";
 import Spacer from "../misc/Spacer";
 import { PlayerControlsFramesIndicator } from "./PlayerControlsFramesIndicator";
 import { PlayerControlsProgressBar } from "./PlayerControlsProgressBar/PlayerControlsProgressBar";
@@ -9,7 +9,7 @@ import { PlayButton } from "./buttons/PlayButton";
 import { StopButton } from "./buttons/StopButton";
 
 export type PlayerControlsProps = Pick<
-  LottieHookResult,
+  UseLottieFactoryResult,
   "state" | "totalFrames" | "loop" | "play" | "pause" | "stop" | "seek" | "toggleLoop" | "subscribe"
 > & {
   show: boolean;

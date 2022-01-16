@@ -1,9 +1,9 @@
 import "./PlayerControlsProgressBar.less";
 import React, { ChangeEventHandler, MouseEventHandler, useEffect, useRef } from "react";
-import { LottieSubscription, LottieHookResult } from "../../../types";
+import { LottieSubscription, UseLottieFactoryResult } from "../../../types";
 import isFunction from "../../../utils/isFunction";
 
-export type ProgressBarProps = Pick<LottieHookResult, "totalFrames" | "subscribe"> & {
+export type ProgressBarProps = Pick<UseLottieFactoryResult, "totalFrames" | "subscribe"> & {
   disabled?: boolean;
   onChange?: (progress: number, isDraggingEnded?: boolean) => void;
 };
