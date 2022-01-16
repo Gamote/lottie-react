@@ -67,7 +67,11 @@ export const PlayerControls: FC<PlayerControlsProps> = (props) => {
 
       {shouldShowElement(PlayerControlsElement.FramesIndicator) && (
         <>
-          <PlayerControlsFramesIndicator subscribe={subscribe} totalFrames={totalFrames || 0} />
+          <PlayerControlsFramesIndicator
+            subscribe={subscribe}
+            totalFrames={totalFrames || 0}
+            decimals={0}
+          />
           <Spacer size={10} />
         </>
       )}

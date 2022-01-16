@@ -59,7 +59,7 @@ export const PlayerControlsProgressBar = (props: ProgressBarProps) => {
     <div style={{ flex: 1 }}>
       <input
         ref={containerRef}
-        disabled={disabled || !!_totalFrames}
+        disabled={disabled || !_totalFrames}
         className={"player-controls-progress-bar"}
         type="range"
         style={{
