@@ -1,13 +1,11 @@
 import React, { DetailedHTMLProps, FC, HTMLAttributes } from "react";
 
-type PlayerOverlayProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
-  //
-};
+export type PlayerOverlayProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 
 /**
  * Add a div with padding to the left and right of `size` / 2
  */
-const PlayerOverlay: FC<PlayerOverlayProps> = ({ children, style, ...rest }) => (
+export const PlayerOverlay: FC<PlayerOverlayProps> = ({ children, style, ...rest }) => (
   <div
     {...rest}
     style={{
@@ -25,5 +23,3 @@ const PlayerOverlay: FC<PlayerOverlayProps> = ({ children, style, ...rest }) => 
     {children}
   </div>
 );
-
-export default PlayerOverlay;

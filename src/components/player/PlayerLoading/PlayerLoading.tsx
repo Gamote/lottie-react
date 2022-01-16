@@ -1,6 +1,6 @@
 import "./PlayerLoading.less";
 import React, { FC } from "react";
-import PlayerOverlay from "../PlayerOverlay";
+import { PlayerOverlay } from "../PlayerOverlay";
 
 export type PlayerLoadingProps = {
   show: boolean;

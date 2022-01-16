@@ -4,7 +4,7 @@ export type SvgButtonProps = {
   onClick?: () => void;
 };
 
-const SvgButton: FC<SvgButtonProps> = ({ children, onClick }) => (
+export const SvgButton: FC<SvgButtonProps> = ({ children, onClick }) => (
   <button
     style={{
       background: "rgb(77 77 77)",
@@ -23,5 +23,3 @@ const SvgButton: FC<SvgButtonProps> = ({ children, onClick }) => (
     {children}
   </button>
 );
-
-export default SvgButton;

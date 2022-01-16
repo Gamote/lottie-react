@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import PlayerOverlay from "./PlayerOverlay";
+import { PlayerOverlay } from "./PlayerOverlay";
 
 export type PlayerErrorProps = {
   show: boolean;
