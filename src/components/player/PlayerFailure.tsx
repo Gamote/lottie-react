@@ -19,5 +19,5 @@ export const PlayerFailure: FC<PlayerErrorProps> = ({ show, Component, Content }
     return Component;
   }
 
-  return <PlayerOverlay>{Content ? Content : "Couldn&apos;t load the animation"}</PlayerOverlay>;
+  return <PlayerOverlay>{Content ? Content : "Couldn't load the animation"}</PlayerOverlay>;
 };
