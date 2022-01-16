@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import React, { CSSProperties } from "react";
 import { render } from "@testing-library/react";
 import { renderHook } from "@testing-library/react-hooks";
