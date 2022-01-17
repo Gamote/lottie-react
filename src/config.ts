@@ -1,6 +1,6 @@
 const config = {
-  accentColor: "#00d1c1",
-  whiteColor: "#ffffff",
+  accentColor: "#00D1C1",
+  whiteColor: "#FFFFFF",
 };
 
 export default config;

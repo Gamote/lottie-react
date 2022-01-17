@@ -3,9 +3,12 @@ import { UseLottieFactoryResult, LottieState, PlayerControlsElement } from "../.
 import Spacer from "../misc/Spacer";
 import { PlayerControlsFramesIndicator } from "./PlayerControlsFramesIndicator";
 import { PlayerControlsProgressBar } from "./PlayerControlsProgressBar/PlayerControlsProgressBar";
+import { DirectionButton } from "./buttons/DirectionButton";
+import { FullScreenButton } from "./buttons/FullScreenButton";
 import { LoopButton } from "./buttons/LoopButton";
 import { PauseButton } from "./buttons/PauseButton";
 import { PlayButton } from "./buttons/PlayButton";
+import { PlaybackSpeedButton } from "./buttons/PlaybackSpeedButton";
 import { StopButton } from "./buttons/StopButton";
 
 export type PlayerControlsProps = Pick<
@@ -109,7 +112,28 @@ export const PlayerControls: FC<PlayerControlsProps> = (props) => {
       )}
 
       {shouldShowElement(PlayerControlsElement.Loop) && (
-        <LoopButton isOn={loop} onClick={toggleLoop} />
+        <>
+          <LoopButton isOn={loop} onClick={toggleLoop} />
+          <Spacer size={10} />
+        </>
+      )}
+
+      {shouldShowElement(PlayerControlsElement.Direction) && (
+        <>
+          <DirectionButton direction={"right"} onClick={toggleLoop} />
+          <Spacer size={10} />
+        </>
+      )}
+
+      {shouldShowElement(PlayerControlsElement.PlaybackSpeed) && (
+        <>
+          <PlaybackSpeedButton />
+          <Spacer size={10} />
+        </>
+      )}
+
+      {shouldShowElement(PlayerControlsElement.FullScreen) && (
+        <FullScreenButton isFullScreen={false} />
       )}
     </div>
   );

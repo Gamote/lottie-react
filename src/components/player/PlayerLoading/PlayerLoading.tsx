@@ -1,5 +1,6 @@
 import "./PlayerLoading.less";
 import React, { FC } from "react";
+import config from "../../../config";
 import { PlayerOverlay } from "../PlayerOverlay";
 
 export type PlayerLoadingProps = {
@@ -17,7 +18,7 @@ export const PlayerLoading: FC<PlayerLoadingProps> = ({
   show,
   Component,
   Content,
-  color = "#FFFFFF",
+  color = config.whiteColor,
   size = 80,
 }) => {
   if (!show) {

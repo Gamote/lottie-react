@@ -171,6 +171,9 @@ export enum PlayerControlsElement {
   FramesIndicator = "framesIndicator",
   ProgressBar = "progressBar",
   Loop = "loop",
+  FullScreen = "fullScreen",
+  PlaybackSpeed = "playbackSpeed",
+  Direction = "direction",
 }
 
 /**

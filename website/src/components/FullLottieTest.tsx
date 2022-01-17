@@ -100,7 +100,7 @@ const FullLottieTest: FC = () => {
   useEffect(() => {
     setTimeout(() => {
       logger.info("> Using the ref to pause");
-      ref.current.pause();
+      // ref.current.pause();
     }, 4500);
   }, []);
 
