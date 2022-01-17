@@ -6,7 +6,7 @@ import del from "rollup-plugin-delete";
 import dts from "rollup-plugin-dts";
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
 import postcss from "rollup-plugin-postcss";
-import { terser } from "rollup-plugin-terser";
+import { uglify } from "rollup-plugin-uglify";
 import packageJson from "./package.json";
 
 /**
@@ -64,6 +64,7 @@ const reusablePluginList = [
 const externalPackages = [
   ...Object.keys(packageJson.dependencies || {}),
   ...Object.keys(packageJson.peerDependencies || {}),
+  "lottie-web/build/player/lottie_light",
 ];
 
 /**
@@ -87,13 +88,13 @@ const options = [
         file: packageJson.main,
         format: "cjs",
         exports: "named", // TODO: add description
-        sourcemap: true,
       },
       {
         file: getMinifiedName(packageJson.main),
         format: "cjs",
         exports: "named", // TODO: add description
-        plugins: [terser()],
+        sourcemap: true,
+        plugins: [uglify()],
       },
     ],
     plugins: [
@@ -120,13 +121,13 @@ const options = [
         file: packageJson.module,
         format: "esm",
         exports: "named", // TODO: add description
-        sourcemap: true,
       },
       {
         file: getMinifiedName(packageJson.module),
         format: "esm",
         exports: "named", // TODO: add description
-        plugins: [terser()],
+        sourcemap: true,
+        plugins: [uglify()],
       },
     ],
     plugins: reusablePluginList,
@@ -145,6 +146,7 @@ const options = [
   //       file: getMinifiedName(packageJson.browser), // "browser": "build/index.umd.js",
   //       format: "umd",
   //       exports: "named",
+  //       sourcemap: true,
   //       name: "LottieReact",
   //       globals: {
   //         react: "React",

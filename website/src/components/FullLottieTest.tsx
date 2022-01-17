@@ -135,7 +135,7 @@ const FullLottieTest: FC = () => {
 
           {showAnimationNumber === 2 && (
             <>
-              <Lottie
+              <LottieLight
                 ref={ref}
                 src={src}
                 initialValues={{ autoplay: true, loop: true }}
