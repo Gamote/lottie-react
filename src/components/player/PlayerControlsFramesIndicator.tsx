@@ -1,5 +1,5 @@
 import React, { CSSProperties, FC, useCallback, useEffect, useMemo, useRef } from "react";
-import { LottieSubscription, UseLottieFactoryResult } from "../../types";
+import { UseLottieFactoryResult, LottieSubscription } from "../../@types";
 
 export type PlayerFramesIndicatorProps = Pick<
   UseLottieFactoryResult,

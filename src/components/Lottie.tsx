@@ -1,5 +1,5 @@
 import lottieFull from "lottie-web";
-import { LottieVersion } from "../types";
+import { LottieVersion } from "../@types";
 import { lottieHoc } from "./lottieHoc";
 
 /**

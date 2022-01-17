@@ -1,7 +1,7 @@
 import { LottiePlayer } from "lottie-web";
 import React, { forwardRef, ForwardRefRenderFunction, useImperativeHandle } from "react";
+import { LottieProps, LottieRef, LottieState, LottieVersion } from "../@types";
 import { useLottieFactory } from "../hooks/useLottieFactory";
-import { LottieProps, LottieRef, LottieState, LottieVersion } from "../types";
 import {
   PlayerFailure,
   PlayerLoading,

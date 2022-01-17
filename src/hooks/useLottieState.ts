@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { LottieState, UseLottieStateOptions } from "../types";
+import { LottieState, UseLottieStateOptions } from "../@types";
 import isFunction from "../utils/isFunction";
 import usePreviousState from "./usePreviousState";
 

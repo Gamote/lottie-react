@@ -2,16 +2,16 @@ import { AnimationConfig, AnimationItem, AnimationSegment, LottiePlayer } from "
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import isEqual from "react-fast-compare";
 import {
-  Direction,
   InternalListener,
+  LottieSubscriptions,
+  UseLottieFactoryOptions,
+  UseLottieFactoryResult,
+  Direction,
   LottieRenderer,
   LottieState,
   LottieSubscription,
-  LottieSubscriptions,
   LottieVersion,
-  UseLottieFactoryOptions,
-  UseLottieFactoryResult,
-} from "../types";
+} from "../@types";
 import { SubscriptionManager } from "../utils/SubscriptionManager";
 import getNumberFromNumberOrPercentage from "../utils/getNumberFromNumberOrPercentage";
 import logger from "../utils/logger";

@@ -1,6 +1,6 @@
 import "./PlayerControlsProgressBar.less";
 import React, { ChangeEventHandler, MouseEventHandler, useEffect, useRef } from "react";
-import { LottieSubscription, UseLottieFactoryResult } from "../../../types";
+import { UseLottieFactoryResult, LottieSubscription } from "../../../@types";
 import isFunction from "../../../utils/isFunction";
 
 export type ProgressBarProps = Pick<UseLottieFactoryResult, "totalFrames" | "subscribe"> & {

@@ -1,6 +1,6 @@
 import React, { FC } from "react";
+import { Direction } from "../../../@types";
 import config from "../../../config";
-import { Direction } from "../../../types";
 import { SvgButton, SvgButtonProps } from "../../misc/SvgButton";
 
 export type DirectionButtonProps = SvgButtonProps & {

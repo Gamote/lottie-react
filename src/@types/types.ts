@@ -7,7 +7,15 @@ import {
   SVGRendererConfig,
 } from "lottie-web";
 import { AnimationEventHandler, RefCallback, RefObject } from "react";
-import { SubscriptionManager } from "./utils/SubscriptionManager";
+import { SubscriptionManager } from "../utils/SubscriptionManager";
+import {
+  Direction,
+  LottieRenderer,
+  LottieState,
+  LottieSubscription,
+  LottieVersion,
+  PlayerControlsElement,
+} from "./enums";
 
 /**
  * Object returned by `useCallbackRef()`
@@ -24,35 +32,6 @@ export type InternalListener = {
   name: AnimationEventName;
   handler: AnimationEventHandler;
 };
-
-/**
- * Enum with the Lottie's states
- */
-export enum LottieState {
-  Loading = "loading",
-  Playing = "playing",
-  Paused = "paused",
-  Stopped = "stopped",
-  Frozen = "frozen",
-  Failure = "failure",
-}
-
-/**
- * Enum with Lottie's subscription types
- */
-export enum LottieSubscription {
-  Load = "load",
-  Failure = "failure",
-  Ready = "ready",
-  Play = "play",
-  Pause = "pause",
-  Stop = "stop",
-  Freeze = "freeze",
-  LoopCompleted = "loop_completed",
-  Complete = "complete",
-  Frame = "frame",
-  NewState = "new_state",
-}
 
 /**
  * The generic type for the subscription's action
@@ -73,23 +52,6 @@ export type LottieSubscriptions = {
   [LottieSubscription.Failure]: LottieSubscriptionAction;
   [LottieSubscription.NewState]: LottieSubscriptionAction<{ state: LottieState }>;
 };
-
-/**
- * Enum with animation's versions which are `full` and `light`
- */
-export enum LottieVersion {
-  Full = "full",
-  Light = "light",
-}
-
-/**
- * Render types that animation supports
- */
-export enum LottieRenderer {
-  Svg = "svg",
-  Html = "html",
-  Canvas = "canvas",
-}
 
 /**
  * Options for the `useLottieFactory()` hook
@@ -163,29 +125,6 @@ export type UseLottieStateOptions = {
   initialState: LottieState;
   onChange?: (previousState: undefined | LottieState, newState: LottieState) => void;
 };
-
-/**
- * Enum with the PlayerControls' elements
- */
-export enum PlayerControlsElement {
-  Play = "play",
-  Pause = "pause",
-  Stop = "stop",
-  FramesIndicator = "framesIndicator",
-  ProgressBar = "progressBar",
-  Loop = "loop",
-  FullScreen = "fullScreen",
-  PlaybackSpeed = "playbackSpeed",
-  Direction = "direction",
-}
-
-/**
- * Options for the playback direction
- */
-export enum Direction {
-  Right = "right",
-  Left = "left",
-}
 
 /**
  * Type for Lottie's `ref` property

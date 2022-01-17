@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { UseCallbackRefResult } from "../types";
+import { UseCallbackRefResult } from "../@types";
 
 /**
  * Ref that rerender on change

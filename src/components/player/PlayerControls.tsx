@@ -1,5 +1,10 @@
 import React, { FC, useCallback } from "react";
-import { Direction, LottieState, PlayerControlsElement, UseLottieFactoryResult } from "../../types";
+import {
+  UseLottieFactoryResult,
+  Direction,
+  LottieState,
+  PlayerControlsElement,
+} from "../../@types";
 import Spacer from "../misc/Spacer";
 import { PlayerControlsFramesIndicator } from "./PlayerControlsFramesIndicator";
 import { PlayerControlsProgressBar } from "./PlayerControlsProgressBar/PlayerControlsProgressBar";
