@@ -279,7 +279,7 @@ export const useLottieFactory = <Version extends LottieVersion = LottieVersion.F
       return newState;
     });
 
-    // Autoplay
+    // Direction
     setDirection((prevState) => {
       // Skip update if equal
       if (_initialValues.current?.direction === prevState) {
@@ -361,11 +361,17 @@ export const useLottieFactory = <Version extends LottieVersion = LottieVersion.F
   // Play
   const play = useCallback(() => {
     if (animationItem) {
-      animationItem.play();
+      // If direction is `Left` and the animation is completed, play from the
+      if (animationItem.currentFrame <= 0 && direction === Direction.Left) {
+        animationItem.goToAndPlay(animationItem.totalFrames, true);
+      } else {
+        animationItem.play();
+      }
+
       setState(LottieState.Playing);
       subscriptionManager.notify(LottieSubscription.Play, undefined);
     }
-  }, [animationItem, subscriptionManager, setState]);
+  }, [animationItem, direction, setState, subscriptionManager]);
 
   // Pause
   const pause = useCallback(() => {
