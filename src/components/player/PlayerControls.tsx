@@ -1,5 +1,5 @@
 import React, { FC, useCallback } from "react";
-import { UseLottieFactoryResult, LottieState, PlayerControlsElement } from "../../types";
+import { Direction, LottieState, PlayerControlsElement, UseLottieFactoryResult } from "../../types";
 import Spacer from "../misc/Spacer";
 import { PlayerControlsFramesIndicator } from "./PlayerControlsFramesIndicator";
 import { PlayerControlsProgressBar } from "./PlayerControlsProgressBar/PlayerControlsProgressBar";
@@ -13,7 +13,17 @@ import { StopButton } from "./buttons/StopButton";
 
 export type PlayerControlsProps = Pick<
   UseLottieFactoryResult,
-  "state" | "totalFrames" | "loop" | "play" | "pause" | "stop" | "seek" | "toggleLoop" | "subscribe"
+  | "state"
+  | "totalFrames"
+  | "direction"
+  | "loop"
+  | "play"
+  | "pause"
+  | "stop"
+  | "seek"
+  | "changeDirection"
+  | "toggleLoop"
+  | "subscribe"
 > & {
   show: boolean;
   elements?: PlayerControlsElement[];
@@ -25,12 +35,14 @@ export const PlayerControls: FC<PlayerControlsProps> = (props) => {
     elements,
     state,
     totalFrames,
+    direction,
     loop,
     play,
     pause,
     stop,
     seek,
     toggleLoop,
+    changeDirection,
     subscribe,
   } = props;
 
@@ -120,7 +132,12 @@ export const PlayerControls: FC<PlayerControlsProps> = (props) => {
 
       {shouldShowElement(PlayerControlsElement.Direction) && (
         <>
-          <DirectionButton direction={"right"} onClick={toggleLoop} />
+          <DirectionButton
+            direction={direction}
+            onClick={() =>
+              changeDirection(direction === Direction.Right ? Direction.Left : Direction.Right)
+            }
+          />
           <Spacer size={10} />
         </>
       )}

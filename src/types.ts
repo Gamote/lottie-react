@@ -101,6 +101,7 @@ export type UseLottieFactoryOptions<Version extends LottieVersion = LottieVersio
   src: string | Record<string | number | symbol, unknown>;
   initialValues?: {
     loop?: boolean | number;
+    direction?: Direction;
     autoplay?: boolean;
     segment?: AnimationSegment;
     assetsPath?: string;
@@ -147,10 +148,12 @@ export type UseLottieFactoryResult = {
   pause: () => void;
   stop: () => void;
   toggleLoop: () => void;
+  changeDirection: (direction: Direction) => void;
   setSpeed: (speed: number) => void;
   seek: (value: number | string, isSeekingEnded: boolean) => void;
   subscribe: SubscriptionManager<LottieSubscriptions>["subscribe"];
   totalFrames: number;
+  direction: Direction;
 };
 
 /**
@@ -174,6 +177,14 @@ export enum PlayerControlsElement {
   FullScreen = "fullScreen",
   PlaybackSpeed = "playbackSpeed",
   Direction = "direction",
+}
+
+/**
+ * Options for the playback direction
+ */
+export enum Direction {
+  Right = "right",
+  Left = "left",
 }
 
 /**

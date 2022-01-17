@@ -2,6 +2,7 @@ import { AnimationConfig, AnimationItem, AnimationSegment, LottiePlayer } from "
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import isEqual from "react-fast-compare";
 import {
+  Direction,
   InternalListener,
   LottieRenderer,
   LottieState,
@@ -60,6 +61,9 @@ export const useLottieFactory = <Version extends LottieVersion = LottieVersion.F
   // (State) Initial states converted to local states
   const [loop, setLoop] = useState<boolean | number>(options.initialValues?.loop || false);
   const [autoplay, setAutoplay] = useState<boolean>(options.initialValues?.autoplay || false);
+  const [direction, setDirection] = useState<Direction>(
+    options.initialValues?.direction || Direction.Right,
+  );
   const [initialSegment, setInitialSegment] = useState<AnimationSegment | undefined>(
     options.initialValues?.segment || undefined,
   );
@@ -275,6 +279,19 @@ export const useLottieFactory = <Version extends LottieVersion = LottieVersion.F
       return newState;
     });
 
+    // Autoplay
+    setDirection((prevState) => {
+      // Skip update if equal
+      if (_initialValues.current?.direction === prevState) {
+        return prevState;
+      }
+
+      animationItem.setDirection(_initialValues.current?.direction === Direction.Right ? 1 : -1);
+      return _initialValues.current?.direction === Direction.Right
+        ? _initialValues.current?.direction
+        : Direction.Left;
+    });
+
     // TODO: handle initialSegment change
     // Initial segment
     // useEffect(() => {
@@ -376,7 +393,18 @@ export const useLottieFactory = <Version extends LottieVersion = LottieVersion.F
     }
   }, [animationItem]);
 
-  // Set player speed
+  // Set playback direction
+  const changeDirection = useCallback(
+    (direction: Direction) => {
+      if (animationItem) {
+        setDirection(direction);
+        animationItem?.setDirection(direction === Direction.Right ? 1 : -1);
+      }
+    },
+    [animationItem],
+  );
+
+  // Set player speed TODO: this
   const setSpeed = useCallback(
     (speed: number) => {
       if (animationItem) {
@@ -448,11 +476,13 @@ export const useLottieFactory = <Version extends LottieVersion = LottieVersion.F
     state,
     subscribe: subscriptionManager.subscribe,
     totalFrames: animationItem?.totalFrames ?? 0,
+    direction,
     loop,
     play,
     pause,
     stop,
     toggleLoop,
+    changeDirection,
     setSpeed,
     seek,
   };

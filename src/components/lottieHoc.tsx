@@ -2,9 +2,13 @@ import { LottiePlayer } from "lottie-web";
 import React, { forwardRef, ForwardRefRenderFunction, useImperativeHandle } from "react";
 import { useLottieFactory } from "../hooks/useLottieFactory";
 import { LottieProps, LottieRef, LottieState, LottieVersion } from "../types";
-import { PlayerContainer, PlayerControls, PlayerDisplay } from "./player";
-import { PlayerFailure } from "./player/PlayerFailure";
-import { PlayerLoading } from "./player/PlayerLoading/PlayerLoading";
+import {
+  PlayerFailure,
+  PlayerLoading,
+  PlayerContainer,
+  PlayerControls,
+  PlayerDisplay,
+} from "./player";
 
 /**
  * High Order Component to build Lottie's animation component
@@ -32,8 +36,19 @@ export const lottieHoc = <Version extends LottieVersion>(lottie: LottiePlayer) =
      */
     useImperativeHandle(ref, () => lottieFactoryResult);
 
-    const { state, totalFrames, loop, play, pause, stop, toggleLoop, seek, subscribe } =
-      lottieFactoryResult;
+    const {
+      state,
+      totalFrames,
+      direction,
+      loop,
+      play,
+      pause,
+      stop,
+      toggleLoop,
+      changeDirection,
+      seek,
+      subscribe,
+    } = lottieFactoryResult;
 
     return (
       <PlayerContainer>
@@ -56,12 +71,14 @@ export const lottieHoc = <Version extends LottieVersion>(lottie: LottiePlayer) =
           elements={Array.isArray(controls) ? controls : undefined}
           state={state}
           totalFrames={totalFrames}
+          direction={direction}
           loop={loop}
           play={play}
           pause={pause}
           stop={stop}
           seek={seek}
           toggleLoop={toggleLoop}
+          changeDirection={changeDirection}
           subscribe={subscribe}
         />
       </PlayerContainer>
