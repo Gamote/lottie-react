@@ -1,7 +1,7 @@
 import React, {
   MutableRefObject,
   AnimationEventHandler,
-  ReactElement,
+  ReactElement, RefObject
 } from "react";
 import {
   AnimationConfigWithData,
@@ -19,13 +19,11 @@ export type LottieRefCurrentProps = {
   goToAndStop: (value: number, isFrame?: boolean) => void;
   goToAndPlay: (value: number, isFrame?: boolean) => void;
   setDirection: (direction: AnimationDirection) => void;
-  playSegments: (
-    segments: AnimationSegment | AnimationSegment[],
-    forceFlag?: boolean,
-  ) => void;
+  playSegments: (segments: AnimationSegment | AnimationSegment[], forceFlag?: boolean) => void;
   setSubframe: (useSubFrames: boolean) => void;
   getDuration: (inFrames?: boolean) => number | undefined;
   destroy: () => void;
+  animationContainerRef: RefObject<HTMLDivElement>;
   animationLoaded: boolean;
   animationItem: AnimationItem | undefined;
 };

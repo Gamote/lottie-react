@@ -335,6 +335,7 @@ const useLottie = (
     setSubframe,
     getDuration,
     destroy,
+    animationContainerRef: animationContainer,
     animationLoaded,
     animationItem: animationInstanceRef.current,
   };

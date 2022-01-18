@@ -22,6 +22,7 @@ const Lottie = (props: LottieComponentProps) => {
     setSubframe,
     getDuration,
     destroy,
+    animationContainerRef,
     animationLoaded,
     animationItem,
   } = useLottie(lottieProps, style);
@@ -43,6 +44,7 @@ const Lottie = (props: LottieComponentProps) => {
         setSubframe,
         getDuration,
         destroy,
+        animationContainerRef,
         animationLoaded,
         animationItem,
       };
@@ -50,7 +52,7 @@ const Lottie = (props: LottieComponentProps) => {
   }, [props.lottieRef?.current]);
 
   if (interactivity) {
-    const EnhancedView = useLottieInteractivity({
+    return useLottieInteractivity({
       lottieObj: {
         View,
         play,
@@ -64,13 +66,12 @@ const Lottie = (props: LottieComponentProps) => {
         setSubframe,
         getDuration,
         destroy,
+        animationContainerRef,
         animationLoaded,
         animationItem,
       },
       ...interactivity,
     });
-
-    return EnhancedView;
   }
 
   return View;

@@ -1,5 +1,5 @@
 import { AnimationSegment } from "lottie-web";
-import React, { useEffect, ReactElement, useRef } from "react";
+import React, { useEffect, ReactElement } from "react";
 import { InteractivityProps } from "../types";
 
 // helpers
@@ -256,10 +256,9 @@ const useLottieInteractivity = ({
 }: InteractivityProps): ReactElement => {
   const { animationItem, View } = lottieObj;
 
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  useInitInteractivity({ actions, animationItem, mode, wrapperRef });
+  useInitInteractivity({ actions, animationItem, mode, wrapperRef: lottieObj.animationContainerRef });
 
-  return <div ref={wrapperRef}>{View}</div>;
+  return View;
 };
 
 export default useLottieInteractivity;
