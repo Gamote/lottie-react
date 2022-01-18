@@ -7,4 +7,6 @@ const config = {
   textFontSize: 12,
 };
 
+// TODO: add languages
+
 export default config;
