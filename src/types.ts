@@ -9,9 +9,6 @@ import {
   AnimationEventName,
   AnimationItem,
   AnimationSegment,
-  CanvasRendererConfig,
-  HTMLRendererConfig,
-  SVGRendererConfig,
 } from "lottie-web";
 
 export type LottieRefCurrentProps = {
@@ -35,7 +32,7 @@ export type LottieRefCurrentProps = {
 
 export type LottieRef = MutableRefObject<LottieRefCurrentProps | null>;
 
-export type LottieOptions = AnimationConfigWithData & {
+export type LottieOptions = Omit<AnimationConfigWithData, "container"> & {
   lottieRef?: LottieRef;
   onComplete?: AnimationEventHandler | null;
   onLoopComplete?: AnimationEventHandler | null;
