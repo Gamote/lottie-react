@@ -1,23 +1,56 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import config from "../../config";
 
 export type BaseButtonProps = {
   onClick?: () => void;
-  DropdownContent?: (setShowDropdown: (state: boolean) => void) => JSX.Element;
+  DropdownContent?: (setIsMenuOpen: (state: boolean) => void) => JSX.Element;
 };
 
+/**
+ * Component that wraps a button and provides a menu
+ * TODO: add tooltips
+ */
 export const BaseButton: FC<BaseButtonProps> = ({ children, onClick, DropdownContent }) => {
-  const [showDropdown, setShowDropdown] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    // Do nothing, the menu will never open
+    if (!DropdownContent) {
+      return;
+    }
+
+    const checkIfClickedOutside = (event: MouseEvent) => {
+      // If the menu is open and the clicked target is not within the menu,
+      // then close the menu
+      if (
+        isMenuOpen &&
+        ref.current &&
+        event.target &&
+        !ref.current.contains(event.target as HTMLDivElement)
+      ) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", checkIfClickedOutside);
+
+    return () => {
+      // Cleanup the event listener
+      document.removeEventListener("mousedown", checkIfClickedOutside);
+    };
+  }, [DropdownContent, isMenuOpen]);
 
   return (
     <div
+      ref={ref}
       style={{
         position: "relative",
         display: "inline-block",
         zIndex: 2,
       }}
     >
-      {showDropdown && DropdownContent && (
+      {isMenuOpen && DropdownContent && (
         <div
           style={{
             display: "block",
@@ -31,7 +64,7 @@ export const BaseButton: FC<BaseButtonProps> = ({ children, onClick, DropdownCon
             marginBottom: 43,
           }}
         >
-          {DropdownContent(setShowDropdown)}
+          {DropdownContent(setIsMenuOpen)}
         </div>
       )}
 
@@ -48,7 +81,7 @@ export const BaseButton: FC<BaseButtonProps> = ({ children, onClick, DropdownCon
           cursor: "pointer",
         }}
         onClick={() => {
-          setShowDropdown(!showDropdown);
+          setIsMenuOpen(!isMenuOpen);
           onClick?.();
         }}
       >

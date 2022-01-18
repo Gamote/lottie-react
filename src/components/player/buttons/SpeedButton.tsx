@@ -4,7 +4,7 @@ import { BaseButton } from "../../misc/BaseButton";
 
 export type SpeedButtonProps = {
   speed: number;
-  speeds?: number[];
+  speeds?: number[]; // TODO: add levels to also set labels like: Slow (0.5), Normal (1), Fast (2) etc.
   onClick: (speed: number) => void;
 };
 
