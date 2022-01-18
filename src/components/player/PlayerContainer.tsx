@@ -19,6 +19,7 @@ export const PlayerContainer: FC<PlayerContainerProps> = (props) => {
         minWidth: 0,
         display: "flex",
         flexDirection: "column",
+        backgroundColor: "white",
         ...rest.style,
       }}
     >

@@ -1,5 +1,6 @@
 import React, { CSSProperties, FC, useCallback, useEffect, useMemo, useRef } from "react";
 import { UseLottieFactoryResult, LottieSubscription } from "../../@types";
+import config from "../../config";
 
 export type PlayerFramesIndicatorProps = Pick<
   UseLottieFactoryResult,
@@ -11,8 +12,8 @@ export type PlayerFramesIndicatorProps = Pick<
 const styles: Record<string, CSSProperties> = {
   container: {
     display: "flex",
-    background: "rgb(77 77 77)",
-    fontSize: 12,
+    background: config.darkBackgroundColor,
+    fontSize: config.textFontSize,
     fontWeight: "500",
     color: "white",
     justifyContent: "center",

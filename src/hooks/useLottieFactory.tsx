@@ -64,6 +64,7 @@ export const useLottieFactory = <Version extends LottieVersion = LottieVersion.F
   const [direction, setDirection] = useState<Direction>(
     options.initialValues?.direction || Direction.Right,
   );
+  const [speed, setSpeed] = useState<number>(options.initialValues?.speed || 1);
   const [initialSegment, setInitialSegment] = useState<AnimationSegment | undefined>(
     options.initialValues?.segment || undefined,
   );
@@ -292,6 +293,18 @@ export const useLottieFactory = <Version extends LottieVersion = LottieVersion.F
         : Direction.Left;
     });
 
+    // Direction
+    setSpeed((prevState) => {
+      // Skip update if equal
+      if (_initialValues.current?.speed === prevState) {
+        return prevState;
+      }
+
+      const newState = _initialValues.current?.speed ?? 1;
+      animationItem.setSpeed(newState);
+      return newState;
+    });
+
     // TODO: handle initialSegment change
     // Initial segment
     // useEffect(() => {
@@ -411,9 +424,10 @@ export const useLottieFactory = <Version extends LottieVersion = LottieVersion.F
   );
 
   // Set player speed TODO: this
-  const setSpeed = useCallback(
+  const changeSpeed = useCallback(
     (speed: number) => {
       if (animationItem) {
+        setSpeed(speed);
         animationItem?.setSpeed(speed);
       }
     },
@@ -489,7 +503,8 @@ export const useLottieFactory = <Version extends LottieVersion = LottieVersion.F
     stop,
     toggleLoop,
     changeDirection,
-    setSpeed,
+    speed,
+    changeSpeed,
     seek,
   };
 };

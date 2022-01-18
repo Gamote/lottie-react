@@ -5,6 +5,7 @@ import {
   LottieState,
   PlayerControlsElement,
 } from "../../@types";
+import config from "../../config";
 import Spacer from "../misc/Spacer";
 import { PlayerControlsFramesIndicator } from "./PlayerControlsFramesIndicator";
 import { PlayerControlsProgressBar } from "./PlayerControlsProgressBar/PlayerControlsProgressBar";
@@ -13,7 +14,7 @@ import { FullScreenButton } from "./buttons/FullScreenButton";
 import { LoopButton } from "./buttons/LoopButton";
 import { PauseButton } from "./buttons/PauseButton";
 import { PlayButton } from "./buttons/PlayButton";
-import { PlaybackSpeedButton } from "./buttons/PlaybackSpeedButton";
+import { SpeedButton } from "./buttons/SpeedButton";
 import { StopButton } from "./buttons/StopButton";
 
 export type PlayerControlsProps = Pick<
@@ -28,6 +29,8 @@ export type PlayerControlsProps = Pick<
   | "seek"
   | "changeDirection"
   | "toggleLoop"
+  | "speed"
+  | "changeSpeed"
   | "subscribe"
 > & {
   show: boolean;
@@ -47,6 +50,8 @@ export const PlayerControls: FC<PlayerControlsProps> = (props) => {
     stop,
     seek,
     toggleLoop,
+    speed,
+    changeSpeed,
     changeDirection,
     subscribe,
   } = props;
@@ -81,8 +86,21 @@ export const PlayerControls: FC<PlayerControlsProps> = (props) => {
         paddingRight: 10,
         paddingTop: 10,
         paddingBottom: 10,
+        backgroundColor: config.darkTransparentBackgroundColor,
       }}
     >
+      {/*<div*/}
+      {/*  style={{*/}
+      {/*    position: "absolute",*/}
+      {/*    bottom: 0,*/}
+      {/*    height: 194,*/}
+      {/*    width: "100%",*/}
+      {/*    backgroundImage:*/}
+      {/*      "url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAADCCAYAAACIaaiTAAAAAXNSR0IArs4c6QAAARFJREFUOE9lyNdHBQAAhfHb3nvvuu2997jNe29TJJEkkkgSSSSJJJFEEkkiSfRH5jsP56Xz8PM5gcC/xfCIWBNHiXiTQIlEk0SJZJNCiVRIM+mUyDCZlMgy2ZTIMbmUyDP5lCgwhZQoMsWUKDGllCgz5ZSogEpTRYlqU0OJoKmlRJ2pp0SDaaREk2mmRItppUSbaadEh+mkRJfppnpMLyX6TD8lBswgJYbMMCVGzCglxsw4JSZMiBKTZooS02aGErNmjgqbCCWiZp4SC2aREktmmVqBVViDddiATdiCbdiBXdiDfTiAQziCYziBUziDc7iAS7iCa7iBW7iDe3iAR3iCZ3iBV3iDd/iAT/iCb/iB3z+ciSsN3d7yKAAAAABJRU5ErkJggg==)",*/}
+      {/*    zIndex: 1,*/}
+      {/*  }}*/}
+      {/*/>*/}
+
       {shouldShowElement(PlayerControlsElement.Play) && state !== LottieState.Playing && (
         <>
           <PlayButton onClick={play} />
@@ -149,7 +167,11 @@ export const PlayerControls: FC<PlayerControlsProps> = (props) => {
 
       {shouldShowElement(PlayerControlsElement.PlaybackSpeed) && (
         <>
-          <PlaybackSpeedButton />
+          <SpeedButton
+            speed={speed}
+            speeds={[0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 2]}
+            onClick={changeSpeed}
+          />
           <Spacer size={10} />
         </>
       )}

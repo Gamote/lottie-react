@@ -64,6 +64,7 @@ export type UseLottieFactoryOptions<Version extends LottieVersion = LottieVersio
   initialValues?: {
     loop?: boolean | number;
     direction?: Direction;
+    speed?: number;
     autoplay?: boolean;
     segment?: AnimationSegment;
     assetsPath?: string;
@@ -111,7 +112,8 @@ export type UseLottieFactoryResult = {
   stop: () => void;
   toggleLoop: () => void;
   changeDirection: (direction: Direction) => void;
-  setSpeed: (speed: number) => void;
+  speed: number;
+  changeSpeed: (speed: number) => void;
   seek: (value: number | string, isSeekingEnded: boolean) => void;
   subscribe: SubscriptionManager<LottieSubscriptions>["subscribe"];
   totalFrames: number;

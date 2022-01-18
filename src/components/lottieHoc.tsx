@@ -45,6 +45,8 @@ export const lottieHoc = <Version extends LottieVersion>(lottie: LottiePlayer) =
       pause,
       stop,
       toggleLoop,
+      speed,
+      changeSpeed,
       changeDirection,
       seek,
       subscribe,
@@ -78,6 +80,8 @@ export const lottieHoc = <Version extends LottieVersion>(lottie: LottiePlayer) =
           stop={stop}
           seek={seek}
           toggleLoop={toggleLoop}
+          speed={speed}
+          changeSpeed={changeSpeed}
           changeDirection={changeDirection}
           subscribe={subscribe}
         />
