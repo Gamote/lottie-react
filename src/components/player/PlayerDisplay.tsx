@@ -24,7 +24,7 @@ const _PlayerDisplay: ForwardRefRenderFunction<HTMLDivElement, PlayerDisplayProp
   useEffect(() => {
     if (!ref) {
       logger.warn(
-        "😬 Seems like you forgot to pass the `ref` property to the `PlayerContainer` component.",
+        "😬 Seems like you forgot to pass the `ref` property to the `PlayerDisplay` component.",
       );
     }
   }, [ref]);
