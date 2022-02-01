@@ -9,7 +9,7 @@ const usePreviousState = <T = unknown>(value: T) => {
 
   useEffect(() => {
     ref.current = value;
-  });
+  }, [value]);
 
   return ref.current;
 };
