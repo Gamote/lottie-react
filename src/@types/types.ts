@@ -140,7 +140,9 @@ export type LottieProps<Version extends LottieVersion = LottieVersion.Full> =
   UseLottieFactoryOptions<Version> & {
     controls?: boolean | PlayerControlsElement[];
     LoadingOverlay?: JSX.Element;
-    FailureOverlay?: JSX.Element;
     LoadingOverlayContent?: JSX.Element;
+    loadingMinDisplayTime?: number;
+    loadingFadeOutTime?: number;
+    FailureOverlay?: JSX.Element;
     FailureOverlayContent?: JSX.Element;
   };

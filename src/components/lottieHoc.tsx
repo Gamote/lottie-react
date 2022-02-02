@@ -21,8 +21,10 @@ export const lottieHoc = <Version extends LottieVersion>(lottie: LottiePlayer) =
     const {
       controls,
       LoadingOverlay,
-      FailureOverlay,
       LoadingOverlayContent,
+      loadingMinDisplayTime,
+      loadingFadeOutTime,
+      FailureOverlay,
       FailureOverlayContent,
       ...hookOptions
     } = props;
@@ -56,6 +58,8 @@ export const lottieHoc = <Version extends LottieVersion>(lottie: LottiePlayer) =
       <PlayerContainer>
         <PlayerLoading
           show={state === LottieState.Loading}
+          minDisplayTime={loadingMinDisplayTime}
+          fadeOutTime={loadingFadeOutTime}
           Component={LoadingOverlay}
           Content={LoadingOverlayContent}
         />

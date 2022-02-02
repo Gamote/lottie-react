@@ -7,6 +7,8 @@ export type PlayerLoadingProps = {
   show: boolean;
   Component?: JSX.Element;
   Content?: JSX.Element;
+  minDisplayTime?: number;
+  fadeOutTime?: number;
   color?: string;
   size?: number;
 };
@@ -18,14 +20,12 @@ export const PlayerLoading: FC<PlayerLoadingProps> = ({
   show,
   Component,
   Content,
+  minDisplayTime,
+  fadeOutTime,
   color = config.whiteColor,
   size = 80,
 }) => {
-  if (!show) {
-    return null;
-  }
-
-  if (Component) {
+  if (show && Component) {
     return Component;
   }
 
@@ -40,7 +40,7 @@ export const PlayerLoading: FC<PlayerLoadingProps> = ({
   ));
 
   return (
-    <PlayerOverlay>
+    <PlayerOverlay show={show} minDisplayTime={minDisplayTime} fadeOutTime={fadeOutTime}>
       {Content ? (
         Content
       ) : (

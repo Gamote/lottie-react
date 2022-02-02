@@ -135,12 +135,14 @@ const FullLottieTest: FC = () => {
 
           {showAnimationNumber === 2 && (
             <>
-              <LottieLight
+              <Lottie
                 ref={ref}
                 src={src}
                 initialValues={{ autoplay: true, loop: true }}
                 controls
                 // renderer={LottieRenderer.Canvas}
+                loadingMinDisplayTime={100}
+                loadingFadeOutTime={1000}
                 rendererSettings={{ clearCanvas: true }}
               />
               {/*<Lottie*/}
