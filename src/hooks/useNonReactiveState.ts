@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Custom hook for getting previous value
+ * Use state that is not trigger a rerender
  * @param value
  */
-const usePreviousState = <T = unknown>(value: T) => {
+const useNonReactiveState = <T = unknown>(value: T) => {
   const ref = useRef<T>();
 
   useEffect(() => {
@@ -14,4 +14,4 @@ const usePreviousState = <T = unknown>(value: T) => {
   return ref.current;
 };
 
-export default usePreviousState;
+export default useNonReactiveState;

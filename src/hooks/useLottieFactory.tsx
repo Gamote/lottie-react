@@ -17,7 +17,7 @@ import getNumberFromNumberOrPercentage from "../utils/getNumberFromNumberOrPerce
 import logger from "../utils/logger";
 import normalizeAnimationSource from "../utils/normalizeAnimationSource";
 import useCallbackRef from "./useCallbackRef";
-import useLottieState from "./useLottieState";
+import useStateWithPrevious from "./useStateWithPrevious";
 
 /**
  * Lottie's animation factory hook
@@ -46,7 +46,7 @@ export const useLottieFactory = <Version extends LottieVersion = LottieVersion.F
   const subscriptionManager = useMemo(() => new SubscriptionManager<LottieSubscriptions>(), []);
 
   // (State) Animation's state
-  const { state, setState } = useLottieState({
+  const { state, setState } = useStateWithPrevious<LottieState>({
     initialState: LottieState.Loading,
     onChange: (previousPlayerState, newPlayerState) => {
       // Let the subscribers know about the new state
