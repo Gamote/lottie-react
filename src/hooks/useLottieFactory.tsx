@@ -37,6 +37,7 @@ export const useLottieFactory = <Version extends LottieVersion = LottieVersion.F
   // By using a callback ref, a rerender will be trigger when its value changed
   // this way the consumer have the option to set the container, and we know
   // when, and if, the animation should be (re)loaded
+  // TODO: can't we use just `useState()`
   const { ref: containerRef, setRef: setContainerRef } = useCallbackRef<HTMLDivElement>();
 
   // (State) Animation instance
