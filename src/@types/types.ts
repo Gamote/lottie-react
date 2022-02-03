@@ -143,6 +143,8 @@ export type LottieProps<Version extends LottieVersion = LottieVersion.Full> =
     LoadingOverlayContent?: JSX.Element;
     loadingMinDisplayTime?: number;
     loadingFadeOutTime?: number;
+    disableLoading?: boolean;
     FailureOverlay?: JSX.Element;
     FailureOverlayContent?: JSX.Element;
+    disableFailure?: boolean;
   };
