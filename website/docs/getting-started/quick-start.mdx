@@ -2,15 +2,14 @@
 sidebar_position: 1
 ---
 
-import BrowserWindow from '@site/src/components/BrowserWindow/BrowserWindow';
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 
 # Quick Start
 
 A 2-minute quickstart guide on how to install and use `lottie-react`. For additional details and explanations, check out the other sections.
 
-## Installation 
+## Installation
 
 ### Add dependencies
 
@@ -56,17 +55,17 @@ npm i lottie-react
 </TabItem>
 </Tabs>
 
-
 ## Usage
 
 Now that you have installed `lottie-react` you can use it with **local** or **remove** animation `.json` files.
 
 ```mdx-code-block
+import BrowserWindow from '@site/src/components/BrowserWindow/BrowserWindow';
 import Lottie from "lottie-react";
 import groovyWalkAnimation from "./../../static/assets/animations/groovyWalk.json";
 
 <BrowserWindow bodyHeight={200}>
-    <Lottie source={groovyWalkAnimation} />
+    <Lottie src={groovyWalkAnimation} initialValues={{ autoplay: true, loop: true }} />
 </BrowserWindow>
 ```
 
@@ -77,7 +76,7 @@ import groovyWalkAnimation from "./../../static/assets/animations/groovyWalk.jso
 import Lottie from "lottie-react";
 import animation from "./assets/animation.json";
 
-const MyApp = () => <Lottie source={animation} />
+const MyApp = () => <Lottie source={animation} />;
 
 export default MyApp;
 ```
