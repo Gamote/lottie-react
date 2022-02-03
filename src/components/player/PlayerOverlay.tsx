@@ -12,7 +12,7 @@ export type PlayerOverlayProps = DetailedHTMLProps<
    * Minimum time to display the loading screen, helpful when the loading
    * is really fast, and we want to avoid the blinking effect
    *
-   * Value in milliseconds, default 100
+   * Value in milliseconds, default 0
    */
   minShowTime?: number | null;
   /**
@@ -31,7 +31,7 @@ export type PlayerOverlayProps = DetailedHTMLProps<
 export const PlayerOverlay: FC<PlayerOverlayProps> = ({
   children,
   show: _shouldShow,
-  minShowTime = 100,
+  minShowTime = 0,
   fadeOutAnimationTime = 600,
   style,
   ...rest

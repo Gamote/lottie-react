@@ -147,8 +147,8 @@ const FullLottieTest: FC = () => {
                 initialValues={{ autoplay: true, loop: true }}
                 controls
                 renderer={LottieRenderer.Svg}
-                loadingMinDisplayTime={100}
-                loadingFadeOutTime={400}
+                // loadingMinDisplayTime={100}
+                loadingFadeOutTime={600}
                 // disableLoading={true}
                 // disableFailure={true}
                 // rendererSettings={{ clearCanvas: true }}
