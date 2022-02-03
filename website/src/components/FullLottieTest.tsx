@@ -66,18 +66,22 @@ const FullLottieTest: FC = () => {
 
   // Change source
   useEffect(() => {
-    setTimeout(() => {
+    const cancel = setTimeout(() => {
       logger.info("> Changing the animation source");
       setSrc("https://assets1.lottiefiles.com/packages/lf20_fgltupfx.json");
-    }, 1400);
+    }, 3000);
+
+    return () => clearTimeout(cancel);
   }, []);
 
   // Change test text
   useEffect(() => {
-    setTimeout(() => {
+    const cancel = setTimeout(() => {
       logger.info("> Changing the test text");
       setTestText("New value!!!");
     }, 4000);
+
+    return () => clearTimeout(cancel);
   }, []);
 
   // Change loop
@@ -98,10 +102,12 @@ const FullLottieTest: FC = () => {
 
   // User `ref`
   useEffect(() => {
-    setTimeout(() => {
+    const cancel = setTimeout(() => {
       logger.info("> Using the ref to pause");
       // ref.current.pause();
     }, 4500);
+
+    return () => clearTimeout(cancel);
   }, []);
 
   const subscriptions = useMemo<Partial<LottieSubscriptions>>(
@@ -141,8 +147,8 @@ const FullLottieTest: FC = () => {
                 initialValues={{ autoplay: true, loop: true }}
                 controls
                 renderer={LottieRenderer.Svg}
-                loadingMinDisplayTime={100}
-                loadingFadeOutTime={1000}
+                loadingMinDisplayTime={0}
+                loadingFadeOutTime={0}
                 // rendererSettings={{ clearCanvas: true }}
               />
               {/*<Lottie*/}

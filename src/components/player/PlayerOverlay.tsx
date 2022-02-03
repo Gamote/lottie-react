@@ -1,5 +1,7 @@
 import React, { DetailedHTMLProps, FC, HTMLAttributes, useEffect, useState } from "react";
 import "./PlayerOverlay.less";
+import useStateWithPrevious from "../../hooks/useStateWithPrevious";
+import { useTimeout } from "../../hooks/useTimeout";
 
 export type PlayerOverlayProps = DetailedHTMLProps<
   HTMLAttributes<HTMLDivElement>,
@@ -7,43 +9,93 @@ export type PlayerOverlayProps = DetailedHTMLProps<
 > & {
   show: boolean;
   /**
-   * In milliseconds, default 100
+   * Minimum time to display the loading screen, helpful when the loading
+   * is really fast, and we want to avoid the blinking effect
+   *
+   * Value in milliseconds, default 100
    */
-  minDisplayTime?: number | null;
+  minShowTime?: number | null;
   /**
-   * In milliseconds, default 300
+   * Time of the fadeout animation
+   *
+   * Value milliseconds, default 600
    */
-  fadeOutTime?: number | null;
+  fadeOutAnimationTime?: number | null;
 };
 
 /**
  * Wrap children components within an absolute div with center alignment
+ *
+ * TODO: remove all styling for when user is specifying the content
  */
 export const PlayerOverlay: FC<PlayerOverlayProps> = ({
   children,
-  show: shouldShow,
-  minDisplayTime = 100,
-  fadeOutTime = 600, // ! TODO: doesn't work with `0`
+  show: _shouldShow,
+  minShowTime = 100,
+  fadeOutAnimationTime = 600,
   style,
   ...rest
 }) => {
-  const [show, setShow] = useState(shouldShow);
-  const [timeoutElapsed, setTimeoutElapsed] = useState(!minDisplayTime);
+  const {
+    previousState: previousShouldShow,
+    state: shouldShow,
+    setState: setShouldShow,
+  } = useStateWithPrevious({ initialState: _shouldShow });
+  const [show, setShow] = useState(_shouldShow);
 
-  // TODO: restart the timeout when the `shouldShow` change
+  /**
+   * Listen for the `_shouldShow` changes and update any dependent state
+   */
   useEffect(() => {
-    if (!minDisplayTime) {
-      setTimeoutElapsed(true);
-      return;
+    setShouldShow((prevState) => {
+      // Skip update if equal
+      if (_shouldShow === prevState) {
+        return prevState;
+      }
+
+      // If we should show after it was hidden, set the internal show to `true`
+      if (_shouldShow) {
+        setShow(true);
+      }
+
+      return _shouldShow;
+    });
+  }, [_shouldShow, setShouldShow]);
+
+  /**
+   * Start the timeout on mount
+   */
+  const { isReady, set } = useTimeout(() => {
+    // Hide the overlay if the timeout is done and there's no animation
+    if (!fadeOutAnimationTime) {
+      onAnimationEnd();
     }
+  }, minShowTime ?? 100);
 
-    const _timeout = setTimeout(() => setTimeoutElapsed(true), minDisplayTime);
+  /**
+   * Restart the timer when `shouldShow` became `true` from `false`
+   */
+  useEffect(
+    () => {
+      // If we need to show the overlay, it was hidden before and a minimum show
+      // timeout time was specified, set the timeout unless it's not pending already
+      if (shouldShow && shouldShow !== previousShouldShow && minShowTime && isReady !== false) {
+        set();
+      } else if (!shouldShow && show && !fadeOutAnimationTime && isReady !== false) {
+        onAnimationEnd();
+      }
+    },
 
-    return () => {
-      clearTimeout(_timeout);
-    };
-  }, [minDisplayTime]);
+    // * We are disabling the `exhaustive-deps` here because we want to
+    // * (re)initialise only when the `shouldShow` value change
+    // ! DON'T CHANGE because we will end up having the "Maximum update depth exceeded" error
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [shouldShow],
+  );
 
+  /**
+   * Hide the overlay if we shouldn't display it
+   */
   const onAnimationEnd = () => {
     if (!shouldShow) {
       setShow(false);
@@ -63,12 +115,10 @@ export const PlayerOverlay: FC<PlayerOverlayProps> = ({
         backgroundColor: "#007A87",
         zIndex: 3,
         ...style,
-        // TODO: think about `fadeInTime` for when you change between animation files
-        animation: fadeOutTime
-          ? `player-overlay-fade-${!shouldShow && timeoutElapsed ? "out" : ""} ${
-              fadeOutTime / 1000
-            }s`
-          : undefined,
+        animation:
+          fadeOutAnimationTime && isReady !== false
+            ? `player-overlay-fade-${shouldShow ? "" : "out"} ${fadeOutAnimationTime / 1000}s`
+            : undefined,
       }}
       onAnimationEnd={onAnimationEnd}
     >

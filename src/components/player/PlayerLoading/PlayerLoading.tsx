@@ -40,7 +40,7 @@ export const PlayerLoading: FC<PlayerLoadingProps> = ({
   ));
 
   return (
-    <PlayerOverlay show={show} minDisplayTime={minDisplayTime} fadeOutTime={fadeOutTime}>
+    <PlayerOverlay show={show} minShowTime={minDisplayTime} fadeOutAnimationTime={fadeOutTime}>
       {Content ? (
         Content
       ) : (
