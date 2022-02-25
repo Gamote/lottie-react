@@ -103,6 +103,7 @@ export type UseLottieFactoryOptions<Version extends LottieVersion = LottieVersio
  * Object returned by `useLottieFactory()`
  */
 export type UseLottieFactoryResult = {
+  containerRef: RefObject<HTMLDivElement>;
   setContainerRef: RefCallback<HTMLDivElement>;
   animationItem: AnimationItem | null;
   state: LottieState;
