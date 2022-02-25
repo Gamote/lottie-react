@@ -33,12 +33,17 @@ type FullscreenInfo = null | {
 };
 
 /**
+ * Enrich `documents` type with property that are not yet defined
+ */
+export const extendedDocument: ExtendedDocument = document;
+
+/**
  * By getting the info through this method we increase the
  * Fullscreen API support by using vendor prefixed properties
+ *
+ * TODO: should we use the `extendedDocument` if `ref` is `undefined`
  */
 export const getFullscreenInfo = (ref?: RefObject<ExtendedElement>): FullscreenInfo => {
-  const extendedDocument: ExtendedDocument = document;
-
   if (!ref?.current) {
     return null;
   }
