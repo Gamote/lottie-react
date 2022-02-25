@@ -1,5 +1,5 @@
 import { LottiePlayer } from "lottie-web";
-import React, { forwardRef, ForwardRefRenderFunction, useImperativeHandle } from "react";
+import React, { forwardRef, ForwardRefRenderFunction, useImperativeHandle, useRef } from "react";
 import { LottieProps, LottieRef, LottieState, LottieVersion } from "../@types";
 import { useLottieFactory } from "../hooks/useLottieFactory";
 import {
@@ -31,6 +31,7 @@ export const lottieHoc = <Version extends LottieVersion>(lottie: LottiePlayer) =
       ...hookOptions
     } = props;
 
+    // Initialise Lottie
     const { setContainerRef, ...lottieFactoryResult } = useLottieFactory<Version>(lottie, {
       ...hookOptions,
     });
@@ -39,6 +40,11 @@ export const lottieHoc = <Version extends LottieVersion>(lottie: LottiePlayer) =
      * Make the hook variables/methods available through the provided 'lottieRef'
      */
     useImperativeHandle(ref, () => lottieFactoryResult);
+
+    /**
+     * Ref to the {@link Element} that we want to be used by the Fullscreen API
+     */
+    const fullscreenElementRef = useRef<HTMLDivElement>(null);
 
     const {
       state,
@@ -57,7 +63,7 @@ export const lottieHoc = <Version extends LottieVersion>(lottie: LottiePlayer) =
     } = lottieFactoryResult;
 
     return (
-      <PlayerContainer>
+      <PlayerContainer ref={fullscreenElementRef}>
         <PlayerLoading
           show={!disableLoading && state === LottieState.Loading}
           minDisplayTime={loadingMinDisplayTime}
@@ -75,6 +81,7 @@ export const lottieHoc = <Version extends LottieVersion>(lottie: LottiePlayer) =
         <PlayerDisplay ref={setContainerRef} />
 
         <PlayerControls
+          fullscreenElementRef={fullscreenElementRef}
           show={state !== LottieState.Loading && state !== LottieState.Failure && !!controls}
           elements={Array.isArray(controls) ? controls : undefined}
           state={state}

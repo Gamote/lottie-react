@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from "react";
+import React, { FC, RefObject, useCallback } from "react";
 import {
   UseLottieFactoryResult,
   Direction,
@@ -6,11 +6,12 @@ import {
   PlayerControlsElement,
 } from "../../@types";
 import config from "../../config";
+import { useFullscreen } from "../../hooks/useFullscreen";
 import Spacer from "../misc/Spacer";
 import { PlayerControlsFramesIndicator } from "./PlayerControlsFramesIndicator";
 import { PlayerControlsProgressBar } from "./PlayerControlsProgressBar/PlayerControlsProgressBar";
 import { DirectionButton } from "./buttons/DirectionButton";
-import { FullScreenButton } from "./buttons/FullScreenButton";
+import { FullscreenButton } from "./buttons/FullscreenButton";
 import { LoopButton } from "./buttons/LoopButton";
 import { PauseButton } from "./buttons/PauseButton";
 import { PlayButton } from "./buttons/PlayButton";
@@ -34,11 +35,13 @@ export type PlayerControlsProps = Pick<
   | "subscribe"
 > & {
   show: boolean;
+  fullscreenElementRef?: RefObject<Element>;
   elements?: PlayerControlsElement[];
 };
 
 export const PlayerControls: FC<PlayerControlsProps> = (props) => {
   const {
+    fullscreenElementRef,
     show,
     elements,
     state,
@@ -55,6 +58,9 @@ export const PlayerControls: FC<PlayerControlsProps> = (props) => {
     changeDirection,
     subscribe,
   } = props;
+
+  // Initialise the hook for using the Fullscreen API
+  const { isFullscreen, toggleFullscreen } = useFullscreen(fullscreenElementRef);
 
   /**
    * Checks if the consumer have any preference on what elements we should display
@@ -89,18 +95,6 @@ export const PlayerControls: FC<PlayerControlsProps> = (props) => {
         backgroundColor: config.darkTransparentBackgroundColor,
       }}
     >
-      {/*<div*/}
-      {/*  style={{*/}
-      {/*    position: "absolute",*/}
-      {/*    bottom: 0,*/}
-      {/*    height: 194,*/}
-      {/*    width: "100%",*/}
-      {/*    backgroundImage:*/}
-      {/*      "url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAADCCAYAAACIaaiTAAAAAXNSR0IArs4c6QAAARFJREFUOE9lyNdHBQAAhfHb3nvvuu2997jNe29TJJEkkkgSSSSJJJFEEkkiSfRH5jsP56Xz8PM5gcC/xfCIWBNHiXiTQIlEk0SJZJNCiVRIM+mUyDCZlMgy2ZTIMbmUyDP5lCgwhZQoMsWUKDGllCgz5ZSogEpTRYlqU0OJoKmlRJ2pp0SDaaREk2mmRItppUSbaadEh+mkRJfppnpMLyX6TD8lBswgJYbMMCVGzCglxsw4JSZMiBKTZooS02aGErNmjgqbCCWiZp4SC2aREktmmVqBVViDddiATdiCbdiBXdiDfTiAQziCYziBUziDc7iAS7iCa7iBW7iDe3iAR3iCZ3iBV3iDd/iAT/iCb/iB3z+ciSsN3d7yKAAAAABJRU5ErkJggg==)",*/}
-      {/*    zIndex: 1,*/}
-      {/*  }}*/}
-      {/*/>*/}
-
       {shouldShowElement(PlayerControlsElement.Play) && state !== LottieState.Playing && (
         <>
           <PlayButton onClick={play} />
@@ -176,8 +170,8 @@ export const PlayerControls: FC<PlayerControlsProps> = (props) => {
         </>
       )}
 
-      {shouldShowElement(PlayerControlsElement.FullScreen) && (
-        <FullScreenButton isFullScreen={false} />
+      {shouldShowElement(PlayerControlsElement.Fullscreen) && (
+        <FullscreenButton isFullscreen={isFullscreen} onClick={() => toggleFullscreen?.()} />
       )}
     </div>
   );

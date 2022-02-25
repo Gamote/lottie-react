@@ -1,16 +1,25 @@
-import React, { DetailedHTMLProps, FC, HTMLAttributes } from "react";
+import React, {
+  DetailedHTMLProps,
+  forwardRef,
+  ForwardRefRenderFunction,
+  HTMLAttributes,
+} from "react";
 
 export type PlayerContainerProps = DetailedHTMLProps<
   HTMLAttributes<HTMLDivElement>,
   HTMLDivElement
 >;
 
-export const PlayerContainer: FC<PlayerContainerProps> = (props) => {
+export const _PlayerContainer: ForwardRefRenderFunction<HTMLDivElement, PlayerContainerProps> = (
+  props,
+  ref,
+) => {
   const { children, ...rest } = props;
 
   return (
     <div
       {...rest}
+      ref={ref}
       style={{
         position: "relative",
         width: "100%",
@@ -27,3 +36,5 @@ export const PlayerContainer: FC<PlayerContainerProps> = (props) => {
     </div>
   );
 };
+
+export const PlayerContainer = forwardRef(_PlayerContainer);
