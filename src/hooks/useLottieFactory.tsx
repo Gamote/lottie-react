@@ -17,6 +17,7 @@ import getNumberFromNumberOrPercentage from "../utils/getNumberFromNumberOrPerce
 import logger from "../utils/logger";
 import normalizeAnimationSource from "../utils/normalizeAnimationSource";
 import useCallbackRef from "./useCallbackRef";
+import { useLottieInteractivity } from "./useLottieInteractivity";
 import useStateWithPrevious from "./useStateWithPrevious";
 
 /**
@@ -26,7 +27,7 @@ import useStateWithPrevious from "./useStateWithPrevious";
  */
 export const useLottieFactory = <Version extends LottieVersion = LottieVersion.Full>(
   lottie: LottiePlayer,
-  { src, enableReinitialize = false, ...rest }: UseLottieFactoryOptions<Version>,
+  { src, enableReinitialize = false, interactivity, ...rest }: UseLottieFactoryOptions<Version>,
 ): UseLottieFactoryResult => {
   const options = {
     enableReinitialize,
@@ -74,6 +75,13 @@ export const useLottieFactory = <Version extends LottieVersion = LottieVersion.F
   // By keeping this we can pause the animation while the seeking action is
   // happening and return to it immediately, offering a smooth experience
   const [stateBeforeSeeking, setStateBeforeSeeking] = useState<LottieState | null>(null);
+
+  // Interactivity TODO: finish implementation before any release
+  useLottieInteractivity({
+    containerRef,
+    animationItem,
+    options: interactivity,
+  });
 
   /**
    * (Re)initialize the animation when the container and/or source change

@@ -7,6 +7,7 @@ import {
   SVGRendererConfig,
 } from "lottie-web";
 import { AnimationEventHandler, RefCallback, RefObject } from "react";
+import { InteractivityOptions } from "../hooks/useLottieInteractivity";
 import { SubscriptionManager } from "../utils/SubscriptionManager";
 import {
   Direction,
@@ -72,6 +73,8 @@ export type UseLottieFactoryOptions<Version extends LottieVersion = LottieVersio
   enableReinitialize?: boolean;
   debug?: boolean;
   subscriptions?: Partial<LottieSubscriptions>;
+  // TODO: define the right type when the functionality is implemented
+  interactivity: InteractivityOptions;
 
   // TODO: add support for the following
   // audioFactory?(assetPath: string): {
