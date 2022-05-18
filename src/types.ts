@@ -42,16 +42,15 @@ export type LottieOptions = Omit<AnimationConfigWithData, "container"> & {
   onLoadedImages?: AnimationEventHandler | null;
   onDOMLoaded?: AnimationEventHandler | null;
   onDestroy?: AnimationEventHandler | null;
-} & React.HTMLProps<HTMLDivElement>;
+} & Omit<React.HTMLProps<HTMLDivElement>, 'loop'>;
 
 export type PartialLottieOptions = Omit<LottieOptions, "animationData"> & {
   animationData?: LottieOptions["animationData"];
 };
 
-export type LottieComponentProps = LottieOptions &
-  React.HTMLProps<HTMLDivElement> & {
-    interactivity?: Omit<InteractivityProps, "lottieObj">;
-  };
+export type LottieComponentProps = LottieOptions & {
+  interactivity?: Omit<InteractivityProps, "lottieObj">;
+};
 
 export type PartialLottieComponentProps = Omit<
   LottieComponentProps,
