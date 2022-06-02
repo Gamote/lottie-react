@@ -149,6 +149,7 @@ const useLottie = (
    */
   const destroy = (): void => {
     animationInstanceRef.current?.destroy();
+    return;
   };
 
   /*
