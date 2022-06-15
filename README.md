@@ -16,13 +16,13 @@ Install **react**, **react-dom** if you don’t have them already:
 _**Note:** This library is using React hooks so the minimum version required for both react and react-dom is 16.8.0._
 
 ```shell
-npm i react@^16.8.0 react-dom@^16.8.0
+yarn add react@^16.8.0 react-dom@^16.8.0
 ```
 
 Install **lottie-react** using npm:
 
 ```shell
-npm i lottie-react
+yarn add lottie-react
 ```
 
 ## Usage
