@@ -4,7 +4,7 @@
 
 This project is meant to give developers full control over **[Lottie](https://airbnb.design/lottie/)** instance with minimal implementation by wrapping **[lottie-web](https://github.com/airbnb/lottie-web)** in a Component or Hook that can be easily used in **React** applications.
 
-> 👩‍💻 `v3` is under development and is planning to bring a lot of features and improvements. But unfortunately, at the moment all the maintainers are super busy with work related projects. You can check out the progress unde the `v3` branch. And of course, you are encouraged to contribute. :)
+> 👩‍💻 `v3` is under development and is planning to bring a lot of features and improvements. But unfortunately, at the moment all the maintainers are super busy with work related projects. You can check out the progress under the `v3` branch. And of course, you are encouraged to contribute. :)
 
 > 🙋‍♂️ Are you using `lottie-react` in production? Please send us a message with your website, feature requests and recommendations at: [contact@gamote.ro](mailto:contact@gamote.ro).
 
