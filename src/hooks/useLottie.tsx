@@ -182,14 +182,22 @@ const useLottie = (
     animationInstanceRef.current = lottie.loadAnimation(config);
 
     setAnimationLoaded(!!animationInstanceRef.current);
+
+    // Return a function that will clean up
+    return () => {
+      animationInstanceRef.current?.destroy();
+      animationInstanceRef.current = undefined;
+    }
   };
 
   /**
-   * Initialize and listen for changes that affect the animation state
+   * (Re)Initialize when animation data changed
    */
-  // Reinitialize when animation data changed
   useEffect(() => {
-    loadAnimation();
+    const onUnmount = loadAnimation();
+
+    // Clean up on unmount
+    return () => onUnmount?.();
   }, [animationData]);
 
   // Update the loop state
