@@ -50,7 +50,7 @@ export type LottieOptions = Omit<
   onLoadedImages?: AnimationEventHandler | null;
   onDOMLoaded?: AnimationEventHandler | null;
   onDestroy?: AnimationEventHandler | null;
-} & Omit<React.HTMLProps<HTMLDivElement>, "loop">;
+} & Omit<React.HTMLProps<HTMLDivElement>, 'loop'>;
 
 export type PartialLottieOptions = Omit<LottieOptions, "animationData"> & {
   animationData?: LottieOptions["animationData"];
@@ -73,10 +73,9 @@ export type InteractivityProps = {
   mode: "scroll" | "cursor";
 };
 
-export type LottieComponentProps = LottieOptions &
-  React.HTMLProps<HTMLDivElement> & {
-    interactivity?: Omit<InteractivityProps, "lottieObj">;
-  };
+export type LottieComponentProps = LottieOptions & {
+  interactivity?: Omit<InteractivityProps, "lottieObj">;
+};
 
 export type PartialLottieComponentProps = Omit<
   LottieComponentProps,
