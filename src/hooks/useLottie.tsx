@@ -222,7 +222,7 @@ const useLottie = (
 
     // When null should reset to default animation length
     if (!initialSegment) {
-      animationInstanceRef.current.resetSegments(false);
+      animationInstanceRef.current.resetSegments(true);
       return;
     }
 
