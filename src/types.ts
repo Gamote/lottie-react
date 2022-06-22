@@ -34,7 +34,11 @@ export type LottieRefCurrentProps = {
 
 export type LottieRef = MutableRefObject<LottieRefCurrentProps | null>;
 
-export type LottieOptions = Omit<AnimationConfigWithData, "container"> & {
+export type LottieOptions = Omit<
+  AnimationConfigWithData,
+  "container" | "animationData"
+> & {
+  animationData: unknown;
   lottieRef?: LottieRef;
   onComplete?: AnimationEventHandler | null;
   onLoopComplete?: AnimationEventHandler | null;
