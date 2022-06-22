@@ -12,3 +12,5 @@ node_modules
 /.docz
 /docs-dist
 build
+
+.DS_Store
