@@ -40,7 +40,7 @@ export const useInitInteractivity = ({
   useEffect(() => {
     const wrapper = wrapperRef.current;
 
-    if (!wrapper || !animationItem) {
+    if (!wrapper || !animationItem || !actions.length) {
       return;
     }
 
@@ -132,7 +132,7 @@ export const useInitInteractivity = ({
       return () => {
         document.removeEventListener("scroll", scrollHandler);
       };
-    }
+    };
 
     const cursorModeHandler = () => {
       const handleCursor = (_x: number, _y: number) => {
@@ -238,7 +238,7 @@ export const useInitInteractivity = ({
         wrapper.removeEventListener("mousemove", mouseMoveHandler);
         wrapper.removeEventListener("mouseout", mouseOutHandler);
       };
-    }
+    };
 
     switch (mode) {
       case "scroll":
@@ -246,6 +246,7 @@ export const useInitInteractivity = ({
       case "cursor":
         return cursorModeHandler();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, animationItem]);
 };
 
@@ -254,9 +255,14 @@ const useLottieInteractivity = ({
   mode,
   lottieObj,
 }: InteractivityProps): ReactElement => {
-  const { animationItem, View } = lottieObj;
+  const { animationItem, View, animationContainerRef } = lottieObj;
 
-  useInitInteractivity({ actions, animationItem, mode, wrapperRef: lottieObj.animationContainerRef });
+  useInitInteractivity({
+    actions,
+    animationItem,
+    mode,
+    wrapperRef: animationContainerRef,
+  });
 
   return View;
 };
