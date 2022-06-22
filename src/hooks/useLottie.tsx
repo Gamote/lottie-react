@@ -149,7 +149,10 @@ const useLottie = (
    */
   const destroy = (): void => {
     animationInstanceRef.current?.destroy();
-    return;
+
+    // Removing the reference to the animation so separate cleanups are skipped.
+    // Without it the internal `lottie-react` instance throws exceptions as it already cleared itself on destroy.
+    animationInstanceRef.current = undefined;
   };
 
   /*
