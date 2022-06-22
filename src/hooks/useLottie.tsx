@@ -1,3 +1,9 @@
+import lottie, {
+  AnimationConfigWithData,
+  AnimationItem,
+  AnimationDirection,
+  AnimationSegment,
+} from "lottie-web";
 import React, {
   CSSProperties,
   useEffect,
@@ -5,12 +11,6 @@ import React, {
   ReactElement,
   useState,
 } from "react";
-import lottie, {
-  AnimationConfigWithData,
-  AnimationItem,
-  AnimationDirection,
-  AnimationSegment,
-} from "lottie-web";
 import {
   Listener,
   LottieOptions,
@@ -140,9 +140,8 @@ const useLottie = (
    * Get animation duration
    * @param inFrames
    */
-  const getDuration = (inFrames?: boolean): number | undefined => {
-    return animationInstanceRef.current?.getDuration(inFrames);
-  };
+  const getDuration = (inFrames?: boolean): number | undefined =>
+    animationInstanceRef.current?.getDuration(inFrames);
 
   /**
    * Destroy animation
@@ -187,7 +186,7 @@ const useLottie = (
     return () => {
       animationInstanceRef.current?.destroy();
       animationInstanceRef.current = undefined;
-    }
+    };
   };
 
   /**
@@ -198,6 +197,7 @@ const useLottie = (
 
     // Clean up on unmount
     return () => onUnmount?.();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [animationData]);
 
   // Update the loop state
