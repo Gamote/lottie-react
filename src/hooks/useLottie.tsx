@@ -198,20 +198,7 @@ const useLottie = (
     // Clean up on unmount
     return () => onUnmount?.();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [animationData]);
-
-  // Update the loop state
-  useEffect(() => {
-    if (!animationInstanceRef.current) {
-      return;
-    }
-
-    animationInstanceRef.current.loop = !!loop;
-
-    if (loop && animationInstanceRef.current.isPaused) {
-      animationInstanceRef.current.play();
-    }
-  }, [loop]);
+  }, [animationData, loop]);
 
   // Update the autoplay state
   useEffect(() => {
