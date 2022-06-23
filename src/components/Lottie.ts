@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { LottieComponentProps } from "../types";
 import useLottie from "../hooks/useLottie";
 import useLottieInteractivity from "../hooks/useLottieInteractivity";
+import { LottieComponentProps } from "../types";
 
 const Lottie = (props: LottieComponentProps) => {
   const { style, interactivity, ...lottieProps } = props;
@@ -49,32 +49,30 @@ const Lottie = (props: LottieComponentProps) => {
         animationItem,
       };
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.lottieRef?.current]);
 
-  if (interactivity) {
-    return useLottieInteractivity({
-      lottieObj: {
-        View,
-        play,
-        stop,
-        pause,
-        setSpeed,
-        goToAndStop,
-        goToAndPlay,
-        setDirection,
-        playSegments,
-        setSubframe,
-        getDuration,
-        destroy,
-        animationContainerRef,
-        animationLoaded,
-        animationItem,
-      },
-      ...interactivity,
-    });
-  }
-
-  return View;
+  return useLottieInteractivity({
+    lottieObj: {
+      View,
+      play,
+      stop,
+      pause,
+      setSpeed,
+      goToAndStop,
+      goToAndPlay,
+      setDirection,
+      playSegments,
+      setSubframe,
+      getDuration,
+      destroy,
+      animationContainerRef,
+      animationLoaded,
+      animationItem,
+    },
+    actions: interactivity?.actions ?? [],
+    mode: interactivity?.mode ?? "scroll",
+  });
 };
 
 export default Lottie;

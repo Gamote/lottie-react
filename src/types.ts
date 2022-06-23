@@ -1,8 +1,3 @@
-import React, {
-  MutableRefObject,
-  AnimationEventHandler,
-  ReactElement, RefObject
-} from "react";
 import {
   AnimationConfigWithData,
   AnimationDirection,
@@ -10,6 +5,12 @@ import {
   AnimationItem,
   AnimationSegment,
 } from "lottie-web";
+import React, {
+  MutableRefObject,
+  AnimationEventHandler,
+  ReactElement,
+  RefObject,
+} from "react";
 
 export type LottieRefCurrentProps = {
   play: () => void;
@@ -19,7 +20,10 @@ export type LottieRefCurrentProps = {
   goToAndStop: (value: number, isFrame?: boolean) => void;
   goToAndPlay: (value: number, isFrame?: boolean) => void;
   setDirection: (direction: AnimationDirection) => void;
-  playSegments: (segments: AnimationSegment | AnimationSegment[], forceFlag?: boolean) => void;
+  playSegments: (
+    segments: AnimationSegment | AnimationSegment[],
+    forceFlag?: boolean,
+  ) => void;
   setSubframe: (useSubFrames: boolean) => void;
   getDuration: (inFrames?: boolean) => number | undefined;
   destroy: () => void;
@@ -30,7 +34,11 @@ export type LottieRefCurrentProps = {
 
 export type LottieRef = MutableRefObject<LottieRefCurrentProps | null>;
 
-export type LottieOptions = Omit<AnimationConfigWithData, "container"> & {
+export type LottieOptions = Omit<
+  AnimationConfigWithData,
+  "container" | "animationData"
+> & {
+  animationData: unknown;
   lottieRef?: LottieRef;
   onComplete?: AnimationEventHandler | null;
   onLoopComplete?: AnimationEventHandler | null;
@@ -46,6 +54,23 @@ export type LottieOptions = Omit<AnimationConfigWithData, "container"> & {
 
 export type PartialLottieOptions = Omit<LottieOptions, "animationData"> & {
   animationData?: LottieOptions["animationData"];
+};
+
+// Interactivity
+export type Axis = "x" | "y";
+export type Position = { [key in Axis]: number | [number, number] };
+
+export type Action = {
+  type: "seek" | "play" | "stop" | "loop";
+  frames: [number] | [number, number];
+  visibility?: [number, number];
+  position?: Position;
+};
+
+export type InteractivityProps = {
+  lottieObj: { View: ReactElement } & LottieRefCurrentProps;
+  actions: Action[];
+  mode: "scroll" | "cursor";
 };
 
 export type LottieComponentProps = LottieOptions & {
@@ -65,21 +90,4 @@ export type Listener = {
 };
 export type PartialListener = Omit<Listener, "handler"> & {
   handler?: Listener["handler"] | null;
-};
-
-// Interactivity
-export type Axis = "x" | "y";
-export type Position = { [key in Axis]: number | [number, number] };
-
-export type Action = {
-  type: "seek" | "play" | "stop" | "loop";
-  frames: [number] | [number, number];
-  visibility?: [number, number];
-  position?: Position;
-};
-
-export type InteractivityProps = {
-  lottieObj: { View: ReactElement } & LottieRefCurrentProps;
-  actions: Action[];
-  mode: "scroll" | "cursor";
 };

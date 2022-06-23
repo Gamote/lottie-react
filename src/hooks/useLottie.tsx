@@ -1,3 +1,9 @@
+import lottie, {
+  AnimationConfigWithData,
+  AnimationItem,
+  AnimationDirection,
+  AnimationSegment,
+} from "lottie-web";
 import React, {
   CSSProperties,
   useEffect,
@@ -5,12 +11,6 @@ import React, {
   ReactElement,
   useState,
 } from "react";
-import lottie, {
-  AnimationConfigWithData,
-  AnimationItem,
-  AnimationDirection,
-  AnimationSegment,
-} from "lottie-web";
 import {
   Listener,
   LottieOptions,
@@ -140,9 +140,8 @@ const useLottie = (
    * Get animation duration
    * @param inFrames
    */
-  const getDuration = (inFrames?: boolean): number | undefined => {
-    return animationInstanceRef.current?.getDuration(inFrames);
-  };
+  const getDuration = (inFrames?: boolean): number | undefined =>
+    animationInstanceRef.current?.getDuration(inFrames);
 
   /**
    * Destroy animation
@@ -185,28 +184,24 @@ const useLottie = (
     animationInstanceRef.current = lottie.loadAnimation(config);
 
     setAnimationLoaded(!!animationInstanceRef.current);
+
+    // Return a function that will clean up
+    return () => {
+      animationInstanceRef.current?.destroy();
+      animationInstanceRef.current = undefined;
+    };
   };
 
   /**
-   * Initialize and listen for changes that affect the animation state
+   * (Re)Initialize when animation data changed
    */
-  // Reinitialize when animation data changed
   useEffect(() => {
-    loadAnimation();
-  }, [animationData]);
+    const onUnmount = loadAnimation();
 
-  // Update the loop state
-  useEffect(() => {
-    if (!animationInstanceRef.current) {
-      return;
-    }
-
-    animationInstanceRef.current.loop = !!loop;
-
-    if (loop && animationInstanceRef.current.isPaused) {
-      animationInstanceRef.current.play();
-    }
-  }, [loop]);
+    // Clean up on unmount
+    return () => onUnmount?.();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [animationData, loop]);
 
   // Update the autoplay state
   useEffect(() => {
@@ -225,7 +220,7 @@ const useLottie = (
 
     // When null should reset to default animation length
     if (!initialSegment) {
-      animationInstanceRef.current.resetSegments(false);
+      animationInstanceRef.current.resetSegments(true);
       return;
     }
 
