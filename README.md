@@ -81,7 +81,7 @@ All files                    |     100 |      100 |     100 |     100 |
 
 ## Contribution
 
-Any **questions** or **suggestions**? Use the [**Discussions**](https://github.com/github/docs/discussions) tab. Any **issues**? Don't hesitate to document it in the [**Issues**](https://github.com/Gamote/lottie-react/issues) tab, and we will do our best to investigate it and fix it. Any **solutions**? You are very welcomed to open a [**pull request**](https://github.com/Gamote/lottie-react/pulls).
+Any **questions** or **suggestions**? Use the [**Discussions**](https://github.com/Gamote/docs/discussions) tab. Any **issues**? Don't hesitate to document it in the [**Issues**](https://github.com/Gamote/lottie-react/issues) tab, and we will do our best to investigate it and fix it. Any **solutions**? You are very welcomed to open a [**pull request**](https://github.com/Gamote/lottie-react/pulls).
 
 > 👩‍💻 `v3` is under development and is planning to bring a lot of features and improvements. But unfortunately, at the moment all the maintainers are super busy with work related projects. You can check out the progress under the `v3` branch. And of course, you are encouraged to contribute. :)
 
