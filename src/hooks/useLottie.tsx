@@ -10,6 +10,8 @@ import React, {
   useRef,
   ReactElement,
   useState,
+  useMemo,
+  useCallback
 } from "react";
 import {
   Listener,
@@ -56,115 +58,115 @@ const useLottie = (
   const animationContainer = useRef<HTMLDivElement>(null);
 
   /*
-		======================================
-			INTERACTION METHODS
-		======================================
-	 */
+    ======================================
+      INTERACTION METHODS
+    ======================================
+   */
 
   /**
    * Play
    */
-  const play = (): void => {
+  const play = useCallback((): void => {
     animationInstanceRef.current?.play();
-  };
+  }, [animationInstanceRef.current]);
 
   /**
    * Stop
    */
-  const stop = (): void => {
+  const stop = useCallback((): void => {
     animationInstanceRef.current?.stop();
-  };
+  }, [animationInstanceRef.current]);
 
   /**
    * Pause
    */
-  const pause = (): void => {
+  const pause = useCallback((): void => {
     animationInstanceRef.current?.pause();
-  };
+  }, [animationInstanceRef.current]);
 
   /**
    * Set animation speed
    * @param speed
    */
-  const setSpeed = (speed: number): void => {
+  const setSpeed = useCallback((speed: number): void => {
     animationInstanceRef.current?.setSpeed(speed);
-  };
+  }, [animationInstanceRef.current]);
 
   /**
    * Got to frame and play
    * @param value
    * @param isFrame
    */
-  const goToAndPlay = (value: number, isFrame?: boolean): void => {
+  const goToAndPlay = useCallback((value: number, isFrame?: boolean): void => {
     animationInstanceRef.current?.goToAndPlay(value, isFrame);
-  };
+  }, [animationInstanceRef.current]);
 
   /**
    * Got to frame and stop
    * @param value
    * @param isFrame
    */
-  const goToAndStop = (value: number, isFrame?: boolean): void => {
+  const goToAndStop = useCallback((value: number, isFrame?: boolean): void => {
     animationInstanceRef.current?.goToAndStop(value, isFrame);
-  };
+  }, [animationInstanceRef.current]);
 
   /**
    * Set animation direction
    * @param direction
    */
-  const setDirection = (direction: AnimationDirection): void => {
+  const setDirection = useCallback((direction: AnimationDirection): void => {
     animationInstanceRef.current?.setDirection(direction);
-  };
+  }, [animationInstanceRef.current]);
 
   /**
    * Play animation segments
    * @param segments
    * @param forceFlag
    */
-  const playSegments = (
+  const playSegments = useCallback((
     segments: AnimationSegment | AnimationSegment[],
     forceFlag?: boolean,
   ): void => {
     animationInstanceRef.current?.playSegments(segments, forceFlag);
-  };
+  }, [animationInstanceRef.current]);
 
   /**
    * Set sub frames
    * @param useSubFrames
    */
-  const setSubframe = (useSubFrames: boolean): void => {
+  const setSubframe = useCallback((useSubFrames: boolean): void => {
     animationInstanceRef.current?.setSubframe(useSubFrames);
-  };
+  }, [animationInstanceRef.current]);
 
   /**
    * Get animation duration
    * @param inFrames
    */
-  const getDuration = (inFrames?: boolean): number | undefined =>
-    animationInstanceRef.current?.getDuration(inFrames);
+  const getDuration = useMemo((inFrames?: boolean): number | undefined =>
+    animationInstanceRef.current?.getDuration(inFrames), [animationInstanceRef.current]);
 
   /**
    * Destroy animation
    */
-  const destroy = (): void => {
+  const destroy = useCallback((): void => {
     animationInstanceRef.current?.destroy();
 
     // Removing the reference to the animation so separate cleanups are skipped.
     // Without it the internal `lottie-react` instance throws exceptions as it already cleared itself on destroy.
     animationInstanceRef.current = undefined;
-  };
+  }, [animationInstanceRef.current]);
 
   /*
-		======================================
-			LOTTIE
-		======================================
-	 */
+    ======================================
+      LOTTIE
+    ======================================
+   */
 
   /**
    * Load a new animation, and if it's the case, destroy the previous one
    * @param {Object} forcedConfigs
    */
-  const loadAnimation = (forcedConfigs = {}) => {
+  const loadAnimation = useMemo((forcedConfigs = {}) => {
     // Return if the container ref is null
     if (!animationContainer.current) {
       return;
@@ -190,7 +192,7 @@ const useLottie = (
       animationInstanceRef.current?.destroy();
       animationInstanceRef.current = undefined;
     };
-  };
+  }, [animationInstanceRef.current, animationContainer.current]);
 
   /**
    * (Re)Initialize when animation data changed
@@ -246,10 +248,10 @@ const useLottie = (
   }, [initialSegment]);
 
   /*
-		======================================
-			EVENTS
-		======================================
-	 */
+    ======================================
+      EVENTS
+    ======================================
+   */
 
   /**
    * Reinitialize listener on change

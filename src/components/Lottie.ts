@@ -1,9 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 import useLottie from "../hooks/useLottie";
 import useLottieInteractivity from "../hooks/useLottieInteractivity";
 import { LottieComponentProps } from "../types";
 
-const Lottie = (props: LottieComponentProps) => {
+const Lottie = memo((props: LottieComponentProps) => {
   const { style, interactivity, ...lottieProps } = props;
 
   /**
@@ -73,6 +73,6 @@ const Lottie = (props: LottieComponentProps) => {
     actions: interactivity?.actions ?? [],
     mode: interactivity?.mode ?? "scroll",
   });
-};
+});
 
 export default Lottie;

@@ -75,7 +75,7 @@ export const useInitInteractivity = ({
             Math.ceil(
               ((currentPercent - action.visibility[0]) /
                 (action.visibility[1] - action.visibility[0])) *
-                action.frames[1],
+              action.frames[1],
             );
 
           //! goToAndStop must be relative to the start of the current segment
@@ -200,7 +200,7 @@ export const useInitInteractivity = ({
           animationItem.goToAndStop(
             Math.ceil(
               ((xPercent + yPercent) / 2) *
-                (action.frames[1] - action.frames[0]),
+              (action.frames[1] - action.frames[0]),
             ),
             true,
           );
