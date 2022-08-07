@@ -192,7 +192,7 @@ const useLottie = (
       animationInstanceRef.current?.destroy();
       animationInstanceRef.current = undefined;
     };
-  }, [animationInstanceRef.current, animationContainer.current]);
+  }, [animationInstanceRef.current, animationContainer.current, props]);
 
   /**
    * (Re)Initialize when animation data changed
