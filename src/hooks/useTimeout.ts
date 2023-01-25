@@ -1,13 +1,19 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
+export enum TimeoutState {
+  NotSet = "not-set",
+  Idle = "idle",
+  InProgress = "in-progress",
+}
+
 export type UseTimeoutFnReturn = {
-  isReady: boolean | null;
+  status: TimeoutState;
   set: () => void;
   clear: () => void;
 };
 
-export const useTimeout = (fn: () => void, ms = 0): UseTimeoutFnReturn => {
-  const [isReady, setIsReady] = useState<boolean | null>(ms ? false : null);
+export const useTimeout = (ms: number, fn?: () => void): UseTimeoutFnReturn => {
+  const [status, setStatus] = useState<TimeoutState>(ms ? TimeoutState.Idle : TimeoutState.NotSet);
   const timeout = useRef<ReturnType<typeof setTimeout>>();
   const callback = useRef(fn);
 
@@ -16,17 +22,17 @@ export const useTimeout = (fn: () => void, ms = 0): UseTimeoutFnReturn => {
       return;
     }
 
-    setIsReady(false);
+    setStatus(TimeoutState.InProgress);
     timeout.current && clearTimeout(timeout.current);
 
     timeout.current = setTimeout(() => {
-      setIsReady(true);
-      callback.current();
+      setStatus(TimeoutState.Idle);
+      callback.current?.();
     }, ms);
   }, [ms]);
 
   const clear = useCallback(() => {
-    setIsReady(null);
+    setStatus(TimeoutState.NotSet);
     timeout.current && clearTimeout(timeout.current);
   }, []);
 
@@ -50,5 +56,5 @@ export const useTimeout = (fn: () => void, ms = 0): UseTimeoutFnReturn => {
     [ms],
   );
 
-  return { isReady, clear, set };
+  return { status, clear, set };
 };

@@ -2,6 +2,7 @@ import React, { FC, useEffect, useRef, useState } from "react";
 import config from "../../config";
 
 export type BaseButtonProps = {
+  children: JSX.Element;
   onClick?: () => void;
   DropdownContent?: (setIsMenuOpen: (state: boolean) => void) => JSX.Element;
 };

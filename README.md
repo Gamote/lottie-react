@@ -18,7 +18,9 @@
 
 ## Description
 
-TODO: about Lottie and this library.
+TODO:
+- about Lottie and this library.
+- look into `dotLottie`
 
 ## Installation
 
