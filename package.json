@@ -1,6 +1,7 @@
 {
   "name": "lottie-react",
   "version": "3.0.0-beta.0",
+  "type": "module",
   "description": "A lightweight React library for rendering complex After Effects animations in real time using Lottie.",
   "keywords": [
     "lottie",
