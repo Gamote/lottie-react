@@ -30,8 +30,8 @@ export type PlayerOverlayProps = DetailedHTMLProps<
 export const PlayerOverlay: FC<PlayerOverlayProps> = ({
   children,
   show: shouldShow,
-  minShowTime = 3000, // TODO: set it to 0
-  fadeOutAnimationTime = 600, // TODO: set it to 600
+  minShowTime = 0,
+  fadeOutAnimationTime = 600,
   style,
   ...rest
 }) => {
