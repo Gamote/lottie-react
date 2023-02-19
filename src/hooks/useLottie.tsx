@@ -3,6 +3,7 @@ import lottie, {
   AnimationItem,
   AnimationDirection,
   AnimationSegment,
+  RendererType,
 } from "lottie-web";
 import React, {
   CSSProperties,
@@ -18,8 +19,8 @@ import {
   PartialListener,
 } from "../types";
 
-const useLottie = (
-  props: LottieOptions,
+const useLottie = <T extends RendererType = "svg">(
+  props: LottieOptions<T>,
   style?: CSSProperties,
 ): { View: ReactElement } & LottieRefCurrentProps => {
   const {
@@ -174,7 +175,7 @@ const useLottie = (
     animationInstanceRef.current?.destroy();
 
     // Build the animation configuration
-    const config: AnimationConfigWithData = {
+    const config: AnimationConfigWithData<T> = {
       ...props,
       ...forcedConfigs,
       container: animationContainer.current,

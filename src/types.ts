@@ -1,9 +1,10 @@
-import {
+import type {
   AnimationConfigWithData,
   AnimationDirection,
   AnimationEventName,
   AnimationItem,
   AnimationSegment,
+  RendererType,
 } from "lottie-web";
 import React, {
   MutableRefObject,
@@ -34,8 +35,8 @@ export type LottieRefCurrentProps = {
 
 export type LottieRef = MutableRefObject<LottieRefCurrentProps | null>;
 
-export type LottieOptions = Omit<
-  AnimationConfigWithData,
+export type LottieOptions<T extends RendererType = "svg"> = Omit<
+  AnimationConfigWithData<T>,
   "container" | "animationData"
 > & {
   animationData: unknown;
@@ -50,7 +51,7 @@ export type LottieOptions = Omit<
   onLoadedImages?: AnimationEventHandler | null;
   onDOMLoaded?: AnimationEventHandler | null;
   onDestroy?: AnimationEventHandler | null;
-} & Omit<React.HTMLProps<HTMLDivElement>, 'loop'>;
+} & Omit<React.HTMLProps<HTMLDivElement>, "loop">;
 
 export type PartialLottieOptions = Omit<LottieOptions, "animationData"> & {
   animationData?: LottieOptions["animationData"];
