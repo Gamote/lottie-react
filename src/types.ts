@@ -62,7 +62,7 @@ export type Axis = "x" | "y";
 export type Position = { [key in Axis]: number | [number, number] };
 
 export type Action = {
-  type: "seek" | "play" | "stop" | "loop";
+  type: "seek" | "play" | "stop" | "loop" | "playOnce";
   frames: [number] | [number, number];
   visibility?: [number, number];
   position?: Position;

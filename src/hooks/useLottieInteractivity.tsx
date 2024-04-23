@@ -39,6 +39,7 @@ export const useInitInteractivity = ({
 }: InitInteractivity) => {
   useEffect(() => {
     const wrapper = wrapperRef.current;
+    let playCount = 0;
 
     if (!wrapper || !animationItem || !actions.length) {
       return;
@@ -116,6 +117,12 @@ export const useInitInteractivity = ({
           // Play: Reset segments and continue playing full animation from current position
           animationItem.resetSegments(true);
           animationItem.play();
+        }
+        if (action.type === "playOnce" && playCount === 0) {
+          // Play: Reset segments and continue playing full animation from current position
+          animationItem.resetSegments(true);
+          animationItem.play();
+          playCount++;
         }
 
         if (action.type === "stop") {
@@ -216,6 +223,14 @@ export const useInitInteractivity = ({
             animationItem.resetSegments(false);
           }
           animationItem.playSegments(action.frames as AnimationSegment);
+        }
+
+        if (action.type === "playOnce" && playCount === 0) {
+          if (animationItem.isPaused) {
+            animationItem.resetSegments(false);
+          }
+          animationItem.playSegments(action.frames as AnimationSegment);
+          playCount++;
         }
 
         if (action.type === "stop") {
