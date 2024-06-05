@@ -11,6 +11,8 @@ import React, {
   AnimationEventHandler,
   ReactElement,
   RefObject,
+  ComponentType,
+  ElementType,
 } from "react";
 
 export type LottieRefCurrentProps = {
@@ -51,7 +53,8 @@ export type LottieOptions<T extends RendererType = "svg"> = Omit<
   onLoadedImages?: AnimationEventHandler | null;
   onDOMLoaded?: AnimationEventHandler | null;
   onDestroy?: AnimationEventHandler | null;
-} & Omit<React.HTMLProps<HTMLDivElement>, "loop">;
+  as?: ElementType | ComponentType;
+} & Omit<React.HTMLProps<HTMLDivElement>, "loop" | "as">;
 
 export type PartialLottieOptions = Omit<LottieOptions, "animationData"> & {
   animationData?: LottieOptions["animationData"];

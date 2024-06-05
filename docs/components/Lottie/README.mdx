@@ -171,6 +171,24 @@ const Example = () =>
 export default Example;
 ```
 
+### `as`
+
+React `ElementType` or `ComponentType` that replaces the default container `<div>` element.
+
+```jsx
+import Lottie from "lottie-react";
+import fancyLoadingAnimation from "./fancyLoading.json";
+
+const Example = () =>
+  <button>
+    <Lottie
+      as="span"
+      animationData={fancyLoadingAnimation}
+    />
+    Loading
+  </button>
+```
+
 ## Interaction methods
 
 These methods are designed to give you more control over the Lottie animation, and fill in the gaps left by the props:

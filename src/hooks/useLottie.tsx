@@ -40,6 +40,8 @@ const useLottie = <T extends RendererType = "svg">(
     onDOMLoaded,
     onDestroy,
 
+    as: Container = "div",
+
     // Specified here to take them out from the 'rest'
     lottieRef,
     renderer,
@@ -320,7 +322,11 @@ const useLottie = <T extends RendererType = "svg">(
   /**
    * Build the animation view
    */
-  const View = <div style={style} ref={animationContainer} {...rest} />;
+  const View = React.createElement(Container, {
+    style,
+    ref: animationContainer,
+    ...rest,
+  });
 
   return {
     View,
