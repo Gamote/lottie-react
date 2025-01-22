@@ -1,17 +1,14 @@
-import type {
+import {
   AnimationConfigWithData,
   AnimationDirection,
+  AnimationEventCallback,
   AnimationEventName,
+  AnimationEvents,
   AnimationItem,
   AnimationSegment,
   RendererType,
 } from "lottie-web";
-import React, {
-  MutableRefObject,
-  AnimationEventHandler,
-  ReactElement,
-  RefObject,
-} from "react";
+import React, { MutableRefObject, ReactElement, RefObject } from "react";
 
 export type LottieRefCurrentProps = {
   play: () => void;
@@ -41,16 +38,36 @@ export type LottieOptions<T extends RendererType = "svg"> = Omit<
 > & {
   animationData: unknown;
   lottieRef?: LottieRef;
-  onComplete?: AnimationEventHandler | null;
-  onLoopComplete?: AnimationEventHandler | null;
-  onEnterFrame?: AnimationEventHandler | null;
-  onSegmentStart?: AnimationEventHandler | null;
-  onConfigReady?: AnimationEventHandler | null;
-  onDataReady?: AnimationEventHandler | null;
-  onDataFailed?: AnimationEventHandler | null;
-  onLoadedImages?: AnimationEventHandler | null;
-  onDOMLoaded?: AnimationEventHandler | null;
-  onDestroy?: AnimationEventHandler | null;
+  onComplete?: AnimationEventCallback<
+    AnimationEvents[AnimationEventName]
+  > | null;
+  onLoopComplete?: AnimationEventCallback<
+    AnimationEvents[AnimationEventName]
+  > | null;
+  onEnterFrame?: AnimationEventCallback<
+    AnimationEvents[AnimationEventName]
+  > | null;
+  onSegmentStart?: AnimationEventCallback<
+    AnimationEvents[AnimationEventName]
+  > | null;
+  onConfigReady?: AnimationEventCallback<
+    AnimationEvents[AnimationEventName]
+  > | null;
+  onDataReady?: AnimationEventCallback<
+    AnimationEvents[AnimationEventName]
+  > | null;
+  onDataFailed?: AnimationEventCallback<
+    AnimationEvents[AnimationEventName]
+  > | null;
+  onLoadedImages?: AnimationEventCallback<
+    AnimationEvents[AnimationEventName]
+  > | null;
+  onDOMLoaded?: AnimationEventCallback<
+    AnimationEvents[AnimationEventName]
+  > | null;
+  onDestroy?: AnimationEventCallback<
+    AnimationEvents[AnimationEventName]
+  > | null;
 } & Omit<React.HTMLProps<HTMLDivElement>, "loop">;
 
 export type PartialLottieOptions = Omit<LottieOptions, "animationData"> & {
@@ -63,6 +80,7 @@ export type Position = { [key in Axis]: number | [number, number] };
 
 export type Action = {
   type: "seek" | "play" | "stop" | "loop";
+
   frames: [number] | [number, number];
   visibility?: [number, number];
   position?: Position;
@@ -87,7 +105,7 @@ export type PartialLottieComponentProps = Omit<
 
 export type Listener = {
   name: AnimationEventName;
-  handler: AnimationEventHandler;
+  handler: AnimationEventCallback<AnimationEvents[AnimationEventName]>;
 };
 export type PartialListener = Omit<Listener, "handler"> & {
   handler?: Listener["handler"] | null;
