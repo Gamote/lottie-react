@@ -90,6 +90,7 @@ export type InteractivityProps = {
   lottieObj: { View: ReactElement } & LottieRefCurrentProps;
   actions: Action[];
   mode: "scroll" | "cursor";
+  scrollDirection?: "horizontal" | "vertical";
 };
 
 export type LottieComponentProps = LottieOptions & {

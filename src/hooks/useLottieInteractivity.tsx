@@ -1,14 +1,23 @@
 import { AnimationSegment } from "lottie-web";
-import React, { useEffect, ReactElement } from "react";
+import React, { useEffect } from "react";
 import { InteractivityProps } from "../types";
 
 // helpers
-export function getContainerVisibility(container: Element): number {
-  const { top, height } = container.getBoundingClientRect();
-
-  const current = window.innerHeight - top;
-  const max = window.innerHeight + height;
-  return current / max;
+export function getContainerVisibility(
+  container: Element,
+  direction: "horizontal" | "vertical",
+): number {
+  if (direction === "horizontal") {
+    const { left, width } = container.getBoundingClientRect();
+    const current = window.innerWidth - left;
+    const max = window.innerWidth + width;
+    return current / max;
+  } else {
+    const { top, height } = container.getBoundingClientRect();
+    const current = window.innerHeight - top;
+    const max = window.innerHeight + height;
+    return current / max;
+  }
 }
 
 export function getContainerCursorPosition(
@@ -17,10 +26,8 @@ export function getContainerCursorPosition(
   cursorY: number,
 ): { x: number; y: number } {
   const { top, left, width, height } = container.getBoundingClientRect();
-
   const x = (cursorX - left) / width;
   const y = (cursorY - top) / height;
-
   return { x, y };
 }
 
@@ -29,13 +36,18 @@ export type InitInteractivity = {
   animationItem: InteractivityProps["lottieObj"]["animationItem"];
   actions: InteractivityProps["actions"];
   mode: InteractivityProps["mode"];
+  scrollDirection?: InteractivityProps["scrollDirection"];
 };
+
+// Easing function
+const easeOutQuad = (t: number): number => t * (2 - t);
 
 export const useInitInteractivity = ({
   wrapperRef,
   animationItem,
   mode,
   actions,
+  scrollDirection = "vertical",
 }: InitInteractivity) => {
   useEffect(() => {
     const wrapper = wrapperRef.current;
@@ -50,13 +62,14 @@ export const useInitInteractivity = ({
       let assignedSegment: number[] | null = null;
 
       const scrollHandler = () => {
-        const currentPercent = getContainerVisibility(wrapper);
+        const currentPercent = getContainerVisibility(wrapper, scrollDirection);
+        const easedPercent = easeOutQuad(currentPercent);
         // Find the first action that satisfies the current position conditions
         const action = actions.find(
           ({ visibility }) =>
             visibility &&
-            currentPercent >= visibility[0] &&
-            currentPercent <= visibility[1],
+            easedPercent >= visibility[0] &&
+            easedPercent <= visibility[1],
         );
 
         // Skip if no matching action was found!
@@ -73,7 +86,7 @@ export const useInitInteractivity = ({
           const frameToGo =
             action.frames[0] +
             Math.ceil(
-              ((currentPercent - action.visibility[0]) /
+              ((easedPercent - action.visibility[0]) /
                 (action.visibility[1] - action.visibility[0])) *
                 action.frames[1],
             );
@@ -246,15 +259,15 @@ export const useInitInteractivity = ({
       case "cursor":
         return cursorModeHandler();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode, animationItem]);
+  }, [mode, animationItem, actions, wrapperRef, scrollDirection]);
 };
 
 const useLottieInteractivity = ({
   actions,
   mode,
   lottieObj,
-}: InteractivityProps): ReactElement => {
+  scrollDirection,
+}: InteractivityProps & { scrollDirection?: "horizontal" | "vertical" }) => {
   const { animationItem, View, animationContainerRef } = lottieObj;
 
   useInitInteractivity({
@@ -262,6 +275,7 @@ const useLottieInteractivity = ({
     animationItem,
     mode,
     wrapperRef: animationContainerRef,
+    scrollDirection,
   });
 
   return View;
