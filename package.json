@@ -24,8 +24,16 @@
   "author": "David Gamote",
   "main": "build/index.js",
   "module": "build/index.es.js",
-  "browser": "build/index.umd.js",
   "types": "build/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "import": "./build/index.es.js",
+      "require": "./build/index.js",
+      "default": "./build/index.es.js"
+    },
+    "./package.json": "./package.json"
+  },
   "style": "build/index.css",
   "files": [
     "/build"
