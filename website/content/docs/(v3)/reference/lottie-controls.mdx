@@ -1,0 +1,22 @@
+---
+title: LottieControls
+description: The transport bar, and the two props it takes.
+---
+
+<Example name="player/control-bar" />
+
+## Props
+
+| Prop | Type | Behaviour |
+| --- | --- | --- |
+| `lottie` | `LottieInstance` | The animation to drive. Omit it inside `<Lottie>`. |
+| `unit` | `"frames" \| "seconds"` | What the readout counts. Default `frames`; seconds show one decimal. |
+
+Plus any standard HTML attribute; `className` adds to the library's class rather than replacing it.
+
+## Behaviour
+
+The bar is play, stop, the seek bar, the readout, loop, direction, speed and fullscreen, drawn in `currentColor` and sized in `em`.
+Everything disables while the animation is `loading` or in `error`.
+Below about 411px of the bar's own width, the stop button, readout, direction and speed hide.
+The `k`, `l` and `f` keys exist only while a bar is rendered; [Fullscreen and the keyboard](/docs/player/fullscreen-and-keyboard) has the rules.

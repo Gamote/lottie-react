@@ -1,0 +1,48 @@
+---
+title: The instance
+description: "Everything useLottie hands back: values, commands, and subscriptions."
+---
+
+`useLottie` returns the instance: values that re-render with the animation, commands, and a subscription point.
+
+<Example name="instance/live-readouts" />
+
+## Values
+
+`state`, `error`, `speed`, `direction`, `loop`, `playableFrames` and `playableDuration` are React state: read one in your render and it stays current.
+
+`playableFrames` is a count, so the last frame is one less than it: an animation reporting 32 has frames 0 to 31.
+Play a segment and both `playableFrames` and `playableDuration` describe that segment, which is what a progress control wants.
+
+## Commands
+
+Call a command for a one-off action:
+
+<Example name="instance/command-buttons" />
+
+`seek` takes a frame number or a named unit; [Seeking and segments](/docs/animation/seeking-and-segments) has the full vocabulary.
+The setters (`setSpeed`, `setDirection`, `setLoop`) also take an updater function, like React's own.
+
+## Subscriptions
+
+Pass `subscriptions` with the options and each handler is attached for you, cleanup included:
+
+```tsx
+const lottie = useLottie({
+  src: "/anim.json",
+  subscriptions: {
+    complete: () => console.log("done"),
+    error: ({ error }) => console.error(error),
+  },
+});
+```
+
+`subscribe` on the instance attaches one handler at a time and returns the unsubscribe, for anything that mounts later.
+
+The current frame is a subscription, not a value: it changes sixty times a second, faster than a component should re-render.
+Subscribe to `frame`, and write the number where it goes without touching React state, as the readout above does: per-frame state updates re-render sixty times a second.
+
+## The escape hatch
+
+`animationItem` is the raw lottie-web object underneath.
+It sits outside the semver promise: lottie-web's surface moves between versions, and its type declarations are incomplete.

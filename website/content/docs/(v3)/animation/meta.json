@@ -1,0 +1,15 @@
+{
+  "title": "Animation",
+  "pages": [
+    "rendering",
+    "driving-with-props",
+    "the-instance",
+    "refs-and-handles",
+    "placing-it-yourself",
+    "loading-and-errors",
+    "seeking-and-segments",
+    "renderers-and-light",
+    "styling"
+  ],
+  "icon": "Clapperboard"
+}

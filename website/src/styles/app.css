@@ -1,0 +1,90 @@
+/* Declared before anything else so the library's layer ranks below every
+   layer Tailwind declares, which is what lets an ordinary utility class
+   override the library's defaults. */
+@layer lottie-react;
+
+@import "tailwindcss";
+@import "fumadocs-ui/css/neutral.css";
+@import "fumadocs-ui/css/preset.css";
+
+html {
+  scrollbar-gutter: stable;
+}
+
+/* The example stage supplies what an example leaves unsaid, so displayed code
+   carries no site presentation: a standalone animation gets a size, bare
+   buttons get a look, and a bare div holding buttons becomes a row. In the
+   components layer deliberately: an example whose own classes are the lesson
+   uses utilities, which rank above components, so its choices win. A display
+   inside a root is excluded because those examples own their layout. */
+@layer components {
+  .example-stage :where(.lottie-display:not(.lottie-root *)) {
+    width: 8rem;
+    height: 8rem;
+  }
+  /* A composed player (root, display, controls) gets the frame's width, so
+     the control bar shows its full form rather than its narrow one. */
+  .example-stage :where(.lottie-root) {
+    width: 100%;
+    max-width: 34rem;
+    height: 14rem;
+  }
+  /* A hook-path player: a classless root of the reader's own holding the
+     bar. It gets the composed player's width; its height stays the code's,
+     because owning the size is that example's lesson. The display override
+     must follow the standalone-display rule above, which it ties. */
+  .example-stage :where(div:not([class]):has(> .lottie-controls)) {
+    width: 100%;
+    max-width: 34rem;
+  }
+  .example-stage
+    :where(div:not([class]):has(> .lottie-controls))
+    > :where(.lottie-display) {
+    width: 100%;
+  }
+  /* A paragraph inside an example's own root stretches to the root's width,
+     while the drawing centers itself in the display; centering the text keeps
+     the two aligned. */
+  .example-stage :where(p) {
+    text-align: center;
+  }
+  .example-stage.example-scroll {
+    display: block;
+    height: 16rem;
+    overflow-y: auto;
+    padding: 0;
+  }
+  .example-scroll :where(p) {
+    padding: 1rem;
+  }
+  .example-scroll :where(.scroll-cue) {
+    font-size: 0.875rem;
+    opacity: 0.6;
+  }
+  .example-scroll :where(.lottie-display:not(.lottie-root *)) {
+    margin: 14rem auto 20rem;
+  }
+  /* Not the control bar's own buttons: the bar styles itself, and this rule
+     sits in a layer that would beat the library's. */
+  .example-stage :where(button:not(.lottie-controls *)) {
+    border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+    border-radius: 0.375rem;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+  }
+  .example-stage :where(div:has(> button)) {
+    display: flex;
+    gap: 0.5rem;
+  }
+}
+
+/* The scroll lock behind the search dialog writes both of these as inline
+   styles, and `scrollbar-gutter` above already reserves the space, so leaving
+   them applied shifts the page sideways when the dialog opens. An inline style
+   can only be beaten by `!important`, which is why both carry it. */
+html > body[data-scroll-locked] {
+  /* biome-ignore lint/complexity/noImportantStyles: overrides an inline style */
+  margin-right: 0px !important;
+  /* biome-ignore lint/complexity/noImportantStyles: overrides an inline style */
+  --removed-body-scroll-bar-size: 0px !important;
+}

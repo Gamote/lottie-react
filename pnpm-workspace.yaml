@@ -1,0 +1,31 @@
+packages:
+  - "website"
+
+allowBuilds:
+  # Vite's optional peer; esbuild resolves its platform binary without a postinstall.
+  esbuild: false
+  # The docs framework names Next as an optional peer for an adapter this site
+  # does not use, and pnpm installs optional peers, so Next and its image
+  # pipeline arrive whether or not anything imports them. Turning that off drops
+  # both and takes real peers with it, so the entry stays.
+  sharp: false
+
+minimumReleaseAgeExclude:
+  - '@shikijs/core@4.4.3'
+  - '@shikijs/engine-javascript@4.4.3'
+  - '@shikijs/engine-oniguruma@4.4.3'
+  - '@shikijs/langs@4.4.3'
+  - '@shikijs/primitive@4.4.3'
+  - '@shikijs/themes@4.4.3'
+  - '@shikijs/types@4.4.3'
+  - shiki@4.4.3
+
+patchedDependencies:
+  happy-dom: patches/happy-dom.patch
+  # Rewrites the declarations from `export default` to `export =`, which is what a
+  # CommonJS package with a single main export actually exposes. The per-renderer
+  # files switch to `import ... = require(...)` with them, because `export *` cannot
+  # follow an `export =`. Types only, so no shipped JavaScript changes. The version
+  # is pinned so an upgrade fails the install rather than patching a file that may
+  # have moved.
+  lottie-web@5.13.0: patches/lottie-web@5.13.0.patch

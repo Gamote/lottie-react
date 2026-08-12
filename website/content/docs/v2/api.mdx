@@ -1,0 +1,274 @@
+---
+title: API reference
+description: Every export of lottie-react v2, with its props, methods and options.
+---
+
+v2 exports a default component, two hooks, and the engine underneath:
+
+```tsx
+import Lottie, {
+  useLottie,
+  useLottieInteractivity,
+  LottiePlayer,
+} from "lottie-react";
+```
+
+`LottiePlayer` is a runtime re-export of lottie-web's player object, for calls
+the wrapper does not expose, such as `LottiePlayer.setIDPrefix()`. The types
+(`LottieOptions`, `LottieRef`, `LottieRefCurrentProps`, and friends) are
+exported as well.
+
+## `<Lottie />`
+
+```tsx
+import Lottie from "lottie-react";
+import groovyWalkAnimation from "./groovyWalk.json";
+
+const App = () => <Lottie animationData={groovyWalkAnimation} loop={true} />;
+```
+
+### Props
+
+| Prop             | Type                 | Default  | Description                                                                                                              |
+| ---------------- | -------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `animationData`  | `object`             | required | A JSON object with the exported animation data                                                                           |
+| `loop`           | `boolean \| number`  | `true`   | `true` loops forever; a number plays the last played segment that many times                                             |
+| `autoplay`       | `boolean`            | `true`   | Play as soon as the animation has loaded                                                                                 |
+| `initialSegment` | `[number, number]`   |          | Start and end frame to play instead of the exported range. Changing the array reloads the animation, so keep it stable   |
+| `style`          | `object`             |          | Style object applied to the animation's wrapper `<div>`                                                                  |
+| `lottieRef`      | `React.RefObject`    |          | A ref object that receives the interaction methods below once the animation exists                                       |
+| `interactivity`  | `object`             |          | Scroll or cursor sync: the same options `useLottieInteractivity` takes, without `lottieObj`                              |
+
+The component also accepts every `React.HTMLProps<HTMLDivElement>` prop except
+`loop`, passed through to the wrapper `<div>`, and the rest of lottie-web's
+configuration (everything but `container`).
+
+Ten event props subscribe to the underlying lottie-web events. Each takes a
+callback or `null`:
+
+| Prop             | lottie-web event |
+| ---------------- | ---------------- |
+| `onComplete`     | `complete`       |
+| `onLoopComplete` | `loopComplete`   |
+| `onEnterFrame`   | `enterFrame`     |
+| `onSegmentStart` | `segmentStart`   |
+| `onConfigReady`  | `config_ready`   |
+| `onDataReady`    | `data_ready`     |
+| `onDataFailed`   | `data_failed`    |
+| `onLoadedImages` | `loaded_images`  |
+| `onDOMLoaded`    | `DOMLoaded`      |
+| `onDestroy`      | `destroy`        |
+
+### The `lottieRef` object
+
+Pass a ref object to `lottieRef` and drive the animation through it:
+
+```tsx
+import { useRef } from "react";
+import Lottie, { LottieRefCurrentProps } from "lottie-react";
+import groovyWalkAnimation from "./groovyWalk.json";
+
+const App = () => {
+  const lottieRef = useRef<LottieRefCurrentProps>(null);
+
+  return (
+    <>
+      <Lottie lottieRef={lottieRef} animationData={groovyWalkAnimation} />
+      <button onClick={() => lottieRef.current?.pause()}>Pause</button>
+    </>
+  );
+};
+```
+
+| Member                              | Description                                                                                                                  |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `play()`                            | Play                                                                                                                         |
+| `stop()`                            | Stop and rewind                                                                                                              |
+| `pause()`                           | Pause                                                                                                                        |
+| `setSpeed(speed)`                   | Playback speed; `1` is normal                                                                                                |
+| `goToAndPlay(value, isFrame?)`      | Jump and play; `isFrame` treats `value` as a frame instead of milliseconds (default `false`)                                 |
+| `goToAndStop(value, isFrame?)`      | Jump and stop; same arguments                                                                                                |
+| `setDirection(direction)`           | `1` plays forward, `-1` in reverse                                                                                           |
+| `playSegments(segments, forceFlag?)` | One `[from, to]` pair or a list of pairs; `forceFlag` switches immediately instead of after the current segment completes   |
+| `setSubframe(useSubFrames)`         | `true` (default) renders between frames on every animation frame; `false` sticks to the exported frame rate                  |
+| `getDuration(inFrames?)`            | Duration in seconds, or in frames when `inFrames` is `true`; `undefined` before the animation exists                         |
+| `destroy()`                         | Tear the animation down                                                                                                      |
+| `animationContainerRef`             | Ref to the wrapper `<div>`                                                                                                   |
+| `animationLoaded`                   | Whether the animation has loaded                                                                                             |
+| `animationItem`                     | The underlying lottie-web `AnimationItem`, or `undefined` before it exists                                                   |
+
+## `useLottie`
+
+The hook behind the component: it returns the rendered animation as `View`
+along with every `lottieRef` member above, on one object.
+
+```tsx
+import { useLottie } from "lottie-react";
+import groovyWalkAnimation from "./groovyWalk.json";
+
+const App = () => {
+  const options = {
+    animationData: groovyWalkAnimation,
+    loop: true,
+    autoplay: true,
+  };
+
+  const { View, playSegments } = useLottie(options);
+
+  return (
+    <>
+      {View}
+      <button onClick={() => playSegments([10, 40], true)}>Wave</button>
+    </>
+  );
+};
+```
+
+### Parameters
+
+| Parameter                | Type                | Default  | Description                                                          |
+| ------------------------ | ------------------- | -------- | -------------------------------------------------------------------- |
+| `options`                | `object`            | required | The animation configuration, below                                   |
+| `options.animationData`  | `object`            | required | A JSON object with the exported animation data                       |
+| `options.loop`           | `boolean \| number` | `true`   | As on the component                                                  |
+| `options.autoplay`       | `boolean`           | `true`   | As on the component                                                  |
+| `options.initialSegment` | `[number, number]`  |          | As on the component                                                  |
+| `style`                  | `object`            |          | Style object applied to the animation's wrapper `<div>`              |
+
+`options` also accepts the ten event props and the rest of lottie-web's
+configuration, the same way the component does.
+
+## `useLottieInteractivity`
+
+Syncs an animation from `useLottie` with scroll or cursor movement. It takes
+the object `useLottie` returned, a mode, and a list of actions, and returns a
+React element to render in its place.
+
+```tsx
+import { useLottie, useLottieInteractivity } from "lottie-react";
+import likeButton from "./likeButton.json";
+
+const options = {
+  animationData: likeButton,
+};
+
+const App = () => {
+  const lottieObj = useLottie(options);
+  const Animation = useLottieInteractivity({
+    lottieObj,
+    mode: "scroll",
+    actions: [
+      {
+        visibility: [0.4, 0.9],
+        type: "seek",
+        frames: [0, 38],
+      },
+    ],
+  });
+
+  return Animation;
+};
+```
+
+### Parameters
+
+| Parameter   | Type                    | Description                                       |
+| ----------- | ----------------------- | ------------------------------------------------- |
+| `lottieObj` | `object`                | The object returned by `useLottie`                |
+| `mode`      | `"scroll" \| "cursor"`  | What drives the animation                         |
+| `actions`   | `Action[]`              | Runs in sequence; one action chains into the next |
+
+An action:
+
+```ts
+type Action = {
+  frames: [number] | [number, number];
+  type: "seek" | "play" | "stop" | "loop";
+  visibility?: [number, number];
+  position?: { x: number | [number, number]; y: number | [number, number] };
+};
+```
+
+- `frames` is the frame range the action drives. `[0, 150]` covers those
+  frames, `[80]` freezes on frame 80.
+- `type` is what happens there. `play`, `stop` and `loop` do what they say;
+  `seek` maps the scroll or cursor position onto the frame range, frame by
+  frame.
+- `visibility` (scroll mode) is the slice of the container's scroll progress
+  the action owns, from `0` to `1`. `[0.4, 0.85]` runs the action between 40%
+  and 85% scrolled.
+- `position` (cursor mode) is the part of the element the cursor movement
+  covers. `x: [0, 1], y: [0, 1]` spans the whole element; `x: -1, y: -1`
+  matches the cursor being outside it.
+
+### Scroll, with an offset
+
+From 0 to 45% of the container the animation holds its first frame, then syncs
+with the scroll for the rest:
+
+```tsx
+import { useLottie, useLottieInteractivity } from "lottie-react";
+import likeButton from "./likeButton.json";
+
+const options = {
+  animationData: likeButton,
+};
+
+const App = () => {
+  const lottieObj = useLottie(options);
+  const Animation = useLottieInteractivity({
+    lottieObj,
+    mode: "scroll",
+    actions: [
+      {
+        visibility: [0, 0.45],
+        type: "stop",
+        frames: [0],
+      },
+      {
+        visibility: [0.45, 1],
+        type: "seek",
+        frames: [0, 38],
+      },
+    ],
+  });
+
+  return Animation;
+};
+```
+
+### Cursor, horizontal
+
+The animation follows the cursor's horizontal movement across the element and
+rewinds when the cursor leaves:
+
+```tsx
+import { useLottie, useLottieInteractivity } from "lottie-react";
+import hamsterAnimation from "./hamsterAnimation.json";
+
+const options = {
+  animationData: hamsterAnimation,
+};
+
+const App = () => {
+  const lottieObj = useLottie(options);
+  const Animation = useLottieInteractivity({
+    lottieObj,
+    mode: "cursor",
+    actions: [
+      {
+        position: { x: [0, 1], y: [-1, 2] },
+        type: "seek",
+        frames: [0, 179],
+      },
+      {
+        position: { x: -1, y: -1 },
+        type: "stop",
+        frames: [0],
+      },
+    ],
+  });
+
+  return Animation;
+};
+```

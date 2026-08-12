@@ -1,0 +1,21 @@
+name: Feature request
+description: Something lottie-react should be able to do.
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: The need
+      description: What you are building and what stands in the way. The need travels better than a solution.
+    validations:
+      required: true
+  - type: textarea
+    id: sketch
+    attributes:
+      label: How it could look
+      description: The code you wish you could write. Optional.
+  - type: textarea
+    id: today
+    attributes:
+      label: What you do today
+      description: The workaround or the library you reach for instead, if any. Optional.

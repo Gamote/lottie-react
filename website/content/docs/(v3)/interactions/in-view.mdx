@@ -1,0 +1,23 @@
+---
+title: In view
+description: Play while the animation is on screen.
+---
+
+`lottieInView()` plays on entering the viewport and pauses on leaving:
+
+<Example name="interactions/in-view" />
+
+Scroll it out of sight and back to watch both.
+
+## The options
+
+- `once: true` plays on the first entry and then stops watching, so scrolling past again replays nothing.
+- `amount` says how much must be visible to count as entered, `0` to `1`. The default is `0`: a single visible pixel.
+- `margin` grows or shrinks the viewport the entry is measured against, in the platform's `rootMargin` grammar: px or % only.
+
+<Callout type="warn" title="amount: 1 and tall animations">
+  `amount: 1` never fires for an animation taller than the viewport, because
+  such an element is never entirely visible. It warns in development.
+</Callout>
+
+A paused animation resumes on re-entry whether the pause was the behaviour's own or yours: the two are indistinguishable to it.

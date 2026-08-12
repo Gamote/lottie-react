@@ -1,0 +1,28 @@
+---
+title: Fullscreen and the keyboard
+description: Fill the screen from the bar or from three keys, on either path.
+---
+
+The bar's last button fills the screen with the animation and its controls together.
+
+Three keys ride along: `k` plays and pauses, `l` toggles loop, `f` fills the screen.
+They work while the key lands inside the animation, or while that animation fills the screen.
+Typing stays safe: an input, a select or an editable element keeps its keys, and so do modifier combinations.
+
+The keys belong to the bar.
+Render no `<LottieControls>` and no listener exists anywhere on the page.
+
+## Your element, filling the screen
+
+On the hook path, fullscreen takes whatever element carries `setRootRef`:
+
+<Example name="player/fullscreen-your-element" />
+
+Hand it to your wrapper and the fullscreen button fills the screen with your element, controls included.
+The layout is what makes it fullscreen-proof: a column so the bar sits under the animation, a display that grows with `flex: 1`, and a height of your choosing that the browser replaces while the element fills the screen.
+
+<Callout title="Bring a background">
+  The browser paints a black backdrop behind a fullscreen element. The
+  component path ships background and text colors for that state; an element
+  of your own brings its own.
+</Callout>

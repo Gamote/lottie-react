@@ -1,0 +1,45 @@
+---
+title: The stylesheet contract
+description: The class names, keyframes and custom properties a stylesheet can rely on.
+---
+
+<Example name="styling/utility-classes" />
+
+Every identifier below is public: it survives updates within a major version, so a stylesheet anywhere can target it.
+All defaults sit at zero specificity inside one cascade layer, so [your styles always win](/docs/animation/styling).
+
+## Class names
+
+| Class | On |
+| --- | --- |
+| `lottie-root` | the wrapper, when children are present |
+| `lottie-display` | the element the animation draws inside |
+| `lottie-controls` | the control bar |
+| `lottie-play` | the play and pause button |
+| `lottie-stop` | the stop button |
+| `lottie-seek` | the seek bar |
+| `lottie-readout` | the position readout |
+| `lottie-loop` | the loop button |
+| `lottie-direction` | the direction button |
+| `lottie-speed` | the speed select |
+| `lottie-fullscreen` | the fullscreen button |
+| `lottie-loading` | the loading overlay |
+| `lottie-spinner` | the spinner inside it |
+| `lottie-error` | the error overlay |
+
+## Keyframes
+
+`lottie-spin` turns the spinner; `lottie-loading-in` fades the loading overlay in.
+Keyframes names are global to a document, which is why both carry the prefix.
+
+## Custom properties
+
+`--lottie-loading-delay` (default 400ms) and `--lottie-loading-fade` (default 150ms) tune the loading overlay from CSS at any level.
+
+## Layer and precedence
+
+The cascade layer is `lottie-react`, and the React style precedence is the same word.
+A layered consumer declares `@layer lottie-react;` first, per [Installation](/docs/get-started/installation).
+
+On React 19 each sheet appears once, hoisted into `<head>` however many animations render.
+On React 18 every element carries its own copy in place: the same rules, applied the same way, just not deduplicated.

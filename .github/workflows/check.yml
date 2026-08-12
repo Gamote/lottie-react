@@ -1,0 +1,64 @@
+# The same checks the local gate runs, plus the two lanes it cannot: the
+# test suite on React 18 and the packed-package load check. `checks-passed`
+# exists to be the one aggregate name a branch ruleset requires, so a job
+# rename never orphans a required check and silently blocks every merge.
+#
+# TODO: uncomment the pull_request and push triggers to turn the checks on
+#  automatically; they are off while the owner dispatches runs by hand.
+name: Checks
+
+on:
+  workflow_dispatch:
+  # pull_request:
+  # push:
+  #   branches: [v3, main]
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      # The pnpm version comes from package.json's devEngines.packageManager.
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      # Coverage is display only: the gate's thresholds are the enforcement,
+      # so an upload failure or a Codecov outage never reddens the checks.
+      - uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  react18:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      # No install here: the script copies the checkout and installs inside
+      # the copy, with React resolved to the newest 18.
+      - run: pnpm check:react18
+
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check:package
+
+  checks-passed:
+    needs: [gate, react18, package]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "every check is green"

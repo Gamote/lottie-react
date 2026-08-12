@@ -1,0 +1,23 @@
+---
+title: Scroll scrubbing
+description: The scroll position drives the playhead.
+---
+
+`lottieScrollScrub()` maps the animation's journey through its scrollport onto the playhead.
+Scroll inside the box and the animation follows, forward and back:
+
+<Example name="interactions/scroll-scrub" scroll />
+
+## This page does it too
+
+The animation below is scrubbed by your scrolling of this very page:
+
+<PageScrub />
+
+## The options
+
+- `range: [0.25, 0.75]` narrows which stretch of the journey maps onto the animation; outside it, the first or last frame holds.
+- `axis` picks the journey's axis: `block`, the default, or `inline`.
+- `onRangeEnter` and `onRangeLeave` fire at the band's edges with the travel direction, `"forward"` or `"backward"`.
+
+Scrubbing holds playback state the way a drag does: whatever was true before the scrub returns when it leaves.

@@ -1,0 +1,18 @@
+---
+title: LottieDisplay
+description: The element the animation draws inside, for layouts you own.
+---
+
+<Example name="placing/your-own-layout" />
+
+## Props
+
+| Prop | Type | Behaviour |
+| --- | --- | --- |
+| `as` | tag name | The element to render. Default `div`. |
+| `lottie` | `LottieInstance` | The animation to display. Omit it inside `<Lottie>`, where the context supplies it. |
+| `children` | `never` | Refused: the engine owns the contents and wipes them on every reload. |
+
+Plus any standard HTML attribute, and `ref` names the rendered element.
+
+Render it among `<Lottie>`'s children to [place the animation yourself](/docs/animation/placing-it-yourself), or anywhere at all with `lottie` from the hook.

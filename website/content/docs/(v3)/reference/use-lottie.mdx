@@ -1,0 +1,33 @@
+---
+title: useLottie and the instance
+description: The three hooks, the instance's members, and what the handle keeps.
+---
+
+<Example name="instance/live-readouts" />
+
+## The hooks
+
+| Hook | Signature | What it is for |
+| --- | --- | --- |
+| `useLottie` | `(options) => LottieInstance` | Loads and drives an animation with the full engine. Options are the component's own props, minus the element ones. |
+| `useLottieLight` | `(options) => LottieInstance` | The same with the light engine, `svg` only. |
+| `useLottieInstance` | `(lottie?) => LottieInstance` | The explicit argument, else the surrounding `<Lottie>`'s context; throws with neither. For components of yours that work inside or beside an animation. |
+
+## The instance
+
+| Group | Members |
+| --- | --- |
+| values | `state`, `error`, `speed`, `direction`, `loop`, `playableFrames`, `playableDuration` |
+| commands | `reload`, `play`, `pause`, `stop`, `seek`, `playSegments`, `resetSegments`, `scrubStart`, `scrubTo`, `scrubEnd`, `setSpeed`, `setDirection`, `setLoop` |
+| events | `subscribe` |
+| dom | `setDisplayRef`, `setRootRef`, `root` |
+| hatch | `animationItem`, the raw lottie-web object, outside the semver promise |
+
+The values are React state and re-render what reads them.
+`playableFrames` is a count (the last frame is one less), both `playable*` values follow the active segment, and the current frame is only reachable through the `frame` subscription.
+The setters accept a value or an updater function.
+
+## The handle
+
+`LottieHandle`, what `lottieRef` hands back, is the instance minus the values, `subscribe`, and the three dom members: commands and the escape hatch.
+[Refs and handles](/docs/animation/refs-and-handles) carries the why.

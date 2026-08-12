@@ -1,0 +1,14 @@
+{
+  "title": "v3 · latest",
+  "root": true,
+  "pages": [
+    "index",
+    "get-started",
+    "animation",
+    "player",
+    "interactions",
+    "examples",
+    "reference",
+    "migration"
+  ]
+}

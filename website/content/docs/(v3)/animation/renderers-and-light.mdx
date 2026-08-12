@@ -1,0 +1,26 @@
+---
+title: Renderers and the light build
+description: Choose between svg, canvas and html, or ship the smaller engine.
+---
+
+Three renderers draw an animation: `svg`, the default, `canvas`, and `html`.
+
+<Example name="renderers/canvas" />
+
+`renderer` and `rendererSettings` are typed as a pair: choose `canvas` and the settings type is the canvas one.
+The `html` renderer needs a block element, so `as` refuses inline tags while it is chosen.
+
+## The light build
+
+`LottieLight` and `useLottieLight` carry a smaller copy of the engine that renders `svg` only:
+
+<Example name="renderers/light" />
+
+The limit is in the types: `renderer="canvas"` on `LottieLight` is a compile error.
+The light engine also contains no `eval`, which matters under a strict Content Security Policy.
+
+## What an import costs
+
+The package is tree-shakeable: it ships one file per module and declares itself side-effect free, so a bundler keeps only what an import reaches.
+`Lottie` alone does not pay for the controls or the overlays, and `LottieLight` never pulls the full engine.
+Measured with react and lottie-web external, minified and gzipped: `Lottie` alone is about 4.4 KB and `useLottie` alone about 3.4 KB.

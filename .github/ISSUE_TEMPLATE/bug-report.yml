@@ -1,0 +1,38 @@
+name: Bug report
+description: Something behaves wrong in lottie-react.
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what you got instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: The smallest code that shows it, or a link to a repository or sandbox that does. A report without a reproduction usually cannot move.
+    validations:
+      required: true
+  - type: input
+    id: library-version
+    attributes:
+      label: lottie-react version
+      placeholder: 3.0.0
+    validations:
+      required: true
+  - type: input
+    id: react-version
+    attributes:
+      label: React version
+      placeholder: 19.2.8
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Where it runs
+      description: Browser, bundler, framework, server rendering. Whatever shapes the behavior.
+      placeholder: Chrome 139, Vite 7, server rendering on

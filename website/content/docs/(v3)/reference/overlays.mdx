@@ -1,0 +1,30 @@
+---
+title: LottieLoading and LottieError
+description: The two overlays, their props, and the loading overlay's knobs.
+---
+
+<Example name="overlays/error-overlay" />
+
+## LottieLoading
+
+Appears during the `loading` state, a spinner by default.
+
+| Prop | Type | Behaviour |
+| --- | --- | --- |
+| `lottie` | `LottieInstance` | The animation watched. Omit it inside `<Lottie>`. |
+| `showAfter` | `number` | Milliseconds before it appears. Default `400`, so a fast load never flashes. |
+
+Two custom properties reach the same knobs from CSS, at any level from the element to `:root`: `--lottie-loading-delay` (the wait) and `--lottie-loading-fade` (the fade-in, default 150ms).
+Under a reduced-motion preference the spinner turns at half speed rather than stopping.
+
+## LottieError
+
+Appears in the `error` state, a plain sentence by default.
+
+| Prop | Type | Behaviour |
+| --- | --- | --- |
+| `lottie` | `LottieInstance` | The animation watched. Omit it inside `<Lottie>`. |
+| `children` | `ReactNode` | Replaces the default content; a button offering `reload()` is the worked example. |
+
+Both overlays render a fixed `div`, accept the standard HTML attributes, and position themselves over the display area.
+[Loading and errors](/docs/animation/loading-and-errors) teaches both.

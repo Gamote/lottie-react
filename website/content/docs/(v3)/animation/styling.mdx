@@ -1,0 +1,23 @@
+---
+title: Styling
+description: Your styles always win, on an element that behaves like any other.
+---
+
+Every default style ships at zero specificity, so any rule of yours beats any default, per property, with no `!important`.
+
+<Example name="styling/utility-classes" />
+
+## The element is yours
+
+`className`, `style`, `id`, `data-*`, `aria-*` and DOM event props all land on the element `<Lottie>` renders.
+Utility classes, CSS modules and `styled(Lottie)` work the way they do on a `<div>`.
+
+## Layered CSS
+
+When your styles live in cascade layers, declare the library's layer first.
+It is one line, shown in [Installation](/docs/get-started/installation).
+
+## The class names
+
+The rendered elements carry stable class names: `lottie-root` on the wrapper and `lottie-display` on the animation container.
+They are part of the public contract, so a stylesheet anywhere can target them and survive updates.

@@ -1,0 +1,38 @@
+---
+title: Loading and errors
+description: Show something while an animation loads, and a way back when it fails.
+---
+
+A fetching animation shows nothing, and a failed one shows nothing forever.
+One overlay covers each gap.
+
+## While it loads
+
+Render `<LottieLoading>` among the children and it appears during the `loading` state:
+
+<Example name="overlays/loading-overlay" />
+
+By default it waits 400ms before appearing, so a fast load never flashes a spinner; `showAfter={0}` shows it at once.
+
+<Callout title="Too fast to see here">
+  A local file loads in milliseconds, so the overlay above is hard to catch.
+  Slow networks are what it is for.
+</Callout>
+
+The spinner takes its color and size from the surrounding text.
+Under a reduced-motion preference it turns at half speed instead of stopping, so a working page still looks alive.
+
+## When it fails
+
+`<LottieError>` appears in the `error` state, with a plain sentence as its default content.
+Pass children to replace it:
+
+<Example name="overlays/error-overlay" />
+
+`reload()` is the way back: it throws the animation away, rebuilds it from `src`, and returns to `loading`.
+The same command picks up a URL whose contents have changed.
+
+## Reading the reason
+
+The instance keeps `error`, the last failure, cleared when a load begins.
+Anything that mounts after the failure can still read it, which is how an overlay mounted late knows what went wrong.

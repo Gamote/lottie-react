@@ -1,0 +1,57 @@
+---
+title: Overview
+description: lottie-react v2, the previous major.
+---
+
+<Callout title="New projects start with v3">
+  These pages document v2, the previous major. The version picker in the
+  sidebar switches to the v3 documentation.
+</Callout>
+
+v2 wraps [lottie-web](https://github.com/airbnb/lottie-web) in a component and
+a hook for rendering After Effects animations in React.
+
+## Install
+
+```npm
+npm i lottie-react@^2
+```
+
+`react` and `react-dom` are peer dependencies, version 16.8.0 or newer.
+
+## Using the component
+
+```tsx
+import Lottie from "lottie-react";
+import groovyWalkAnimation from "./groovyWalk.json";
+
+const App = () => <Lottie animationData={groovyWalkAnimation} loop={true} />;
+
+export default App;
+```
+
+## Using the hook
+
+```tsx
+import { useLottie } from "lottie-react";
+import groovyWalkAnimation from "./groovyWalk.json";
+
+const App = () => {
+  const options = {
+    animationData: groovyWalkAnimation,
+    loop: true,
+  };
+
+  const { View } = useLottie(options);
+
+  return View;
+};
+
+export default App;
+```
+
+## Going further
+
+The whole surface is on one page: [API reference](/docs/v2/api).
+
+Moving up: [Migration from v2](/docs/migration) maps every v2 surface onto v3.

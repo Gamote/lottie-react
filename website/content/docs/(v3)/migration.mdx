@@ -1,0 +1,118 @@
+---
+title: Migration from v2
+description: Every v2 surface, and where it went in v3.
+icon: Signpost
+---
+
+v3 is a rewrite.
+This page maps the whole v2 surface onto it, one table per area, so an upgrade is a series of small mechanical steps.
+
+## Why upgrade
+
+- **Only what you import ships.** `Lottie` costs about 4.4 kB gzipped and `useLottie` about 3.4 kB, with per-import budgets enforced by the build. v2 shipped one bundled file, so every consumer carried all of it.
+- **Re-renders stopped rebuilding.** v2 tore the animation down and reloaded it whenever `animationData` changed identity or `loop` flipped. v3 loads once: `loop`, `speed` and `direction` reach the running engine, and `src` is compared by content.
+- **The light engine is an entry point.** `LottieLight` and `useLottieLight` render with `lottie_light`, and importing them never pulls the full engine.
+- **`src` fetches.** A path or URL loads with loading and error overlays and a `reload()`. v2 took parsed data only.
+- **Seeking is an API.** Frames, markers, percentages or seconds, plus a scrub gesture, and subscriptions for every playback change.
+- **A player ships.** `LottieControls` is an accessible control bar with keyboard shortcuts and fullscreen, paid for only when imported.
+- **Interactions are a module.** Scroll scrubbing and in-view play, with reduced motion respected.
+- **Server rendering is safe by construction**, and the library's style defaults always lose to yours.
+- **React 18 and 19**, both tested against the real versions.
+
+## The import
+
+The default export is gone; everything is named:
+
+```tsx
+import Lottie from "lottie-react"; // v2
+import { Lottie } from "lottie-react"; // v3
+```
+
+The v2 types went with it: `LottieRefCurrentProps` and `LottieRef` become `LottieHandle`, `LottieOptions` becomes `UseLottieOptions`, and the component's props type is `LottieProps`.
+`LottiePlayer`, the re-export of the engine's player object, is removed with no replacement: the engine's global settings are not part of the v3 surface.
+
+## Two defaults flipped
+
+v2 played and looped unless told otherwise; v3 does neither unless asked.
+An animation that should behave as it did in v2 says so:
+
+```tsx
+<Lottie src={anim} autoplay loop />
+```
+
+## The component's props
+
+| v2 | v3 |
+| --- | --- |
+| `animationData` | `src`, which also accepts a path or URL to fetch |
+| `loop` (default `true`) | `loop` (default `false`), reactive |
+| `autoplay` (default `true`) | `autoplay` (default `false`) |
+| `initialSegment` | `segment` |
+| `style`, `className` | unchanged, and every other HTML attribute now passes through too |
+| `lottieRef` | `lottieRef`, now typed `Ref<LottieHandle>` |
+| `interactivity` | the [interactions module](/docs/interactions/how-interactions-work) |
+| the ten `on*` event props | the `subscriptions` prop, below |
+
+## Events
+
+`subscriptions` is one object of handlers in place of the ten props:
+
+| v2 prop | v3 subscription |
+| --- | --- |
+| `onComplete` | `complete` |
+| `onLoopComplete` | `loopCompleted` |
+| `onEnterFrame` | `frame`, with `{ currentFrame }` |
+| `onDataReady`, `onDOMLoaded`, `onConfigReady` | `ready` |
+| `onDataFailed` | `error`, with `{ error }` |
+| `onSegmentStart`, `onLoadedImages`, `onDestroy` | no equivalent |
+
+v3 also announces what v2 could not: `play`, `pause`, `stop`, `newState`, and `marker`.
+
+## The hook
+
+v2's `useLottie` returned a rendered `View` plus the methods; v3's returns [the instance](/docs/animation/the-instance), and the element is yours:
+
+```tsx
+const { View } = useLottie({ animationData }); // v2
+return View;
+
+const lottie = useLottie({ src, autoplay: true, loop: true }); // v3
+return <div ref={lottie.setDisplayRef} style={{ height: 300 }} />;
+```
+
+## The methods
+
+| v2 member | v3 |
+| --- | --- |
+| `play()`, `pause()`, `stop()` | unchanged |
+| `setSpeed(2)` | unchanged, and it also takes an updater function |
+| `setDirection(1)` / `setDirection(-1)` | `setDirection("forward")` / `setDirection("reverse")` |
+| `goToAndStop(value, isFrame)` | `seek(frame)`, or `seek({ seconds })` for time |
+| `goToAndPlay(value, isFrame)` | `seek(...)` then `play()` |
+| `playSegments(segments, true)` | `playSegments(segments)`: immediate is the default now |
+| `playSegments(segments, false)` | `playSegments(segments, { queue: true })` |
+| `getDuration()` | the `playableDuration` value |
+| `getDuration(true)` | the `playableFrames` value, a count |
+| `setSubframe(...)` | removed |
+| `destroy()` | removed: unmount the component instead |
+| `animationContainerRef` | `ref` on the component, which is the rendered element |
+| `animationLoaded` | the `state` value |
+| `animationItem` | unchanged, still outside the semver promise |
+
+## Interactivity
+
+`useLottieInteractivity` and the `interactivity` prop are replaced by [one wrapper and factories](/docs/interactions/how-interactions-work):
+
+| v2 | v3 |
+| --- | --- |
+| `mode: "scroll"` with a `seek` action | `lottieScrollScrub({ range })` |
+| `visibility: [0.4, 0.9]` | `range: [0.4, 0.9]` |
+| `mode: "cursor"` | no shipped factory: [write one](/docs/interactions/writing-your-own) against the same contract |
+| chained actions | no equivalent |
+
+## Packaging
+
+- The package exposes only its entry points, so a deep import like `lottie-react/build/index.js` stops resolving.
+- `react` and `react-dom` peers move from 16.8 to 18.2 or newer.
+- On React 18 each animation renders its own copy of the library's small stylesheet; React 19 hoists one copy of each into `<head>`. Styling behaves the same either way.
+- The build ships one file per module and declares itself side-effect free, so an import pays only for what it reaches.

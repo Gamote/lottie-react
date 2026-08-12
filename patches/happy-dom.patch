@@ -1,0 +1,36 @@
+diff --git a/lib/css/utilities/CSSParser.js b/lib/css/utilities/CSSParser.js
+index 47abf0b360d6fe3c9d47482cba8a5f8806471b5a..3611b8e776975e72cbeab29a224ac4ab122fc6c0 100644
+--- a/lib/css/utilities/CSSParser.js
++++ b/lib/css/utilities/CSSParser.js
+@@ -170,6 +170,13 @@ export default class CSSParser {
+                             }
+                             parentRule = scopeRule;
+                             break;
++                        case '@layer':
++                            // A cascade layer groups rules without owning a box of its
++                            // own. Layer priority is not modeled: the block is treated
++                            // as transparent, so nested rules attach where the layer's
++                            // parent would attach them. The statement form
++                            // (@layer a, b;) has no block and never reaches this arm.
++                            break;
+                         default:
+                             // Unknown rule.
+                             // We will create a new rule to let it grab its content, but we will not add it to the cssRules array.
+diff --git a/src/css/utilities/CSSParser.ts b/src/css/utilities/CSSParser.ts
+index b8485aca8b4ef7aa00842aba033f14e192541939..e4b1712c09ebbd3d7c26048099ea394219096cf5 100644
+--- a/src/css/utilities/CSSParser.ts
++++ b/src/css/utilities/CSSParser.ts
+@@ -214,6 +214,13 @@ export default class CSSParser {
+ 							}
+ 							parentRule = scopeRule;
+ 							break;
++						case '@layer':
++							// A cascade layer groups rules without owning a box of its own.
++							// Layer priority is not modeled: the block is treated as
++							// transparent, so nested rules attach where the layer's parent
++							// would attach them. The statement form (@layer a, b;) has no
++							// block and never reaches this arm.
++							break;
+ 						default:
+ 							// Unknown rule.
+ 							// We will create a new rule to let it grab its content, but we will not add it to the cssRules array.

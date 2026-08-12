@@ -1,0 +1,32 @@
+---
+title: Lottie and LottieLight
+description: The two components, and every prop of their own.
+---
+
+<Example name="basics/first-animation" />
+
+## Props
+
+| Prop | Type | Behaviour |
+| --- | --- | --- |
+| `src` | `string \| object` | The animation: a path or URL to fetch, or the parsed file. Load-time; compared by content. |
+| `renderer` | `"svg" \| "canvas" \| "html"` | Which renderer draws it. Load-time. Default `svg`. |
+| `rendererSettings` | per renderer | Settings typed to match the chosen renderer. Load-time. |
+| `autoplay` | `boolean` | Start as soon as the animation is ready. Load-time. Default `false`; holds under reduced motion. |
+| `segment` | `[number, number]` | The frame range to play. Load-time. |
+| `assetsPath` | `string` | Where the animation's images live when not beside it. Load-time. |
+| `loop` | `boolean \| number` | `false` none, `true` forever, or a number of repeats after the first play (`loop={3}` plays four times). Reactive. |
+| `speed` | `number` | Playback rate, `1` is the file's own. Reactive. |
+| `direction` | `"forward" \| "reverse"` | Which way it plays. Reactive. |
+| `as` | tag name | The element to render. Default `div`; illegal tags are compile errors. |
+| `children` | `ReactNode` | Present means you place the parts; absent means the component does. |
+| `lottieRef` | `Ref<LottieHandle>` | The commands, handed back. |
+| `subscriptions` | handlers object | Called as the animation reports events. |
+| `debug` | `boolean` | Traces the load lifecycle to the console. Default off. |
+
+Plus any standard HTML attribute: `className`, `style`, `id`, `data-*`, `aria-*` and DOM events all land on the rendered element, and `ref` names that element.
+
+## LottieLight
+
+Identical surface, smaller engine, `svg` only; the types refuse the other renderers.
+The light engine contains no `eval`.

@@ -1,0 +1,35 @@
+---
+title: Installation
+description: Install lottie-react, and what comes with it.
+---
+
+```npm
+npm i lottie-react
+```
+
+## Requirements
+
+`react` and `react-dom` at 18.2 or newer; React 18 and 19 are both supported.
+[lottie-web](https://github.com/airbnb/lottie-web) comes with the package, so there is nothing else to install.
+
+## On the server
+
+Import it anywhere React renders, the server included.
+Nothing touches the browser until an animation mounts, so server rendering needs no dynamic import and no client-only workaround.
+
+## If your CSS lives in cascade layers
+
+The library's default styles live in the `lottie-react` cascade layer, and your styles beat them.
+When your own CSS is layered too, which is Tailwind 4's default, declare the library's layer first so yours rank above it:
+
+```css
+@layer lottie-react;
+
+@import "tailwindcss";
+```
+
+Unlayered CSS needs nothing.
+
+## Next
+
+[First animation](/docs/get-started/first-animation): play something, in five lines.

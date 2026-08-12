@@ -1,0 +1,25 @@
+---
+title: Refs and handles
+description: ref reaches the element, lottieRef reaches the animation.
+---
+
+`ref` on `<Lottie>` names the element it renders, like on any element.
+The animation is behind `lottieRef`:
+
+<Example name="refs/handle-commands" />
+
+`lottieRef` takes a ref object or a callback and fills it with a `LottieHandle`.
+There is no ref type to import: `useRef<LottieHandle>(null)` is all of it.
+
+## What the handle carries
+
+Commands only: `play`, `pause`, `stop`, `seek`, `playSegments`, `resetSegments`, the scrub trio, the setters, `reload`, and the `animationItem` escape hatch.
+
+The values are left off on purpose.
+A ref cannot re-render your component, so a value read from one goes stale silently; reading `state` from the handle is a compile error instead.
+`subscribe` is off it for the same reason [subscriptions](/docs/animation/the-instance) exist: the prop attaches and cleans up for you, where a ref makes you do both in an effect.
+
+## When you need the values
+
+`<LottieDisplay>` renders from values, so a handle cannot feed it.
+To place the animation's parts yourself, use [the hook](/docs/animation/the-instance) and pass the instance.

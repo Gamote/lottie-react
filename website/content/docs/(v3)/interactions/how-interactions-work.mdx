@@ -1,0 +1,25 @@
+---
+title: How interactions work
+description: One wrapper attaches behaviours to any number of animations.
+---
+
+An interaction is a behaviour made by a factory and attached by `<LottieInteractions>`:
+
+```tsx
+<LottieInteractions interactions={[lottieInView({ once: true })]}>
+  <Lottie src="/anim.json" loop />
+</LottieInteractions>
+```
+
+Around a `<Lottie>` it drives every animation inside, however deep and however many.
+Inside a `<Lottie>` it drives that one.
+From the hook, pass the instance: `<LottieInteractions lottie={lottie} interactions={[...]} />`.
+It renders no element of its own, so there is nothing to place or style.
+
+## The list is declarative
+
+`interactions` is read the way React reads children: edit the list and behaviours attach and detach to match.
+Change one factory's options and only that behaviour re-arms.
+
+Two factories ship: [lottieInView](/docs/interactions/in-view) plays while the animation is on screen, and [lottieScrollScrub](/docs/interactions/scroll-scrubbing) hands the playhead to the scroll position.
+[Writing your own](/docs/interactions/writing-your-own) is the extension point.

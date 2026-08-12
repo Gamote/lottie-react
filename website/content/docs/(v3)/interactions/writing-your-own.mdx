@@ -1,0 +1,27 @@
+---
+title: Writing your own
+description: An interaction is a factory returning attach and options.
+---
+
+An interaction is an object with two fields: `attach`, the behaviour, and `options`, its configuration.
+The smallest useful one, complete:
+
+<Example name="interactions/custom-factory" />
+
+Press and hold the animation to play it.
+
+## The contract
+
+`attach(context, options)` runs once per animation and returns its cleanup, or nothing when there was nothing to attach.
+The context carries four things:
+
+- `lottie`: the animation, read fresh on every use.
+- `options()`: the descriptor's options as they are right now, so a callback option stays current without re-attaching.
+- `onChange(listener)`: fires when the root arrives, the values move, or the options change; re-check what you armed against and return early when nothing you use moved.
+- `memory`: scratch that survives an option change, for state that must outlive a re-attach.
+
+The factory above arms through `onChange` because `root` can arrive after `attach` runs.
+
+`LottieInteraction` and `LottieInteractionContext` are exported, so a factory of yours typechecks against the same contract the shipped ones use.
+
+Not everything needs a factory: when one element's own events are enough, a plain handler is simpler, and the gallery's [interaction recipes](/docs/examples/interactions) show hover, click and state handled that way.

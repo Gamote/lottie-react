@@ -1,0 +1,31 @@
+---
+title: First animation
+description: Play a Lottie file with the component, then with the hook.
+---
+
+## The component
+
+Import `Lottie`, point `src` at an animation, and give the element a size:
+
+<Example name="rendering/sizing" />
+
+`src` takes a served path, a URL, or the parsed animation itself.
+The size matters: the animation fills its element, and an element with no height shows nothing.
+
+## The hook
+
+The same animation with `useLottie`, when the element should be yours:
+
+<Example name="basics/first-animation-hook" />
+
+Hand `setDisplayRef` to the element the animation draws inside.
+Nothing appears until an element carries it.
+
+## Which to pick
+
+Start with the component.
+Reach for the hook when you want to own the element and hold [the instance](/docs/animation/the-instance) directly.
+
+## Next
+
+[Rendering](/docs/animation/rendering): the `src` forms, starting, repeating, and sizing.

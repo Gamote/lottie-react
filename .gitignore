@@ -1,16 +1,21 @@
-# Coverage directory used by tools like istanbul
-coverage
-.coveralls.yml
-
 # Dependency directories
 node_modules
+
+# pnpm
+.pnpm-store
 
 # IDE directories
 .idea
 
-/compiled
-/.docz
-/docs-dist
+# OS artifacts
+.DS_Store
+
+# Builds
 build
 
-.DS_Store
+# Local overrides
+CLAUDE.local.md
+.claude/settings.local.json
+
+# Testing
+coverage

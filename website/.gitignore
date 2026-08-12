@@ -1,0 +1,23 @@
+node_modules
+
+.DS_Store
+.cache
+.vercel
+.output
+.nitro
+/build/
+/api/
+/server/build
+/public/build
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+.tanstack
+
+.source
+
+# The router generates this from the files in src/routes during a build, so it
+# is output rather than source. That is also why the typecheck runs after the
+# build rather than before it.
+/src/routeTree.gen.ts

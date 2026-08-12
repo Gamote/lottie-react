@@ -1,0 +1,31 @@
+---
+title: Driving with props
+description: Change a running animation from React state, and try every reactive prop in the playground.
+---
+
+`loop`, `speed` and `direction` are reactive: change the prop and the running animation follows, with no reload.
+
+<Example name="driving/speed-and-direction" />
+
+## The playground
+
+The three reactive props, live.
+The code rewrites as you change them, and a prop at its default leaves the code:
+
+<PropsPlayground />
+
+## Load-time props
+
+Everything that describes the load itself (`src`, `renderer`, `rendererSettings`, `autoplay`, `segment`, `assetsPath`) reloads the animation when it changes.
+Hover a prop in your editor to see which kind it is.
+
+## When a prop and a command disagree
+
+Props and commands write the same values, and per field, the last writer wins.
+Set `speed={2}`, call `setSpeed(4)`, and the animation runs at 4 until the prop's value next changes; `direction` and `loop` are untouched.
+Driving one field from both places at once logs a development warning.
+
+## The other two channels
+
+Props declare what the animation should be.
+Commands live on [the handle](/docs/animation/refs-and-handles), and the animation reports back through [subscriptions](/docs/animation/the-instance).

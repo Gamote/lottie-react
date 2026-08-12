@@ -1,0 +1,43 @@
+---
+title: Seeking and segments
+description: Move the playhead, play part of the file, and wire up a scrub gesture.
+---
+
+`seek` moves the playhead without touching playback: playing stays playing, paused stays paused.
+
+<Example name="seeking/seek-units" />
+
+## The units
+
+A plain number is a frame.
+Every other unit names itself:
+
+```tsx
+lottie.seek(90);
+lottie.seek({ frame: 90 });
+lottie.seek({ percent: 50 });
+lottie.seek({ seconds: 1.5 });
+lottie.seek({ marker: "intro" });
+```
+
+One unit per call: combining two is a compile error.
+`percent` and `seconds` measure the currently playable range, and out-of-range frames clamp to it.
+A marker resolves to the frame the designer placed it on; a marker outside the range clamps and warns, because that is an authoring mistake worth naming.
+
+## Play part of the file
+
+`playSegments` narrows playback to a range and plays it:
+
+<Example name="seeking/play-segments" />
+
+A range is `[first, last]`, or `{ marker: "intro" }` to use a marker's own duration; a marker without a duration is refused with a warning, because it is a point rather than a span.
+`playableFrames` and `playableDuration` follow the active range, as the readout above shows.
+`resetSegments()` returns playback to the whole file.
+
+Pass `{ queue: true }` as the second argument and the new range waits for the current pass to finish.
+With nothing playing there is nothing to wait for, and the range applies at once.
+
+## Scrubbing
+
+A drag gesture is three calls: `scrubStart()` once, `scrubTo(frame)` per move, `scrubEnd()` once.
+`scrubEnd` resumes playback if it was playing when the drag began, and it is the only call that clears that memory, so an unfinished drag is a missing call rather than a silent surprise.

@@ -1,0 +1,13 @@
+{
+  "title": "Reference",
+  "pages": [
+    "lottie",
+    "use-lottie",
+    "lottie-display",
+    "lottie-controls",
+    "overlays",
+    "interactions",
+    "stylesheet"
+  ],
+  "icon": "BookOpen"
+}

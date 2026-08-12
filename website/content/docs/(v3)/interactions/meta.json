@@ -1,0 +1,10 @@
+{
+  "title": "Interactions",
+  "pages": [
+    "how-interactions-work",
+    "in-view",
+    "scroll-scrubbing",
+    "writing-your-own"
+  ],
+  "icon": "MousePointerClick"
+}

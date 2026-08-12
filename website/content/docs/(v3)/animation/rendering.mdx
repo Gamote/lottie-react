@@ -1,0 +1,57 @@
+---
+title: Rendering
+description: Load an animation from a file or a URL, start it, repeat it, and size it.
+---
+
+`src` takes an animation two ways: the parsed file itself, or a place to fetch it from.
+
+## Pass the animation object
+
+Import the file and pass it when the animation ships with your code:
+
+<Example name="rendering/src-as-object" />
+
+The animation reloads only when the content of `src` changes, so an object written inline at the call site is safe.
+
+## Fetch from a URL
+
+Pass a string to fetch the animation from a served path or a full URL:
+
+```tsx
+<Lottie src="/animations/hero.json" />
+<Lottie src="https://example.com/hero.json" />
+```
+
+While the fetch is in flight the animation is in its `loading` state; a failed fetch ends in `error`.
+[Loading and errors](/docs/animation/loading-and-errors) covers showing both.
+
+## Start it
+
+Set `autoplay` to start playback as soon as the animation is ready. It is off by default:
+
+```tsx
+<Lottie src="/anim.json" autoplay />
+```
+
+`autoplay` is a load-time prop: change it and the animation reloads with the new setting.
+
+On a device that asks for reduced motion, `autoplay` holds instead of starting.
+The animation still loads and `play()` still works, so offer a control instead of starting motion for the reader.
+
+## Repeat it
+
+`loop` takes `true` to repeat forever, a number of repeats, or `false`, the default.
+A number counts the repeats after the first play, so `loop={3}` plays four times in all:
+
+<Example name="rendering/loop-count" />
+
+It is [reactive](/docs/animation/driving-with-props): change the prop and the running animation follows.
+
+## Size it
+
+The animation fills its element, so sizing the element is sizing the animation:
+
+<Example name="rendering/sizing" />
+
+There is no width or height prop.
+Use `className` or `style`, and give the element a height: an element with no height shows nothing.

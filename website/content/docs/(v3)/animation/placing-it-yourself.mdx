@@ -1,0 +1,32 @@
+---
+title: Placing it yourself
+description: Take over the layout with children, and change the element with as.
+---
+
+Give `<Lottie>` children and the layout is yours: it renders the wrapper, you place the parts.
+
+<Example name="placing/your-own-layout" />
+
+## Place the display
+
+With children present, `<Lottie>` no longer places the animation itself: render `<LottieDisplay />` where it should draw.
+Leave it out, or render two, and a development warning tells you.
+
+`<LottieDisplay>` takes no children of its own.
+The engine owns its contents and wipes them on every reload, so anything put inside would not survive.
+
+## Change the element
+
+`as` renders `<Lottie>` as another tag:
+
+<Example name="placing/as-button" />
+
+The permitted tags are the ones that can legally hold the animation, and with children present, only tags that may hold a `<div>`.
+An illegal choice is a compile error carrying the reason.
+`<LottieDisplay>` takes `as` too.
+
+<Callout type="warn" title="Conditional children and inline tags">
+  `<Lottie as="span">{show && <Caption />}</Lottie>` fails to compile even
+  while `show` is `false`, because the type sees children. Choose a block tag,
+  or lift the conditional outside.
+</Callout>

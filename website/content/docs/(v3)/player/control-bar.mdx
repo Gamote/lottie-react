@@ -1,0 +1,30 @@
+---
+title: The control bar
+description: A full transport bar in one component, drawn in your page's own colors.
+---
+
+`<LottieControls>` is the whole bar: play, stop, a seek bar, a readout, loop, direction, speed, and fullscreen.
+
+<Example name="player/control-bar" />
+
+Render it among `<Lottie>`'s children and it drives that animation.
+From the hook, pass the instance: `<LottieControls lottie={lottie} />`.
+
+## Seconds instead of frames
+
+`unit="seconds"` switches the readout, shown to one decimal:
+
+<Example name="player/unit-seconds" />
+
+## How it behaves
+
+While the animation is `loading` or in `error`, every control is disabled and the readout shows zeros.
+
+Below about 411px of the bar's own width, the stop button, readout, direction and speed step aside so the seek bar stays wide enough to drag:
+
+<Example name="player/narrow-bar" />
+
+## How it looks
+
+The bar draws in `currentColor` and sizes in `em`, so it takes your text's color and scale.
+`className` adds to the library's class instead of replacing it, and every rule ships at zero specificity, so [restyling](/docs/animation/styling) works here like everywhere else.
