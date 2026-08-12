@@ -2,16 +2,13 @@
 # test suite on React 18 and the packed-package load check. `checks-passed`
 # exists to be the one aggregate name a branch ruleset requires, so a job
 # rename never orphans a required check and silently blocks every merge.
-#
-# TODO: uncomment the pull_request and push triggers to turn the checks on
-#  automatically; they are off while the owner dispatches runs by hand.
 name: Checks
 
 on:
   workflow_dispatch:
-  # pull_request:
-  # push:
-  #   branches: [v3, main]
+  pull_request:
+  push:
+    branches: [v3, main]
 
 jobs:
   gate:
