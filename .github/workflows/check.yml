@@ -25,7 +25,7 @@ jobs:
       - run: pnpm check
       # Coverage is display only: the gate's thresholds are the enforcement,
       # so an upload failure or a Codecov outage never reddens the checks.
-      - uses: codecov/codecov-action@v5
+      - uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
