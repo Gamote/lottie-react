@@ -12,9 +12,9 @@ export function baseOptions(): BaseLayoutProps {
       ),
     },
     links: [
-      { text: "Docs", url: docsRoute, active: "nested-url" },
-      { text: "Examples", url: `${docsRoute}/examples/basics` },
-      { text: "Reference", url: `${docsRoute}/reference/lottie` },
+      { text: "Docs", url: docsRoute, active: "nested-url", on: "nav" },
+      { text: "Examples", url: `${docsRoute}/examples/basics`, on: "nav" },
+      { text: "Reference", url: `${docsRoute}/reference/lottie`, on: "nav" },
     ],
     githubUrl: `https://github.com/${gitConfig.user}/${gitConfig.repo}`,
   };
