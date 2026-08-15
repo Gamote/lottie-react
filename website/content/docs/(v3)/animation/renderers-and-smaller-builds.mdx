@@ -43,3 +43,4 @@ It also contains no `eval`, which matters under a strict Content Security Policy
 The package is tree-shakeable: it ships one file per module and declares itself side-effect free, so a bundler keeps only what an import reaches.
 `Lottie` alone does not pay for the controls or the overlays, and `LottieSvg` and `LottieLight` never pull any engine but their own, which the build measures.
 Measured with react and lottie-web external, minified and gzipped: `Lottie` alone is about 4.4 KB and `useLottie` alone about 3.4 KB.
+A whole-package figure, the kind a size badge or a bundle analyzer shows for the package as a unit, sums all three engines and describes no real import: with the engine included, `Lottie` alone is about 81 KB gzipped, `LottieSvg` about 67 KB and `LottieLight` about 51 KB.
