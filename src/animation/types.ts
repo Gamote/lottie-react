@@ -11,7 +11,7 @@ import type { SubscriptionManager } from "../utils/SubscriptionManager.js";
 /**
  * The renderers lottie-web can draw an animation with.
  *
- * `svg` is the default and the only one the light build contains. `canvas`
+ * `svg` is the default and the only one the smaller builds contain. `canvas`
  * draws to a bitmap, and `html` builds real DOM nodes, which is the only
  * renderer that puts block content inside the display.
  */
@@ -120,24 +120,40 @@ type _EverySubscriptionHasAHandler = MustBeNever<
 
 /**
  * Every fact about a renderer, one row each: what it puts inside the display,
- * which settings bag it accepts, and whether the light build contains it.
+ * which settings bag it accepts, and which of the smaller builds contain it.
  *
  * This is the only place any of those facts is recorded. A second table would
  * be a second place for them to disagree, and the disagreement would be silent.
  *
- * `puts` and `inLight` are claims about lottie-web's runtime that no type can
- * check, so `types.test.ts` checks them against the real engine.
+ * `puts`, `inSvg` and `inLight` are claims about lottie-web's runtime that no
+ * type can check, so `types.test.ts` checks them against the real engine.
  */
 export interface RendererRows {
-  svg: { puts: "inline"; settings: SVGRendererConfig; inLight: true };
-  canvas: { puts: "inline"; settings: CanvasRendererConfig; inLight: false };
-  html: { puts: "block"; settings: HTMLRendererConfig; inLight: false };
+  svg: {
+    puts: "inline";
+    settings: SVGRendererConfig;
+    inSvg: true;
+    inLight: true;
+  };
+  canvas: {
+    puts: "inline";
+    settings: CanvasRendererConfig;
+    inSvg: false;
+    inLight: false;
+  };
+  html: {
+    puts: "block";
+    settings: HTMLRendererConfig;
+    inSvg: false;
+    inLight: false;
+  };
 }
 
 /** The shape every row of the table has to have. */
 interface RendererRow {
   puts: "inline" | "block";
   settings: object;
+  inSvg: boolean;
   inLight: boolean;
 }
 
@@ -165,11 +181,19 @@ type _EveryRowIsWellFormed = MustBeNever<
 >;
 
 /**
- * The renderers the light build of the engine contains.
+ * The renderers the svg build of the engine contains.
  *
- * Read off the table rather than written out, so the light component's surface
+ * Read off the table rather than written out, so the svg component's surface
  * and the claim `types.test.ts` checks against the real engine can never be two
  * different answers.
+ */
+export type RendererInSvg = {
+  [K in LottieRenderer]: RendererRows[K]["inSvg"] extends true ? K : never;
+}[LottieRenderer];
+
+/**
+ * The renderers the light build of the engine contains, read off the table for
+ * the same reason {@link RendererInSvg} is.
  */
 export type RendererInLight = {
   [K in LottieRenderer]: RendererRows[K]["inLight"] extends true ? K : never;

@@ -15,11 +15,13 @@ import {
   type RendererRows,
 } from "./types.js";
 
-// Both builds write to a canvas while their module body runs, so the stub has to
-// be in place before either dynamic import below is evaluated.
+// Every build writes to a canvas while its module body runs, so the stub has to
+// be in place before any dynamic import below is evaluated.
 installCanvasStub();
 
 const lottieFull = (await import("lottie-web")).default;
+const lottieSvg = (await import("lottie-web/build/player/lottie_svg.js"))
+  .default;
 const lottieLight = (await import("lottie-web/build/player/lottie_light.js"))
   .default;
 
@@ -42,22 +44,23 @@ const ANIMATION = {
 };
 
 /*
- * The evidence for the two columns of the renderer table that no type can
- * check. `isBlock` and `inLight` are typed *from* that table rather than
- * written down a second time, so a row whose claim stops matching the evidence
- * below fails to compile rather than passing a test that no longer means
- * anything.
+ * The evidence for the three columns of the renderer table that no type can
+ * check. `isBlock`, `inSvg` and `inLight` are typed *from* that table rather
+ * than written down a second time, so a row whose claim stops matching the
+ * evidence below fails to compile rather than passing a test that no longer
+ * means anything.
  */
 const EXPECTED: {
   [K in LottieRenderer]: {
     tagName: string;
     isBlock: RendererRows[K]["puts"] extends "block" ? true : false;
+    inSvg: RendererRows[K]["inSvg"];
     inLight: RendererRows[K]["inLight"];
   };
 } = {
-  svg: { tagName: "svg", isBlock: false, inLight: true },
-  canvas: { tagName: "CANVAS", isBlock: false, inLight: false },
-  html: { tagName: "DIV", isBlock: true, inLight: false },
+  svg: { tagName: "svg", isBlock: false, inSvg: true, inLight: true },
+  canvas: { tagName: "CANVAS", isBlock: false, inSvg: false, inLight: false },
+  html: { tagName: "DIV", isBlock: true, inSvg: false, inLight: false },
 };
 
 function isLottieRenderer(name: string): name is LottieRenderer {
@@ -69,9 +72,24 @@ function isLottieRenderer(name: string): name is LottieRenderer {
  * evidence here cannot slip through: it arrives already carrying a case.
  */
 const RENDERERS = Object.keys(EXPECTED).filter(isLottieRenderer);
-const IN_LIGHT = RENDERERS.filter((renderer) => EXPECTED[renderer].inLight);
-const NOT_IN_LIGHT = RENDERERS.filter(
-  (renderer) => !EXPECTED[renderer].inLight,
+
+/*
+ * The two smaller builds, each with the column that describes it, so every
+ * proof about them below runs once per build off one list.
+ */
+const SMALLER_BUILDS = [
+  { name: "svg", player: lottieSvg, column: "inSvg" },
+  { name: "light", player: lottieLight, column: "inLight" },
+] as const;
+const CONTAINED = SMALLER_BUILDS.flatMap(({ name, player, column }) =>
+  RENDERERS.filter((renderer) => EXPECTED[renderer][column]).map(
+    (renderer) => [name, renderer, player] as const,
+  ),
+);
+const ABSENT = SMALLER_BUILDS.flatMap(({ name, player, column }) =>
+  RENDERERS.filter((renderer) => !EXPECTED[renderer][column]).map(
+    (renderer) => [name, renderer, player] as const,
+  ),
 );
 
 function render<T extends LottieRenderer>(player: LottiePlayer, renderer: T) {
@@ -131,11 +149,11 @@ it("renders the animation it was handed rather than a fixed element", () => {
   animation.destroy();
 });
 
-it.each(IN_LIGHT)(
-  "the light build's %s renderer appends the same one element",
-  (renderer) => {
+it.each(CONTAINED)(
+  "the %s build's %s renderer appends the same one element",
+  (_, renderer, player) => {
     const { tagName } = EXPECTED[renderer];
-    const { animation, container } = render(lottieLight, renderer);
+    const { animation, container } = render(player, renderer);
 
     expect(container.firstElementChild?.tagName).toBe(tagName);
     expect(container.childElementCount).toBe(1);
@@ -148,20 +166,20 @@ it.each(IN_LIGHT)(
 
 /*
  * The second fact a type cannot state, and the declarations do not merely omit
- * it, they assert the opposite: the light build ships the full build's types
- * verbatim, so a renderer it does not contain still compiles.
+ * it, they assert the opposite: the smaller builds ship the full build's types
+ * verbatim, so a renderer they do not contain still compiles.
  */
-it.each(NOT_IN_LIGHT)(
-  "the light build has no %s renderer, which its own types advertise",
-  (renderer) => {
+it.each(ABSENT)(
+  "the %s build has no %s renderer, which its own types advertise",
+  (_, renderer, player) => {
     const container = document.createElement("div");
     document.body.appendChild(container);
 
     // The message is not asserted, because it names an internal variable of
     // lottie-web's unminified build. The full build accepting this same renderer
-    // above is what shows the throw belongs to the light build, not to this test.
+    // above is what shows the throw belongs to the smaller build, not to this test.
     expect(() =>
-      lottieLight.loadAnimation({
+      player.loadAnimation({
         container,
         renderer,
         loop: false,
