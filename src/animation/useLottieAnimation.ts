@@ -95,9 +95,9 @@ function toError(cause: unknown): Error {
 /**
  * Everything the animation does, with no opinion about how it is rendered.
  *
- * It takes the engine as an argument so the same logic serves the full build
- * and the light one. Reach it through `useLottie` or `useLottieLight` rather
- * than directly.
+ * It takes the engine as an argument so the same logic serves every build.
+ * Reach it through `useLottie`, `useLottieSvg` or `useLottieLight` rather than
+ * directly.
  */
 export function useLottieAnimation<
   Renderer extends LottieRenderer = typeof LottieRenderer.svg,

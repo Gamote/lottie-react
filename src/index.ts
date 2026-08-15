@@ -12,6 +12,7 @@ export {
   type LottieDisplayProps,
 } from "./animation/LottieDisplay.js";
 export { LottieLight, type LottieLightProps } from "./animation/LottieLight.js";
+export { LottieSvg, type LottieSvgProps } from "./animation/LottieSvg.js";
 export {
   LottieDirection,
   type LottieHandle,
@@ -27,6 +28,7 @@ export { useLottie } from "./animation/useLottie.js";
 export type { UseLottieOptions } from "./animation/useLottieAnimation.js";
 export { useLottieInstance } from "./animation/useLottieInstance.js";
 export { useLottieLight } from "./animation/useLottieLight.js";
+export { useLottieSvg } from "./animation/useLottieSvg.js";
 
 // The control bar. Its parts are deliberately not public.
 export {

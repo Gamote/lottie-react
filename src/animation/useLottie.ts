@@ -31,8 +31,9 @@ import {
  * ```
  *
  * This is the full build, so every renderer is available. Reach for
- * `useLottieLight` instead when only `svg` is needed, because it carries a
- * considerably smaller copy of the engine.
+ * `useLottieSvg` instead when only `svg` is needed, or `useLottieLight` when
+ * the animation uses no expressions either: each carries a smaller copy of the
+ * engine.
  */
 export function useLottie<
   Renderer extends LottieRenderer = typeof LottieRenderer.svg,

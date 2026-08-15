@@ -121,11 +121,11 @@ export type LottieComponent<Renderers extends LottieRenderer> = <
 ) => ReactNode;
 
 /**
- * Builds the component both public ones are: the full build and the light one
- * differ in the engine they load and in the renderers they admit, and in
+ * Builds the component all three public ones are: the full, svg and light
+ * builds differ in the engine they load and in the renderers they admit, and in
  * nothing else.
  *
- * `Renderers` is what narrows the light build to the renderers it actually
+ * `Renderers` is what narrows a smaller build to the renderers it actually
  * contains, so asking it for one it does not have is a compile error rather
  * than a blank animation and a runtime throw.
  */
