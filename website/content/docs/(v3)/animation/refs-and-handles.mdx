@@ -27,10 +27,11 @@ To place the animation's parts yourself, use [the hook](/docs/animation/the-inst
 ## Commands and signals together
 
 Driving the animation from outside its own tree takes both halves: the handle sends commands, and `subscriptions` reports back.
-Playing the whole file once and then looping one part of it is a signal followed by a command:
+The handle carries no values on purpose, since anything read through a ref goes stale, so what you would have read arrives as a signal instead: `ready` hands over the loaded instance, and `playableFrames` is read there rather than through the ref.
+One example of the shape, playing the whole file once and then looping one part of it, is a signal followed by a command:
 
 <Example name="refs/play-once-then-loop" />
 
 The first pass plays whole.
 When it wraps, `loopCompleted` fires and the handler narrows the playable range once; from then on the engine's own loop repeats that range, so nothing has to re-arm.
-When the number you need is a value, `ready` hands over the loaded instance, so `playableFrames` is read there rather than through the ref.
+Any signal can drive any command the same way: `complete` can reset a segment, `error` can `reload()`, and `marker` can seek somewhere else.
