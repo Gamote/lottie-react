@@ -1,6 +1,6 @@
 ---
-title: Lottie and LottieLight
-description: The two components, and every prop of their own.
+title: Lottie, LottieSvg and LottieLight
+description: The three components, and every prop of their own.
 ---
 
 <Example name="basics/first-animation" />
@@ -20,13 +20,14 @@ description: The two components, and every prop of their own.
 | `direction` | `"forward" \| "reverse"` | Which way it plays. Reactive. |
 | `as` | tag name | The element to render. Default `div`; illegal tags are compile errors. |
 | `children` | `ReactNode` | Present means you place the parts; absent means the component does. |
-| `lottieRef` | `Ref<LottieHandle>` | The commands, handed back. |
+| `lottieRef` | `Ref<LottieHandle>` | The commands, handed back; the values reach you through `subscriptions`. See [Refs and handles](/docs/animation/refs-and-handles). |
 | `subscriptions` | handlers object | Called as the animation reports events. |
 | `debug` | `boolean` | Traces the load lifecycle to the console. Default off. |
 
 Plus any standard HTML attribute: `className`, `style`, `id`, `data-*`, `aria-*` and DOM events all land on the rendered element, and `ref` names that element.
 
-## LottieLight
+## LottieSvg and LottieLight
 
-Identical surface, smaller engine, `svg` only; the types refuse the other renderers.
-The light engine contains no `eval`.
+The same surface on a smaller engine, `svg` only; the types refuse the other renderers.
+`LottieSvg` keeps the expression engine; `LottieLight` drops it too and contains no `eval`.
+[Renderers and the smaller builds](/docs/animation/renderers-and-smaller-builds) has the numbers.

@@ -1,6 +1,6 @@
 ---
-title: Renderers and the light build
-description: Choose between svg, canvas and html, or ship the smaller engine.
+title: Renderers and the smaller builds
+description: Choose between svg, canvas and html, or ship a smaller engine.
 ---
 
 Three renderers draw an animation: `svg`, the default, `canvas`, and `html`.
@@ -10,17 +10,36 @@ Three renderers draw an animation: `svg`, the default, `canvas`, and `html`.
 `renderer` and `rendererSettings` are typed as a pair: choose `canvas` and the settings type is the canvas one.
 The `html` renderer needs a block element, so `as` refuses inline tags while it is chosen.
 
-## The light build
+## The smaller builds
 
-`LottieLight` and `useLottieLight` carry a smaller copy of the engine that renders `svg` only:
+lottie-web ships smaller copies of its engine, and two of them have a component and a hook here.
+Both render `svg` only, and the types refuse the other renderers, so the choice is about what else the engine has to do:
+
+| Pair | Engine | Renderers | Expressions and layer effects | `eval` | Engine size |
+| --- | --- | --- | --- | --- | --- |
+| `Lottie`, `useLottie` | `lottie` | svg, canvas, html | yes | yes | about 77 KB |
+| `LottieSvg`, `useLottieSvg` | `lottie_svg` | svg | yes | yes | about 63 KB |
+| `LottieLight`, `useLottieLight` | `lottie_light` | svg | no | no | about 47 KB |
+
+Engine sizes are lottie-web 5.13, minified and gzipped.
+
+### The svg build
+
+`LottieSvg` and `useLottieSvg` keep the expression engine, so an After Effects export that drives its properties with expressions plays as designed:
+
+<Example name="renderers/svg" />
+
+### The light build
+
+`LottieLight` and `useLottieLight` carry the smallest copy of the engine:
 
 <Example name="renderers/light" />
 
-The limit is in the types: `renderer="canvas"` on `LottieLight` is a compile error.
-The light engine also contains no `eval`, which matters under a strict Content Security Policy.
+The light engine evaluates no expressions and applies no layer effects, so a property they drive is drawn at its static value; in development, loading such an animation logs a warning that names the svg build.
+It also contains no `eval`, which matters under a strict Content Security Policy.
 
 ## What an import costs
 
 The package is tree-shakeable: it ships one file per module and declares itself side-effect free, so a bundler keeps only what an import reaches.
-`Lottie` alone does not pay for the controls or the overlays, and `LottieLight` never pulls the full engine.
+`Lottie` alone does not pay for the controls or the overlays, and `LottieSvg` and `LottieLight` never pull any engine but their own, which the build measures.
 Measured with react and lottie-web external, minified and gzipped: `Lottie` alone is about 4.4 KB and `useLottie` alone about 3.4 KB.

@@ -1,6 +1,6 @@
 ---
 title: useLottie and the instance
-description: The three hooks, the instance's members, and what the handle keeps.
+description: The four hooks, the instance's members, and what the handle keeps.
 ---
 
 <Example name="instance/live-readouts" />
@@ -10,7 +10,8 @@ description: The three hooks, the instance's members, and what the handle keeps.
 | Hook | Signature | What it is for |
 | --- | --- | --- |
 | `useLottie` | `(options) => LottieInstance` | Loads and drives an animation with the full engine. Options are the component's own props, minus the element ones. |
-| `useLottieLight` | `(options) => LottieInstance` | The same with the light engine, `svg` only. |
+| `useLottieSvg` | `(options) => LottieInstance` | The same with the svg engine: `svg` only, expressions kept. |
+| `useLottieLight` | `(options) => LottieInstance` | The same with the light engine: `svg` only, no expressions. |
 | `useLottieInstance` | `(lottie?) => LottieInstance` | The explicit argument, else the surrounding `<Lottie>`'s context; throws with neither. For components of yours that work inside or beside an animation. |
 
 ## The instance
@@ -30,4 +31,5 @@ The setters accept a value or an updater function.
 ## The handle
 
 `LottieHandle`, what `lottieRef` hands back, is the instance minus the values, `subscribe`, and the three dom members: commands and the escape hatch.
-[Refs and handles](/docs/animation/refs-and-handles) carries the why.
+The values are absent by design: `ready` hands over the instance when you need one, and `subscriptions` carries the signals.
+[Refs and handles](/docs/animation/refs-and-handles) carries the why, and the two working together.

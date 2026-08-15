@@ -11,7 +11,7 @@ This page maps the whole v2 surface onto it, one table per area, so an upgrade i
 
 - **Only what you import ships.** `Lottie` costs about 4.4 kB gzipped and `useLottie` about 3.4 kB, with per-import budgets enforced by the build. v2 shipped one bundled file, so every consumer carried all of it.
 - **Re-renders stopped rebuilding.** v2 tore the animation down and reloaded it whenever `animationData` changed identity or `loop` flipped. v3 loads once: `loop`, `speed` and `direction` reach the running engine, and `src` is compared by content.
-- **The light engine is an entry point.** `LottieLight` and `useLottieLight` render with `lottie_light`, and importing them never pulls the full engine.
+- **The smaller engines are entry points.** `LottieSvg` and `useLottieSvg` render with `lottie_svg`, `LottieLight` and `useLottieLight` with `lottie_light`, and importing either never pulls the full engine.
 - **`src` fetches.** A path or URL loads with loading and error overlays and a `reload()`. v2 took parsed data only.
 - **Seeking is an API.** Frames, markers, percentages or seconds, plus a scrub gesture, and subscriptions for every playback change.
 - **A player ships.** `LottieControls` is an accessible control bar with keyboard shortcuts and fullscreen, paid for only when imported.

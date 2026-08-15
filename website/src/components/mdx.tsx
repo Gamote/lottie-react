@@ -7,6 +7,7 @@ import {
   LottieInteractions,
   LottieLight,
   LottieLoading,
+  LottieSvg,
 } from "lottie-react";
 import type { MDXComponents } from "mdx/types";
 import { Example } from "@/components/example";
@@ -27,6 +28,7 @@ export function getMDXComponents(components?: MDXComponents) {
     LottieInteractions,
     LottieLight,
     LottieLoading,
+    LottieSvg,
     Example,
     PageScrub,
     PropsPlayground,
