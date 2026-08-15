@@ -94,6 +94,30 @@
       ],
       "gzip": true,
       "limit": "7.8 KB"
+    },
+    {
+      "name": "import { LottieSvg, useLottieSvg }, only its own engine external",
+      "path": "build/index.js",
+      "import": "{ LottieSvg, useLottieSvg }",
+      "ignore": [
+        "react",
+        "react-dom",
+        "lottie-web/build/player/lottie_svg.js"
+      ],
+      "gzip": true,
+      "limit": "4.9 KB"
+    },
+    {
+      "name": "import { LottieLight, useLottieLight }, only its own engine external",
+      "path": "build/index.js",
+      "import": "{ LottieLight, useLottieLight }",
+      "ignore": [
+        "react",
+        "react-dom",
+        "lottie-web/build/player/lottie_light.js"
+      ],
+      "gzip": true,
+      "limit": "4.9 KB"
     }
   ],
   "scripts": {
