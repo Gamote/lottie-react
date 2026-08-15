@@ -6,7 +6,7 @@ The build contract for lottie-react. It applies to every change in this reposito
 
 lottie-react is a React wrapper around [lottie-web](https://github.com/airbnb/lottie-web) for rendering After Effects animations. It ships a component (`Lottie`), a hook (`useLottie`), the same pair twice more on lottie-web's smaller builds (`LottieSvg` and `useLottieSvg` on `lottie_svg`, `LottieLight` and `useLottieLight` on `lottie_light`), a player UI, and an interactivity layer.
 
-Active development happens on the `v3` branch, a rewrite currently at `3.0.0-beta.0`. The `main` branch holds the released v2 line.
+Active development happens on the `v3` branch, a rewrite currently at `3.0.0-rc.0`. The `main` branch holds the released v2 line.
 
 ## Hard rules
 
