@@ -1,6 +1,6 @@
 {
   "name": "lottie-react",
-  "version": "3.0.0-rc.0",
+  "version": "3.0.0",
   "description": "Lottie animations in React: one component for the easy path, the whole engine when you need control.",
   "keywords": [
     "lottie",
@@ -55,9 +55,6 @@
   "files": [
     "build"
   ],
-  "publishConfig": {
-    "tag": "beta"
-  },
   "size-limit": [
     {
       "name": "import { Lottie }",
