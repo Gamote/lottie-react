@@ -27,7 +27,8 @@ To place the animation's parts yourself, use [the hook](/docs/animation/the-inst
 ## Commands and signals together
 
 Driving the animation from outside its own tree takes both halves: the handle sends commands, and `subscriptions` reports back.
-The handle carries no values on purpose, since anything read through a ref goes stale, so what you would have read arrives as a signal instead: `ready` hands over the loaded instance, and `playableFrames` is read there rather than through the ref.
+The handle carries no values on purpose, since anything read through a ref goes stale.
+When a value is needed, the animation is reached from inside its own tree with `useLottieInstance`, or built on the hook, where the instance is yours; the section above covers both.
 One example of the shape, playing the whole file once and then looping one part of it, is a signal followed by a command:
 
 <Example name="refs/play-once-then-loop" />

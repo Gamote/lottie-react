@@ -71,6 +71,10 @@ export type LottieDirection =
  * `marker` announces the playhead passing a marker the animation's designer
  * placed, while it is travelling: a seek or a scrub puts the playhead somewhere
  * without passing anything, so it announces nothing.
+ *
+ * `ready` carries no payload. Everything that can subscribe already holds the
+ * instance, either as the hook's return value or through `useLottieInstance`,
+ * so the values it announces are read from there.
  */
 export const LottieSubscription = {
   ready: "ready",

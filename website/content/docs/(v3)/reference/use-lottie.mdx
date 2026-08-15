@@ -31,5 +31,5 @@ The setters accept a value or an updater function.
 ## The handle
 
 `LottieHandle`, what `lottieRef` hands back, is the instance minus the values, `subscribe`, and the three dom members: commands and the escape hatch.
-The values are absent by design: `ready` hands over the instance when you need one, and `subscriptions` carries the signals.
+The values are absent by design: they live on the instance the hook returns and `useLottieInstance` reaches, and `subscriptions` carries the signals.
 [Refs and handles](/docs/animation/refs-and-handles) carries the why, and the two working together.
