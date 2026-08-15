@@ -20,9 +20,10 @@ export default defineConfig({
    * outside and the layout stays an implementation detail.
    */
   unbundle: true,
-  /* TODO: the barrel currently exports named symbols only. This setting earns its
-      place once a default export exists, where it stops the CJS bundle making
-      consumers reach through `.default`. Revisit when that decision is settled. */
+  // The barrel exports named symbols only, and this is what makes the CJS
+  // bundle say so rather than guess: without it, a single export would be
+  // emitted as `module.exports`, which a consumer would reach through
+  // `.default`.
   outputOptions: { exports: "named" },
   // Validate the packed tarball. `error` matters: the default only warns, which
   // would let a broken package build clean. Neither check follows imports into
