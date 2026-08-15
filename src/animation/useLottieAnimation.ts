@@ -15,6 +15,7 @@ import { createLogger } from "../utils/createLogger.js";
 import { SubscriptionManager } from "../utils/SubscriptionManager.js";
 import { useStableValue } from "../utils/useStableValue.js";
 import { collectMarkerCrossings } from "./collectMarkerCrossings.js";
+import { hasExpressions } from "./hasExpressions.js";
 import {
   type LottieInstanceBox,
   LottieRegistryContext,
@@ -809,6 +810,25 @@ export function useLottieAnimation<
                 "<LottieControls> is one; any pause affordance satisfies it.",
             );
           }
+        }
+        /*
+         * `expressionsPlugin` is what tells the light engine apart from the
+         * others at runtime, and `null` there means every expression in the
+         * file is skipped. Read here rather than before the load because this
+         * is the first point where the parsed data exists for a path as well as
+         * for an object. Neither field is in the engine's declarations, and
+         * the `in` checks narrow them without a cast.
+         */
+        if (
+          "expressionsPlugin" in item &&
+          item.expressionsPlugin === null &&
+          "animationData" in item &&
+          hasExpressions(item.animationData)
+        ) {
+          console.warn(
+            "[lottie-react] this animation uses expressions, which the light engine does not evaluate, so it renders without them. " +
+              "LottieSvg and useLottieSvg run them and still draw svg only; Lottie and useLottie run them with every renderer.",
+          );
         }
       }
       /*
