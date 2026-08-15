@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://lottiereact.com"><img src="website/public/lottie-logo.svg" width="140" alt="lottie-react" /></a>
+  <a href="https://lottiereact.com"><img src="https://raw.githubusercontent.com/Gamote/lottie-react/main/website/public/lottie-logo.svg" width="140" alt="lottie-react" /></a>
 </p>
 
 <h1 align="center">lottie-react</h1>
