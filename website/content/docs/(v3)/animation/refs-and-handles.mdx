@@ -23,3 +23,14 @@ A ref cannot re-render your component, so a value read from one goes stale silen
 
 `<LottieDisplay>` renders from values, so a handle cannot feed it.
 To place the animation's parts yourself, use [the hook](/docs/animation/the-instance) and pass the instance.
+
+## Commands and signals together
+
+Driving the animation from outside its own tree takes both halves: the handle sends commands, and `subscriptions` reports back.
+Playing the whole file once and then looping one part of it is a signal followed by a command:
+
+<Example name="refs/play-once-then-loop" />
+
+The first pass plays whole.
+When it wraps, `loopCompleted` fires and the handler narrows the playable range once; from then on the engine's own loop repeats that range, so nothing has to re-arm.
+When the number you need is a value, `ready` hands over the loaded instance, so `playableFrames` is read there rather than through the ref.
