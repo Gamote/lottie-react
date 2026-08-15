@@ -19,6 +19,7 @@ minimumReleaseAgeExclude:
   - '@shikijs/themes@4.4.3'
   - '@shikijs/types@4.4.3'
   - shiki@4.4.3
+  - concurrently@10.0.5
 
 patchedDependencies:
   happy-dom: patches/happy-dom.patch
