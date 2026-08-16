@@ -1,8 +1,4 @@
-import type {
-  AnimationEventName,
-  AnimationItem,
-  LottiePlayer,
-} from "lottie-web";
+import type { AnimationEventName, AnimationItem } from "lottie-web";
 import {
   type RefCallback,
   useCallback,
@@ -15,6 +11,7 @@ import { createLogger } from "../utils/createLogger.js";
 import { SubscriptionManager } from "../utils/SubscriptionManager.js";
 import { useStableValue } from "../utils/useStableValue.js";
 import { collectMarkerCrossings } from "./collectMarkerCrossings.js";
+import { applyEngineSettings, type LottieEngine } from "./configureLottie.js";
 import { hasExpressions } from "./hasExpressions.js";
 import {
   type LottieInstanceBox,
@@ -102,7 +99,7 @@ function toError(cause: unknown): Error {
  */
 export function useLottieAnimation<
   Renderer extends LottieRenderer = typeof LottieRenderer.svg,
->(lottie: LottiePlayer, options: UseLottieOptions<Renderer>): LottieInstance {
+>(engine: LottieEngine, options: UseLottieOptions<Renderer>): LottieInstance {
   const {
     src,
     renderer,
@@ -751,9 +748,10 @@ export function useLottieAnimation<
       segment: loadConfig.segment,
     });
 
+    applyEngineSettings(engine);
     let item: AnimationItem;
     try {
-      item = lottie.loadAnimation({
+      item = engine.player.loadAnimation({
         ...normalized,
         /* `container` is lottie-web's name for the element we call the display. */
         container: display,
@@ -951,7 +949,7 @@ export function useLottieAnimation<
       setAnimationItem(null);
       logger.log("the animation was destroyed");
     };
-  }, [display, source, loadConfig, lottie, manager, refreshRange, loadAttempt]);
+  }, [display, source, loadConfig, engine, manager, refreshRange, loadAttempt]);
 
   // One effect per reactive value, so a change to one never disturbs another.
   useEffect(() => {

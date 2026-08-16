@@ -1,10 +1,10 @@
-import lottieLight from "lottie-web/build/player/lottie_light.js";
 import type { ReactNode } from "react";
 import {
   createLottieComponent,
   type LottieComponentProps,
 } from "./createLottieComponent.js";
 import type { AnyTag, LottieRenderer, RendererInLight } from "./types.js";
+import { lightEngine } from "./useLottieLight.js";
 
 /**
  * What {@link LottieLight} accepts. Identical to `LottieProps` except that
@@ -27,4 +27,4 @@ export type LottieLightProps<
  * drawn at its static value; {@link LottieSvg} is the smaller build that keeps
  * expressions.
  */
-export const LottieLight = createLottieComponent<RendererInLight>(lottieLight);
+export const LottieLight = createLottieComponent<RendererInLight>(lightEngine);

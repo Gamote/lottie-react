@@ -1,11 +1,18 @@
 /*
  * The public surface: a symbol is public exactly when it is exported here.
- * Every export carries the `Lottie` prefix, hooks carry `useLottie`, and the
- * sections mirror the folder order under `src/`. Types are free to widen later;
- * removing or reshaping anything here is breaking.
+ * Every export names Lottie: components and types with the `Lottie` prefix,
+ * hooks with `useLottie`, factories with `lottie`, and the one setup function
+ * as `configureLottie`. The sections mirror the folder order under `src/`.
+ * Types are free to widen later; removing or reshaping anything here is
+ * breaking.
  */
 
-// The animation: components, hooks, and the vocabulary they share.
+// The animation: components, hooks, the vocabulary they share, and the
+// engine's own configuration.
+export {
+  type ConfigureLottieOptions,
+  configureLottie,
+} from "./animation/configureLottie.js";
 export { Lottie, type LottieProps } from "./animation/Lottie.js";
 export {
   LottieDisplay,

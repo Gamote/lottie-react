@@ -1,4 +1,5 @@
 import lottieSvg from "lottie-web/build/player/lottie_svg.js";
+import { type LottieEngine, LottieEngineName } from "./configureLottie.js";
 import type { LottieInstance, LottieRenderer } from "./types.js";
 import {
   type UseLottieOptions,
@@ -13,8 +14,14 @@ import {
  * it for one throws at runtime while its own declarations claim otherwise.
  * Unlike {@link useLottieLight} it keeps the expression engine.
  */
+/** The svg engine: svg only, expressions kept. */
+export const svgEngine: LottieEngine = {
+  player: lottieSvg,
+  name: LottieEngineName.svg,
+};
+
 export function useLottieSvg(
   options: UseLottieOptions<typeof LottieRenderer.svg>,
 ): LottieInstance {
-  return useLottieAnimation(lottieSvg, options);
+  return useLottieAnimation(svgEngine, options);
 }

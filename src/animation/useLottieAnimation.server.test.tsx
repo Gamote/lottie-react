@@ -9,7 +9,7 @@ import lottie from "lottie-web";
 import { renderToString } from "react-dom/server";
 import { afterEach, expect, it, vi } from "vitest";
 import { LottieState } from "./types.js";
-import { useLottie } from "./useLottie.js";
+import { fullEngine, useLottie } from "./useLottie.js";
 import { useLottieAnimation } from "./useLottieAnimation.js";
 
 const ANIMATION = {
@@ -66,7 +66,7 @@ it("reports no animation and the loading state on the server", () => {
   let item: unknown;
 
   function Probe() {
-    const animation = useLottieAnimation(lottie, { src: ANIMATION });
+    const animation = useLottieAnimation(fullEngine, { src: ANIMATION });
     state = animation.state;
     item = animation.animationItem;
     return <div ref={animation.setDisplayRef} />;
@@ -80,7 +80,7 @@ it("reports no animation and the loading state on the server", () => {
 
 it("renders a source it could never load without complaining during render", () => {
   function Probe() {
-    const animation = useLottieAnimation(lottie, { src: "" });
+    const animation = useLottieAnimation(fullEngine, { src: "" });
     return <div ref={animation.setDisplayRef} data-state={animation.state} />;
   }
 

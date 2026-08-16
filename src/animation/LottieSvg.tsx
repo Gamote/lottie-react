@@ -1,10 +1,10 @@
-import lottieSvg from "lottie-web/build/player/lottie_svg.js";
 import type { ReactNode } from "react";
 import {
   createLottieComponent,
   type LottieComponentProps,
 } from "./createLottieComponent.js";
 import type { AnyTag, LottieRenderer, RendererInSvg } from "./types.js";
+import { svgEngine } from "./useLottieSvg.js";
 
 /**
  * What {@link LottieSvg} accepts. Identical to `LottieProps` except that
@@ -28,4 +28,4 @@ export type LottieSvgProps<
  * expression engine, so an animation whose properties are driven by
  * expressions plays as designed.
  */
-export const LottieSvg = createLottieComponent<RendererInSvg>(lottieSvg);
+export const LottieSvg = createLottieComponent<RendererInSvg>(svgEngine);

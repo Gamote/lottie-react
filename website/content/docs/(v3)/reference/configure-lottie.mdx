@@ -1,0 +1,17 @@
+---
+title: configureLottie
+description: The engine's global settings, and when they apply.
+---
+
+`configureLottie(options)` sets what belongs to the engine rather than to one animation, for all three engine builds.
+Set it once, at startup, before animations load: it takes effect at once, engine-wide, running animations included.
+
+## Options
+
+| Option     | Type                                    | Behaviour                                                                                                                                           |
+|------------|-----------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `idPrefix` | `string`                                | The base of every element ID the engine mints. Each build appends its own name (`-lottie`, `-lottie_svg`, `-lottie_light`). Default `lottie-react`. |
+| `quality`  | `"low" \| "medium" \| "high" \| number` | How finely curves are drawn: 10, 50 or 200 segments, or any number above 1. Left alone the engine draws with 150.                                   |
+
+A field left out keeps its value.
+[Configuring the engine](/docs/animation/configuring-the-engine) has the reasons and the two-copies case.

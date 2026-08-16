@@ -1,4 +1,5 @@
 import lottie from "lottie-web";
+import { type LottieEngine, LottieEngineName } from "./configureLottie.js";
 import type { LottieInstance, LottieRenderer } from "./types.js";
 import {
   type UseLottieOptions,
@@ -35,8 +36,14 @@ import {
  * the animation uses no expressions either: each carries a smaller copy of the
  * engine.
  */
+/** The full engine: every renderer, expressions included. */
+export const fullEngine: LottieEngine = {
+  player: lottie,
+  name: LottieEngineName.full,
+};
+
 export function useLottie<
   Renderer extends LottieRenderer = typeof LottieRenderer.svg,
 >(options: UseLottieOptions<Renderer>): LottieInstance {
-  return useLottieAnimation(lottie, options);
+  return useLottieAnimation(fullEngine, options);
 }

@@ -1,16 +1,19 @@
 import { act, cleanup, render } from "@testing-library/react";
 import lottie from "lottie-web";
 import { afterAll, afterEach, beforeAll, expect, it, vi } from "vitest";
+import { configureLottie, type LottieEngine } from "./configureLottie.js";
 import {
   LottieDirection,
   type LottieInstance,
   LottieState,
   LottieSubscription,
 } from "./types.js";
+import { fullEngine } from "./useLottie.js";
 import {
   type UseLottieOptions,
   useLottieAnimation,
 } from "./useLottieAnimation.js";
+import { lightEngine } from "./useLottieLight.js";
 
 /** 60 frames at 30fps, so two seconds and a `playableFrames` worth asserting. */
 const ANIMATION = {
@@ -64,6 +67,8 @@ afterEach(() => {
     vi.advanceTimersByTime(100);
   });
   vi.restoreAllMocks();
+  /* The engine settings are module state; 150 is the engine's own quality. */
+  configureLottie({ idPrefix: "lottie-react", quality: 150 });
 });
 
 interface Harness {
@@ -78,12 +83,15 @@ interface Harness {
  */
 function setup(
   options: UseLottieOptions,
-  { strict = false }: { strict?: boolean } = {},
+  {
+    strict = false,
+    engine = fullEngine,
+  }: { strict?: boolean; engine?: LottieEngine } = {},
 ): Harness {
   let latest: LottieInstance | undefined;
 
   function Probe(props: UseLottieOptions) {
-    const instance = useLottieAnimation(lottie, props);
+    const instance = useLottieAnimation(engine, props);
     latest = instance;
     return <div ref={instance.setDisplayRef} />;
   }
@@ -644,7 +652,7 @@ it("does nothing, rather than throwing, while there is no display", () => {
   let latest: LottieInstance | undefined;
 
   function Unattached() {
-    latest = useLottieAnimation(lottie, { src: ANIMATION });
+    latest = useLottieAnimation(fullEngine, { src: ANIMATION });
     // Deliberately never given `setDisplayRef`, so nothing is ever loaded.
     return <div />;
   }
@@ -1664,7 +1672,7 @@ it("reports the element it is asked to treat as the root", () => {
   let latest: LottieInstance | undefined;
 
   function Probe({ attached }: { attached: boolean }) {
-    const instance = useLottieAnimation(lottie, { src: ANIMATION });
+    const instance = useLottieAnimation(fullEngine, { src: ANIMATION });
     latest = instance;
     return (
       <section ref={attached ? instance.setRootRef : undefined}>
@@ -1693,4 +1701,47 @@ it("reports the element it is asked to treat as the root", () => {
   view.rerender(<Probe attached={false} />);
 
   expect(latest?.root).toBeNull();
+});
+
+it("mints element IDs under the library's prefix and the engine's suffix by default", () => {
+  const full = setup({ src: ANIMATION });
+  const light = setup({ src: ANIMATION }, { engine: lightEngine });
+  flushLoad();
+
+  const fullId = full.instance.animationItem?.animationID ?? "";
+  const lightId = light.instance.animationItem?.animationID ?? "";
+  expect(fullId).toMatch(/^lottie-react-lottie__lottie_element_\d+$/);
+  expect(lightId).toMatch(/^lottie-react-lottie_light__lottie_element_\d+$/);
+  expect(fullId).not.toBe(lightId);
+});
+
+it("mints under a configured base for what loads after the call", () => {
+  const before = setup({ src: ANIMATION });
+  flushLoad();
+  expect(before.instance.animationItem?.animationID).toMatch(
+    /^lottie-react-lottie__/,
+  );
+
+  configureLottie({ idPrefix: "crm" });
+  const after = setup({ src: ANIMATION });
+  flushLoad();
+
+  expect(after.instance.animationItem?.animationID).toMatch(
+    /^crm-lottie__lottie_element_\d+$/,
+  );
+});
+
+it("hands the quality to the engine at once and again before every load", () => {
+  const setQuality = vi.spyOn(lottie, "setQuality");
+  setup({ src: ANIMATION });
+  flushLoad();
+  expect(setQuality).not.toHaveBeenCalledWith("low");
+
+  configureLottie({ quality: "low" });
+  expect(setQuality).toHaveBeenCalledWith("low");
+
+  setQuality.mockClear();
+  setup({ src: ANIMATION });
+  flushLoad();
+  expect(setQuality).toHaveBeenCalledWith("low");
 });
