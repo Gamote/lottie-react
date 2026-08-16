@@ -7,13 +7,13 @@ import {
 function playWhilePressed(): LottieInteraction {
   return {
     options: undefined,
-    attach: (context) => {
+    attach: ({ lottie, onChange }) => {
       let detach: (() => void) | undefined;
       const arm = () => {
-        const root = context.lottie.root;
+        const root = lottie.root;
         if (root === null || detach !== undefined) return;
-        const down = () => context.lottie.play();
-        const up = () => context.lottie.pause();
+        const down = () => lottie.play();
+        const up = () => lottie.pause();
         root.addEventListener("pointerdown", down);
         root.addEventListener("pointerup", up);
         detach = () => {
@@ -22,7 +22,7 @@ function playWhilePressed(): LottieInteraction {
         };
       };
       arm();
-      const stop = context.onChange(arm);
+      const stop = onChange(arm);
       return () => {
         stop();
         detach?.();

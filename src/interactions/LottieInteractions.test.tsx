@@ -1,9 +1,10 @@
 import { act, cleanup, render } from "@testing-library/react";
 import lottie from "lottie-web";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { afterAll, afterEach, beforeAll, expect, it, vi } from "vitest";
 import { LottieInstanceContext } from "../animation/LottieInstanceContext.js";
 import type { LottieInstance } from "../animation/types.js";
+import { LottieState } from "../animation/types.js";
 import {
   type UseLottieOptions,
   useLottieAnimation,
@@ -77,6 +78,19 @@ function spyInteraction(options: unknown = {}) {
   };
 }
 
+/**
+ * The context hands out a live view of the animation rather than the instance
+ * object itself, so "this context drives that animation" is proved through
+ * `subscribe`, which is one function per animation for its whole life.
+ */
+function expectDrives(
+  context: LottieInteractionContext,
+  instance: LottieInstance | undefined,
+) {
+  expect(instance).toBeDefined();
+  expect(context.lottie.subscribe).toBe(instance?.subscribe);
+}
+
 it("drives every animation rendered inside it", () => {
   const spy = spyInteraction();
   const instances = new Map<string, LottieInstance>();
@@ -116,9 +130,9 @@ it("the lottie prop drives that animation, and children fall through", () => {
   render(<Fixture />);
 
   expect(inner.attach).toHaveBeenCalledTimes(1);
-  expect(inner.context.lottie).toBe(handed);
+  expectDrives(inner.context, handed);
   expect(outer.attach).toHaveBeenCalledTimes(1);
-  expect(outer.context.lottie).toBe(instances.get("b"));
+  expectDrives(outer.context, instances.get("b"));
 });
 
 it("is driven by the animation whose <Lottie> it sits inside", () => {
@@ -138,7 +152,7 @@ it("is driven by the animation whose <Lottie> it sits inside", () => {
   render(<Fixture />);
 
   expect(spy.attach).toHaveBeenCalledTimes(1);
-  expect(spy.context.lottie).toBe(instances.get("host"));
+  expectDrives(spy.context, instances.get("host"));
 });
 
 it("the nearest wrapper wins, and even an empty one isolates", () => {
@@ -158,7 +172,7 @@ it("the nearest wrapper wins, and even an empty one isolates", () => {
   );
 
   expect(inner.attach).toHaveBeenCalledTimes(1);
-  expect(inner.context.lottie).toBe(instances.get("a"));
+  expectDrives(inner.context, instances.get("a"));
   expect(outer.attach).not.toHaveBeenCalled();
 });
 
@@ -308,7 +322,86 @@ it("a late animation is armed when it arrives, none before", () => {
   });
 
   expect(spy.attach).toHaveBeenCalledTimes(1);
-  expect(spy.context.lottie).toBe(instances.get("late"));
+  expectDrives(spy.context, instances.get("late"));
+});
+
+it("a copy of the context's animation stays live", () => {
+  let copy: LottieInstance | undefined;
+  const copying = vi.fn(({ lottie }: LottieInteractionContext) => {
+    copy = lottie;
+    return undefined;
+  });
+  const instances = new Map<string, LottieInstance>();
+  let mountElement: () => void = () => undefined;
+
+  /* The element, and with it the root and the load, arrive after attach. */
+  function LateElement() {
+    const instance = useLottieAnimation(lottie, { src: ANIMATION });
+    instances.set("a", instance);
+    const [on, setOn] = useState(false);
+    mountElement = () => {
+      setOn(true);
+    };
+    const setRefs = useCallback(
+      (element: HTMLElement | null) => {
+        instance.setDisplayRef(element);
+        instance.setRootRef(element);
+      },
+      [instance.setDisplayRef, instance.setRootRef],
+    );
+    return on ? <div ref={setRefs} /> : null;
+  }
+
+  render(
+    <LottieInteractions interactions={[{ attach: copying, options: {} }]}>
+      <LateElement />
+    </LottieInteractions>,
+  );
+  expect(copying).toHaveBeenCalledTimes(1);
+  expect(copy?.root).toBeNull();
+  expect(copy?.state).toBe(LottieState.loading);
+
+  act(() => {
+    mountElement();
+  });
+  act(() => {
+    vi.advanceTimersByTime(0);
+  });
+
+  expect(copy?.root).not.toBeNull();
+  expect(copy?.state).not.toBe(LottieState.loading);
+  act(() => {
+    copy?.play();
+  });
+  expect(instances.get("a")?.animationItem?.isPaused).toBe(false);
+  expect(Object.keys(copy ?? {})).toEqual(
+    Object.keys(instances.get("a") ?? {}),
+  );
+});
+
+it("the context's animation is one stable object", () => {
+  const spy = spyInteraction({ tone: 1 });
+  const instances = new Map<string, LottieInstance>();
+
+  function Fixture({ tone }: { tone: number }) {
+    return (
+      <LottieInteractions
+        interactions={[{ attach: spy.attach, options: { tone } }]}
+      >
+        <AnimProbe name="a" instances={instances} />
+      </LottieInteractions>
+    );
+  }
+
+  const view = render(<Fixture tone={1} />);
+  const first = spy.context.lottie;
+  expect(spy.context.lottie).toBe(first);
+
+  view.rerender(<Fixture tone={2} />);
+
+  expect(spy.attach).toHaveBeenCalledTimes(2);
+  expect(spy.context.lottie).toBe(first);
+  expectDrives(spy.context, instances.get("a"));
 });
 
 it("hears about an animation's values moving through onChange", () => {

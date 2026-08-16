@@ -15,12 +15,12 @@ Press and hold the animation to play it.
 `attach(context, options)` runs once per animation and returns its cleanup, or nothing when there was nothing to attach.
 The context carries four things:
 
-- `lottie`: the animation, read fresh on every use.
+- `lottie`: the animation, live: its members always answer the current animation.
 - `options()`: the descriptor's options as they are right now, so a callback option stays current without re-attaching.
 - `onChange(listener)`: fires when the root arrives, the values move, or the options change; re-check what you armed against and return early when nothing you use moved.
 - `memory`: scratch that survives an option change, for state that must outlive a re-attach.
 
-The factory above arms through `onChange` because `root` can arrive after `attach` runs, and it reads `context.lottie` each time rather than copying it once: the context hands out the current animation on every read, and a copy taken at attach time keeps the `root` of that moment, usually `null`.
+The factory above arms through `onChange` because `root` can arrive after `attach` runs; `context.lottie` is a live view, so holding it is safe, and a value pulled out of it is a copy of that moment.
 
 `LottieInteraction` and `LottieInteractionContext` are exported, so a factory of yours typechecks against the same contract the shipped ones use.
 

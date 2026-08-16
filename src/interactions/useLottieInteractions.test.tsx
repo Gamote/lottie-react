@@ -62,7 +62,9 @@ it("attaches once to the animation it was handed, inline array and all", () => {
   view.rerender(<Fixture amount={0.5} />);
 
   expect(spy.attach).toHaveBeenCalledTimes(1);
-  expect(spy.contexts.at(-1)?.lottie).toBe(latest);
+  /* The context hands out a live view, so identity is proved through
+     `subscribe`, one function per animation for its whole life. */
+  expect(spy.contexts.at(-1)?.lottie.subscribe).toBe(latest?.subscribe);
 
   view.rerender(<Fixture amount={0.9} />);
   expect(spy.attach).toHaveBeenCalledTimes(2);
