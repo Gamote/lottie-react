@@ -10,6 +10,12 @@ import { vi } from "vitest";
 export class StubbedViewTimeline {
   readonly subject: Element;
   readonly axis: string;
+  /**
+   * The scroller the timeline reports as driving it. A real one derives it
+   * from the subject's ancestors; the stub answers the document's own scroller
+   * unless a test says otherwise, which is what a plain page produces.
+   */
+  source: Element | null;
   private percent: number | null = null;
 
   constructor(options?: ViewTimelineOptions) {
@@ -19,6 +25,7 @@ export class StubbedViewTimeline {
     }
     this.subject = subject;
     this.axis = options?.axis ?? "block";
+    this.source = document.scrollingElement;
     installed?.instances.push(this);
   }
 
@@ -41,6 +48,11 @@ export class StubbedViewTimeline {
   setNumeric(percent: number): void {
     this.percent = percent;
     this.numeric = true;
+  }
+
+  /** Makes the timeline report another element, or none, as its scroller. */
+  setSource(element: Element | null): void {
+    this.source = element;
   }
 }
 
