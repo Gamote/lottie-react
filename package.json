@@ -30,6 +30,9 @@
   "files": [
     "/build"
   ],
+  "publishConfig": {
+    "tag": "legacy"
+  },
   "scripts": {
     "build": "run-s tsc:compile rollup:compile",
     "postbuild": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz",
@@ -48,7 +51,7 @@
     "tsc:compile:watch": "tsc --watch"
   },
   "dependencies": {
-    "lottie-web": "^5.10.2"
+    "lottie-web": "^5.13.0"
   },
   "devDependencies": {
     "@babel/core": "^7.16.7",
