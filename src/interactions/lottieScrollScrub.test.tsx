@@ -270,6 +270,74 @@ it("warns once and measures by hand when the timeline is inactive", () => {
   expect(inactive).toHaveLength(1);
 });
 
+it("measures by hand when the timeline's scroller cannot scroll", () => {
+  const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+  const scrub = mountScrub();
+  const height = window.innerHeight;
+  /* A quarter of the way through the journey by geometry: the leading edge
+     sits a quarter of the span above the viewport's far end. */
+  vi.spyOn(scrub.root, "getBoundingClientRect").mockReturnValue(
+    new DOMRect(0, height - (height + 200) / 4, 100, 200),
+  );
+  /* `body` with `overflow-x: hidden` is a scroll container that never
+     scrolls; happy-dom's zero extents say exactly that. */
+  timelines?.last().setSource(document.body);
+
+  scrub.enter();
+  scrub.drive(50);
+
+  expect(scrub.frame()).toBeCloseTo(15, 0);
+  expect(warn).not.toHaveBeenCalled();
+});
+
+it("keeps the timeline when its scroller really scrolls", () => {
+  const scrub = mountScrub();
+  const scroller = document.createElement("div");
+  vi.spyOn(scroller, "scrollHeight", "get").mockReturnValue(1000);
+  vi.spyOn(scroller, "clientHeight", "get").mockReturnValue(300);
+  timelines?.last().setSource(scroller);
+
+  scrub.enter();
+  scrub.drive(50);
+
+  expect(scrub.frame()).toBeCloseTo(30, 0);
+});
+
+it("checks the scroller again on each entry", () => {
+  const scrub = mountScrub();
+  const height = window.innerHeight;
+  vi.spyOn(scrub.root, "getBoundingClientRect").mockReturnValue(
+    new DOMRect(0, height - (height + 200) / 4, 100, 200),
+  );
+  const scroller = document.createElement("div");
+  const extent = vi.spyOn(scroller, "scrollHeight", "get").mockReturnValue(0);
+  vi.spyOn(scroller, "clientHeight", "get").mockReturnValue(0);
+  timelines?.last().setSource(scroller);
+
+  scrub.enter();
+  scrub.drive(50);
+  expect(scrub.frame()).toBeCloseTo(15, 0);
+
+  scrub.exit();
+  extent.mockReturnValue(1000);
+  scrub.enter();
+  scrub.drive(50);
+  expect(scrub.frame()).toBeCloseTo(30, 0);
+});
+
+it("checks the inline extents when the journey runs inline", () => {
+  const scrub = mountScrub({ axis: "inline" });
+  const scroller = document.createElement("div");
+  vi.spyOn(scroller, "scrollWidth", "get").mockReturnValue(1000);
+  vi.spyOn(scroller, "clientWidth", "get").mockReturnValue(300);
+  timelines?.last().setSource(scroller);
+
+  scrub.enter();
+  scrub.drive(50);
+
+  expect(scrub.frame()).toBeCloseTo(30, 0);
+});
+
 it("shrugs at options it does not recognise and scrubs the whole journey", () => {
   io = installIntersectionObserverStub();
   timelines = installViewTimelineStub();

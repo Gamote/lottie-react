@@ -51,6 +51,34 @@ function isScrubOptions(value: unknown): value is LottieScrollScrubOptions {
   return !("onRangeLeave" in value && typeof value.onRangeLeave !== "function");
 }
 
+/** Whether an element has anything to scroll along the axis right now. */
+function canScrollAlong(element: Element, axis: "block" | "inline"): boolean {
+  return axis === "inline"
+    ? element.scrollWidth > element.clientWidth
+    : element.scrollHeight > element.clientHeight;
+}
+
+/*
+ * A view timeline binds to the nearest ancestor that is a scroll container,
+ * and any non-visible overflow makes an element one whether or not it ever
+ * scrolls: `overflow-x: hidden` on `body` makes `body` the scroller while the
+ * viewport is what moves, and the timeline then holds one position. So the
+ * timeline is trusted only when its scroller is the document's own, whose
+ * extents are the viewport's and not to be second-guessed, or when it can
+ * scroll along the axis. A `null` scroller is left to the inactive path,
+ * which reads `currentTime`.
+ */
+function timelineIsUsable(
+  timeline: ViewTimeline,
+  axis: "block" | "inline",
+): boolean {
+  const source = timeline.source;
+  if (source === null || source === document.scrollingElement) {
+    return true;
+  }
+  return canScrollAlong(source, axis);
+}
+
 function attachScrollScrub(
   context: LottieInteractionContext,
   raw: unknown,
@@ -62,6 +90,7 @@ function attachScrollScrub(
   let observer: IntersectionObserver | null = null;
   let observedRoot: HTMLElement | null = null;
   let timeline: ViewTimeline | null = null;
+  let useTimeline = false;
   let frameHandle: number | null = null;
   let scrubbing = false;
   let gestureStarted = false;
@@ -69,7 +98,7 @@ function attachScrollScrub(
   let warnedInactive = false;
 
   const readProgress = (root: HTMLElement): number => {
-    if (timeline !== null) {
+    if (useTimeline && timeline !== null) {
       const time = timeline.currentTime;
       if (typeof time === "number") {
         return Math.min(Math.max(time / 100, 0), 1);
@@ -147,6 +176,13 @@ function attachScrollScrub(
     }
     scrubbing = true;
     previousBand = null;
+    /*
+     * Decided once per entry rather than per frame: an entry is when layout
+     * exists to be read, and reading extents every frame would put the layout
+     * cost back on the platform path that exists to avoid it. A scroller that
+     * only later grows something to scroll is picked up on the next entry.
+     */
+    useTimeline = timeline !== null && timelineIsUsable(timeline, axis);
     if (context.lottie.state !== LottieState.loading) {
       gestureStarted = true;
       context.lottie.scrubStart();
@@ -188,6 +224,7 @@ function attachScrollScrub(
     observer?.disconnect();
     observer = null;
     timeline = null;
+    useTimeline = false;
     observedRoot = root;
     if (root === null) {
       return;
@@ -246,9 +283,10 @@ function attachScrollScrub(
  * </LottieInteractions>
  * ```
  *
- * Progress is the platform's own scroll timeline where the browser has one,
- * and the same arithmetic measured by hand where it does not; the numbers
- * agree by construction. While the animation is out of view nothing samples
+ * Progress is the platform's own scroll timeline where the browser has one
+ * and its scroller is one that scrolls, and the same arithmetic measured by
+ * hand against the viewport where it does not; the numbers agree by
+ * construction. While the animation is out of view nothing samples
  * at all, and playback state is held by the scrub gesture, so whatever was
  * true before the scrub is restored when it leaves.
  */
