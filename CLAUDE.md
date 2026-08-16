@@ -54,6 +54,8 @@ Import order is enforced by Biome's `organizeImports` assist and is auto-fixable
 
 Relative imports carry a `.js` extension even though the file on disk is `.ts` or `.tsx`: the extension names the emitted output, not the source. This follows from `moduleResolution: nodenext`, which checks specifiers the way Node resolves them rather than the way a bundler would, so a missing extension is a typecheck error. The strictness is deliberate, because this package renders on the server and an import only a bundler can resolve is a defect that `bundler` resolution cannot see.
 
+A public module that only works in the browser starts with `"use client";`: every component, every hook, the interaction factories and `configureLottie`. Under React Server Components that line is what lets a server component import `<Lottie>` directly instead of evaluating the module, and what makes a server-side call of `configureLottie` fail at build time rather than configure a copy the browser never sees. The barrel and the vocabulary maps in `types.ts` stay unmarked, because the barrel must be evaluated to re-export and a server component may read `LottieDirection.reverse`. tsdown keeps the directive at the top of the emitted file, so the source line is the whole mechanism.
+
 ### Components
 
 Feature code decomposes into small components with typed props and a single visual responsibility, kept as sibling files in the folder they belong to. Hooks own state and side effects; components render what they are given.

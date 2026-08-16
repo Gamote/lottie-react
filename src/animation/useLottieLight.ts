@@ -1,3 +1,5 @@
+"use client";
+
 import lottieLight from "lottie-web/build/player/lottie_light.js";
 import { type LottieEngine, LottieEngineName } from "./configureLottie.js";
 import type { LottieInstance, LottieRenderer } from "./types.js";

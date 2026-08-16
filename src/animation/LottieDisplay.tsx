@@ -1,3 +1,5 @@
+"use client";
+
 import { type Ref, useMemo } from "react";
 import { mergeRefs } from "../utils/mergeRefs.js";
 import { polymorphicForwardRef } from "./polymorphicForwardRef.js";

@@ -1,3 +1,5 @@
+"use client";
+
 import { type ReactNode, useContext, useState } from "react";
 import { LottieInstanceContext } from "../animation/LottieInstanceContext.js";
 import {

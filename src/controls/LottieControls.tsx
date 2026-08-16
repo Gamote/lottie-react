@@ -1,3 +1,5 @@
+"use client";
+
 import { forwardRef, useCallback, useRef } from "react";
 import { renderStyledElement } from "../animation/renderStyledElement.js";
 import {

@@ -16,7 +16,8 @@ configureLottie({ idPrefix: "crm", quality: "low" });
 Set it once, at startup, before animations load.
 It takes effect at once on every engine that has loaded an animation, and on the others when they first do, and it reaches what is already on screen: element IDs for everything the engines build from then on, and the drawing quality of every animation on them.
 A field left out keeps its value.
-The settings are held for the life of the page, or of the server process, so it is a one-time setup, not something to call per render or per request.
+The settings are held for the life of the page, so it is a one-time setup, not something to call per render.
+Call it from client code, where the animations run: under React Server Components it is client code, and a call from a server component fails at build time rather than configuring a copy the browser never sees.
 
 ## Element IDs
 
