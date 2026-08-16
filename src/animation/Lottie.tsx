@@ -1,10 +1,10 @@
-import lottie from "lottie-web";
 import type { ReactNode } from "react";
 import {
   createLottieComponent,
   type LottieComponentProps,
 } from "./createLottieComponent.js";
 import type { AnyTag, LottieRenderer } from "./types.js";
+import { fullEngine } from "./useLottie.js";
 
 /**
  * What {@link Lottie} accepts: our own props, plus every attribute of the
@@ -51,4 +51,4 @@ export type LottieProps<
  * animation uses no expressions either: each carries a smaller copy of the
  * engine.
  */
-export const Lottie = createLottieComponent<LottieRenderer>(lottie);
+export const Lottie = createLottieComponent<LottieRenderer>(fullEngine);

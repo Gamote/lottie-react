@@ -1,6 +1,7 @@
 import type {
   AnimationItem,
   CanvasRendererConfig,
+  FilterSizeConfig,
   HTMLRendererConfig,
   RendererType,
   SVGRendererConfig,
@@ -135,22 +136,47 @@ type _EverySubscriptionHasAHandler = MustBeNever<
 export interface RendererRows {
   svg: {
     puts: "inline";
-    settings: SVGRendererConfig;
+    settings: SVGRendererConfig & SettingsTheEngineReads & SvgSizeSettings;
     inSvg: true;
     inLight: true;
   };
   canvas: {
     puts: "inline";
-    settings: CanvasRendererConfig;
+    settings: CanvasRendererConfig & SettingsTheEngineReads;
     inSvg: false;
     inLight: false;
   };
   html: {
     puts: "block";
-    settings: HTMLRendererConfig;
+    settings: HTMLRendererConfig &
+      Pick<SettingsTheEngineReads, "runExpressions"> & {
+        /** The filter region for effects; declared on svg, read by html too. */
+        filterSize?: FilterSizeConfig;
+      };
     inSvg: false;
     inLight: false;
   };
+}
+
+/*
+ * Settings every renderer reads from its config that lottie-web's own
+ * declarations leave out. The table only ever adds to those declarations, so
+ * there is nothing to keep in step: a field lottie-web declares later is
+ * simply declared twice, identically.
+ */
+interface SettingsTheEngineReads {
+  /** Whether expressions in the file are evaluated. On unless turned off. */
+  runExpressions?: boolean;
+  /** The `content-visibility` the renderer sets on what it draws. */
+  contentVisibility?: string;
+  /** The `id` the renderer puts on the element it draws. */
+  id?: string;
+}
+
+/** The svg renderer alone sizes its `<svg>` from these, as attribute values. */
+interface SvgSizeSettings {
+  width?: number | string;
+  height?: number | string;
 }
 
 /** The shape every row of the table has to have. */

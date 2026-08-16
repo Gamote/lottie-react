@@ -10,9 +10,9 @@
  * @vitest-environment-options { "settings": { "device": { "prefersReducedMotion": "reduce" } } }
  */
 import { act, cleanup, render } from "@testing-library/react";
-import lottie from "lottie-web";
 import { afterAll, afterEach, beforeAll, expect, it, vi } from "vitest";
 import { type LottieInstance, LottieState } from "./types.js";
+import { fullEngine } from "./useLottie.js";
 import {
   type UseLottieOptions,
   useLottieAnimation,
@@ -51,7 +51,7 @@ function setup(options: UseLottieOptions): { instance: LottieInstance } {
   let latest: LottieInstance | undefined;
 
   function Probe(props: UseLottieOptions) {
-    const instance = useLottieAnimation(lottie, props);
+    const instance = useLottieAnimation(fullEngine, props);
     latest = instance;
     return <div ref={instance.setDisplayRef} />;
   }

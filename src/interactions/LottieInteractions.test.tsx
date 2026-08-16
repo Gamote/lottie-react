@@ -1,10 +1,10 @@
 import { act, cleanup, render } from "@testing-library/react";
-import lottie from "lottie-web";
 import { useCallback, useState } from "react";
 import { afterAll, afterEach, beforeAll, expect, it, vi } from "vitest";
 import { LottieInstanceContext } from "../animation/LottieInstanceContext.js";
 import type { LottieInstance } from "../animation/types.js";
 import { LottieState } from "../animation/types.js";
+import { fullEngine } from "../animation/useLottie.js";
 import {
   type UseLottieOptions,
   useLottieAnimation,
@@ -50,7 +50,10 @@ function AnimProbe({
   name: string;
   instances: Map<string, LottieInstance>;
 } & Partial<UseLottieOptions>) {
-  const instance = useLottieAnimation(lottie, { src: ANIMATION, ...options });
+  const instance = useLottieAnimation(fullEngine, {
+    src: ANIMATION,
+    ...options,
+  });
   instances.set(name, instance);
   return <div ref={instance.setDisplayRef} />;
 }
@@ -116,7 +119,7 @@ it("the lottie prop drives that animation, and children fall through", () => {
   let handed: LottieInstance | undefined;
 
   function Fixture() {
-    const a = useLottieAnimation(lottie, { src: ANIMATION });
+    const a = useLottieAnimation(fullEngine, { src: ANIMATION });
     handed = a;
     return (
       <LottieInteractions interactions={[outer.interaction]}>
@@ -140,7 +143,7 @@ it("is driven by the animation whose <Lottie> it sits inside", () => {
   const instances = new Map<string, LottieInstance>();
 
   function Fixture() {
-    const instance = useLottieAnimation(lottie, { src: ANIMATION });
+    const instance = useLottieAnimation(fullEngine, { src: ANIMATION });
     instances.set("host", instance);
     return (
       <LottieInstanceContext.Provider value={instance}>
@@ -336,7 +339,7 @@ it("a copy of the context's animation stays live", () => {
 
   /* The element, and with it the root and the load, arrive after attach. */
   function LateElement() {
-    const instance = useLottieAnimation(lottie, { src: ANIMATION });
+    const instance = useLottieAnimation(fullEngine, { src: ANIMATION });
     instances.set("a", instance);
     const [on, setOn] = useState(false);
     mountElement = () => {

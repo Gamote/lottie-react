@@ -9,6 +9,7 @@
     "loading-and-errors",
     "seeking-and-segments",
     "renderers-and-smaller-builds",
+    "configuring-the-engine",
     "styling"
   ],
   "icon": "Clapperboard"

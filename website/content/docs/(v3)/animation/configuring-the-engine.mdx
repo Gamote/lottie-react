@@ -1,0 +1,49 @@
+---
+title: Configuring the engine
+description: The two settings that belong to the engine rather than to one animation.
+---
+
+Most of what lottie-web does is per animation, and those things are props.
+Two settings are not: they belong to a loaded copy of the engine, and one animation changing them would change every other animation on the page.
+`configureLottie` sets them for all three engine builds at once:
+
+```ts
+import { configureLottie } from "lottie-react";
+
+configureLottie({ idPrefix: "crm", quality: "low" });
+```
+
+Set it once, at startup, before animations load.
+It takes effect at once on every engine that has loaded an animation, and on the others when they first do, and it reaches what is already on screen: element IDs for everything the engines build from then on, and the drawing quality of every animation on them.
+A field left out keeps its value.
+The settings are held for the life of the page, or of the server process, so it is a one-time setup, not something to call per render or per request.
+
+## Element IDs
+
+The engine gives every clip path, mask and gradient it draws an ID from one counter per engine copy.
+Two engine copies on one page, a monorepo whose packages each bundle their own, count from one twice: the two animations share an ID, and the second is drawn with the first's clip path.
+
+`idPrefix` is the base of every ID.
+The library prefixes by default with `lottie-react`, and each build appends its own name, `-lottie`, `-lottie_svg` or `-lottie_light`, so `Lottie` and `LottieLight` on one page never share an ID, and a separate lottie-web on the page, with no prefix of its own, cannot collide with ours.
+The library sets the engine's prefix itself before every load, so choose it here rather than through lottie-web directly.
+Two copies of the library each set a base of their own:
+
+```ts
+configureLottie({ idPrefix: "crm" }); // crm-lottie__lottie_element_1, crm-lottie_light__lottie_element_1, ...
+```
+
+## Quality
+
+`quality` is how finely the engine draws curves: `low`, `medium`, `high`, or a number of segments above 1.
+Fewer segments mean less work per frame, which is what a page with many animations or a slower device wants; more mean smoother curves.
+Left alone, the engine draws with 150 segments, between `medium` (50) and `high` (200), and passing that number restores it.
+The engine reads it whenever it builds a curve, so a change reaches every animation on the engine, running ones included; set it once, before they load.
+
+```ts
+configureLottie({ quality: "low" });
+```
+
+## What stays per animation
+
+Everything on `<Lottie>` and `useLottie` is per animation, the renderer and its settings included; see [Renderers and the smaller builds](/docs/animation/renderers-and-smaller-builds).
+`configureLottie` is for the two settings that cannot be.

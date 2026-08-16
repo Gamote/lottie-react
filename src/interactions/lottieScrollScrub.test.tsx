@@ -1,9 +1,9 @@
 import { act, cleanup, render } from "@testing-library/react";
-import lottie from "lottie-web";
 import { useCallback } from "react";
 import { afterAll, afterEach, beforeAll, expect, it, vi } from "vitest";
 import type { LottieInstance } from "../animation/types.js";
 import { LottieState } from "../animation/types.js";
+import { fullEngine } from "../animation/useLottie.js";
 import { useLottieAnimation } from "../animation/useLottieAnimation.js";
 import {
   type IntersectionObserverStub,
@@ -59,7 +59,7 @@ function AnimProbe({
   instances: Map<string, LottieInstance>;
   autoplay?: boolean;
 }) {
-  const instance = useLottieAnimation(lottie, { src: ANIMATION, autoplay });
+  const instance = useLottieAnimation(fullEngine, { src: ANIMATION, autoplay });
   instances.set("a", instance);
   const setRefs = useCallback(
     (element: HTMLElement | null) => {
@@ -409,7 +409,7 @@ it("lets go cleanly when the root goes away mid-life", () => {
   const instances = new Map<string, LottieInstance>();
 
   function SwappableProbe({ rootless }: { rootless: boolean }) {
-    const instance = useLottieAnimation(lottie, { src: ANIMATION });
+    const instance = useLottieAnimation(fullEngine, { src: ANIMATION });
     instances.set("a", instance);
     const setRefs = useCallback(
       (element: HTMLElement | null) => {

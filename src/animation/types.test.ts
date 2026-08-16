@@ -237,6 +237,42 @@ const _canvasRefusesSvg: RendererRows["canvas"]["settings"] = {
 };
 
 /*
+ * The fields the engine reads but lottie-web leaves undeclared: expressions
+ * and the element's id and content-visibility on svg and canvas, the size on
+ * svg alone (as attribute values, so strings too), and on html expressions
+ * and the filter region.
+ */
+const _svgTakesWhatTheEngineReads: RendererRows["svg"]["settings"] = {
+  runExpressions: false,
+  contentVisibility: "hidden",
+  id: "hero",
+  width: 320,
+  height: 240,
+};
+const _canvasTakesWhatTheEngineReads: RendererRows["canvas"]["settings"] = {
+  runExpressions: false,
+  contentVisibility: "hidden",
+  id: "hero",
+};
+const _htmlTakesExpressionsAndTheFilterRegion: RendererRows["html"]["settings"] =
+  {
+    runExpressions: false,
+    filterSize: { width: "200%", height: "200%", x: "-50%", y: "-50%" },
+  };
+const _svgSizesFromStringsToo: RendererRows["svg"]["settings"] = {
+  width: "100%",
+  height: "100%",
+};
+const _canvasRefusesTheSvgSize: RendererRows["canvas"]["settings"] = {
+  // @ts-expect-error only the svg renderer sizes itself from the settings
+  width: 320,
+};
+const _htmlRefusesTheId: RendererRows["html"]["settings"] = {
+  // @ts-expect-error the html renderer reads no id from the settings
+  id: "hero",
+};
+
+/*
  * A seek target names exactly one unit, and the obvious way to write that does
  * not work: a plain union of single-key objects accepts a literal combining two
  * of them, because the excess-property check against a union admits a property

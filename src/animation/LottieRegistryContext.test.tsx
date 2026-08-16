@@ -1,5 +1,4 @@
 import { act, cleanup, render } from "@testing-library/react";
-import lottie from "lottie-web";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { afterAll, afterEach, beforeAll, expect, it, vi } from "vitest";
@@ -9,6 +8,7 @@ import {
   type LottieRegistryStore,
 } from "./LottieRegistryContext.js";
 import { LottieState } from "./types.js";
+import { fullEngine } from "./useLottie.js";
 import {
   type UseLottieOptions,
   useLottieAnimation,
@@ -44,7 +44,7 @@ afterEach(() => {
 });
 
 function Probe(props: UseLottieOptions) {
-  const instance = useLottieAnimation(lottie, props);
+  const instance = useLottieAnimation(fullEngine, props);
   return <div ref={instance.setDisplayRef} />;
 }
 

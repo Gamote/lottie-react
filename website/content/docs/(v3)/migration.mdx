@@ -29,7 +29,7 @@ import { Lottie } from "lottie-react"; // v3
 ```
 
 The v2 types went with it: `LottieRefCurrentProps` and `LottieRef` become `LottieHandle`, `LottieOptions` becomes `UseLottieOptions`, and the component's props type is `LottieProps`.
-`LottiePlayer`, the re-export of the engine's player object, is removed with no replacement: the engine's global settings are not part of the v3 surface.
+`LottiePlayer`, the re-export of the engine's player object, is removed; the engine's global settings, its ID prefix and its quality, are set through [`configureLottie`](/docs/animation/configuring-the-engine), and element IDs are prefixed by default (`lottie-react-lottie__lottie_element_1` where v2 minted `__lottie_element_1`).
 
 ## Two defaults flipped
 

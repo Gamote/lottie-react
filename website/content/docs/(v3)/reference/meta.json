@@ -7,7 +7,8 @@
     "lottie-controls",
     "overlays",
     "interactions",
-    "stylesheet"
+    "stylesheet",
+    "configure-lottie"
   ],
   "icon": "BookOpen"
 }

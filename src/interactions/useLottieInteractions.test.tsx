@@ -1,7 +1,7 @@
 import { act, cleanup, render } from "@testing-library/react";
-import lottie from "lottie-web";
 import { afterAll, afterEach, beforeAll, expect, it, vi } from "vitest";
 import type { LottieInstance } from "../animation/types.js";
+import { fullEngine } from "../animation/useLottie.js";
 import { useLottieAnimation } from "../animation/useLottieAnimation.js";
 import type { LottieInteractionContext } from "./types.js";
 import { useLottieInteractions } from "./useLottieInteractions.js";
@@ -50,7 +50,7 @@ it("attaches once to the animation it was handed, inline array and all", () => {
   let latest: LottieInstance | undefined;
 
   function Fixture({ amount }: { amount: number }) {
-    const instance = useLottieAnimation(lottie, { src: ANIMATION });
+    const instance = useLottieAnimation(fullEngine, { src: ANIMATION });
     latest = instance;
     useLottieInteractions(instance, [
       { ...spy.interaction, options: { amount } },

@@ -1,4 +1,3 @@
-import type { LottiePlayer } from "lottie-web";
 import {
   type ReactNode,
   type Ref,
@@ -10,6 +9,7 @@ import {
   useRef,
 } from "react";
 import { mergeRefs } from "../utils/mergeRefs.js";
+import type { LottieEngine } from "./configureLottie.js";
 import { lottieDisplayClass, lottieDisplayStyles } from "./LottieDisplay.js";
 import { LottieInstanceContext } from "./LottieInstanceContext.js";
 import { polymorphicForwardRef } from "./polymorphicForwardRef.js";
@@ -130,7 +130,7 @@ export type LottieComponent<Renderers extends LottieRenderer> = <
  * than a blank animation and a runtime throw.
  */
 export function createLottieComponent<Renderers extends LottieRenderer>(
-  engine: LottiePlayer,
+  engine: LottieEngine,
 ): LottieComponent<Renderers> {
   return polymorphicForwardRef(function Lottie<
     As extends AnyTag = "div",

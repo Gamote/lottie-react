@@ -11,7 +11,7 @@ description: The three components, and every prop of their own.
 | --- | --- | --- |
 | `src` | `string \| object` | The animation: a path or URL to fetch, or the parsed file. Load-time; compared by content. |
 | `renderer` | `"svg" \| "canvas" \| "html"` | Which renderer draws it. Load-time. Default `svg`. |
-| `rendererSettings` | per renderer | Settings typed to match the chosen renderer. Load-time. |
+| `rendererSettings` | per renderer | Settings typed to match the chosen renderer, including the fields the engine reads that its own declarations leave out (`runExpressions`, `contentVisibility`, `id`; `width` and `height` on svg). Load-time. |
 | `autoplay` | `boolean` | Start as soon as the animation is ready. Load-time. Default `false`; holds under reduced motion. |
 | `segment` | `[number, number]` | The frame range to play. Load-time. |
 | `assetsPath` | `string` | Where the animation's images live when not beside it. Load-time. |
