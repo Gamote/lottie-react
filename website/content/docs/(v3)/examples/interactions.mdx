@@ -15,6 +15,14 @@ Each press restarts from the top: seek, then play:
 
 <Example name="recipes/play-on-click" />
 
+## Follow the cursor
+
+The pointer's horizontal position across the element sets the frame: move left and right to scrub, and leaving rewinds:
+
+<Example name="recipes/cursor-follow" />
+
+`seek` clamps what it is given, so the edges need no guard of their own.
+
 ## Segment on state
 
 The playing range follows React state, so anything that sets the state steers the animation:
