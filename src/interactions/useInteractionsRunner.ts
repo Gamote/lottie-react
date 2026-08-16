@@ -24,6 +24,26 @@ interface Attachment {
   memory: Record<string, unknown>;
 }
 
+/*
+ * The animation object a hook returns is rebuilt on every render, so anything
+ * that keeps one keeps the past. A factory naturally keeps what it is handed
+ * (`const { lottie } = context`), so what it is handed is a view: one object
+ * per animation whose members read the current instance on every access.
+ * The members are the instance's own, read from it once, so the view is
+ * complete by construction. Getters only: a member of the view is a reading,
+ * not a place to write, and a value pulled out of it is a copy of that moment.
+ */
+function createLiveInstanceView(box: LottieInstanceBox): LottieInstance {
+  const view = {} as LottieInstance;
+  for (const key of Object.keys(box.current) as (keyof LottieInstance)[]) {
+    Object.defineProperty(view, key, {
+      enumerable: true,
+      get: () => box.current[key],
+    });
+  }
+  return view;
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -77,6 +97,9 @@ export function useInteractionsRunner(
   );
 
   const runtime = useRef(new Map<LottieInstanceBox, Attachment[]>()).current;
+  const views = useRef(
+    new WeakMap<LottieInstanceBox, LottieInstance>(),
+  ).current;
 
   /*
    * The attachments live in a ref rather than inside the effect, so a changed
@@ -98,10 +121,13 @@ export function useInteractionsRunner(
       listeners: new Set(),
       memory: memory ?? {},
     };
+    let view = views.get(box);
+    if (view === undefined) {
+      view = createLiveInstanceView(box);
+      views.set(box, view);
+    }
     const context: LottieInteractionContext = {
-      get lottie() {
-        return box.current;
-      },
+      lottie: view,
       options: () => latest.current[slot]?.options,
       onChange: (listener) => {
         record.listeners.add(listener);

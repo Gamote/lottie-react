@@ -11,9 +11,9 @@ import type { LottieInstance } from "../animation/types.js";
  */
 export interface LottieInteractionContext {
   /**
-   * The animation: values, commands, `subscribe`, `root`. Read it through the
-   * context on every use: it answers the current animation each time, and a
-   * copy taken once keeps that moment's values, `root` included.
+   * The animation: values, commands, `subscribe`, `root`. Live: every member
+   * answers the current animation, so keeping or destructuring it is safe; a
+   * value pulled out of it is a copy of that moment.
    */
   readonly lottie: LottieInstance;
   /** The descriptor's options as they are right now. */
