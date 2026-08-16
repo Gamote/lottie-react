@@ -16,7 +16,7 @@ npm i lottie-react
 
 Import it anywhere React renders, the server included.
 Nothing touches the browser until an animation mounts, so server rendering needs no dynamic import and no client-only workaround.
-Under React Server Components, `<Lottie>` goes in a file marked `"use client"`, like any component that uses hooks; that file still renders on the server.
+Under React Server Components the components and hooks mark themselves as client code, so a server component can import `<Lottie>` directly and it still renders on the server; `configureLottie`, like the hooks, is called from client code, where the animations run.
 
 ## If your CSS lives in cascade layers
 

@@ -1,3 +1,5 @@
+"use client";
+
 import type { LottiePlayer } from "lottie-web";
 
 /** What {@link configureLottie} can be told. */

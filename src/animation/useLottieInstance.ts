@@ -1,3 +1,5 @@
+"use client";
+
 import { useContext } from "react";
 import { LottieInstanceContext } from "./LottieInstanceContext.js";
 import type { LottieInstance } from "./types.js";

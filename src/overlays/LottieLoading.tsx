@@ -1,3 +1,5 @@
+"use client";
+
 import { forwardRef, type ReactNode } from "react";
 import { renderStyledElement } from "../animation/renderStyledElement.js";
 import {

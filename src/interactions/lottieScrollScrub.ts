@@ -1,3 +1,5 @@
+"use client";
+
 import type { LottieInstance } from "../animation/types.js";
 import { LottieState } from "../animation/types.js";
 import { bandEdges, bandProgress, coverProgress } from "./coverProgress.js";

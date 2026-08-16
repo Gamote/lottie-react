@@ -1,3 +1,5 @@
+"use client";
+
 import lottieSvg from "lottie-web/build/player/lottie_svg.js";
 import { type LottieEngine, LottieEngineName } from "./configureLottie.js";
 import type { LottieInstance, LottieRenderer } from "./types.js";

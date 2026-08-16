@@ -1,3 +1,5 @@
+"use client";
+
 import { LottieState } from "../animation/types.js";
 import type { LottieInteraction, LottieInteractionContext } from "./types.js";
 
