@@ -40,6 +40,7 @@ const lottie = useLottie({
 `subscribe` on the instance attaches one handler at a time and returns the unsubscribe, for anything that mounts later.
 
 The current frame is a subscription, not a value: it changes sixty times a second, faster than a component should re-render.
+The frame it reports counts from the start of the playable range, so after `playSegments` it runs from 0 to `playableFrames`, the way `playableFrames` follows the range.
 Subscribe to `frame`, and write the number where it goes without touching React state, as the readout above does: per-frame state updates re-render sixty times a second.
 
 ## The escape hatch

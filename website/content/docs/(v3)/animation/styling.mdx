@@ -12,6 +12,16 @@ Every default style ships at zero specificity, so any rule of yours beats any de
 `className`, `style`, `id`, `data-*`, `aria-*` and DOM event props all land on the element `<Lottie>` renders.
 Utility classes, CSS modules and `styled(Lottie)` work the way they do on a `<div>`.
 
+## Recolouring
+
+The engine draws fills and strokes as attributes on the SVG, and CSS beats attributes, so a rule on the animation's element recolours it.
+With `currentColor`, the surrounding text colour becomes the icon's colour:
+
+<Example name="styling/recolour" />
+
+In plain CSS the same rule is `.icon svg path { fill: currentColor; stroke: currentColor }`; it sets both because artwork draws with fills, with strokes, or with both, as this file does.
+This route is for the svg renderer and solid colours; to recolour for every renderer, gradients included, rewrite the colours in the animation itself and pass the object to `src`, which reloads when its content changes.
+
 ## Layered CSS
 
 When your styles live in cascade layers, declare the library's layer first.

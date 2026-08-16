@@ -20,8 +20,8 @@ The context carries four things:
 - `onChange(listener)`: fires when the root arrives, the values move, or the options change; re-check what you armed against and return early when nothing you use moved.
 - `memory`: scratch that survives an option change, for state that must outlive a re-attach.
 
-The factory above arms through `onChange` because `root` can arrive after `attach` runs.
+The factory above arms through `onChange` because `root` can arrive after `attach` runs, and it reads `context.lottie` each time rather than copying it once: the context hands out the current animation on every read, and a copy taken at attach time keeps the `root` of that moment, usually `null`.
 
 `LottieInteraction` and `LottieInteractionContext` are exported, so a factory of yours typechecks against the same contract the shipped ones use.
 
-Not everything needs a factory: when one element's own events are enough, a plain handler is simpler, and the gallery's [interaction recipes](/docs/examples/interactions) show hover, click and state handled that way.
+Not everything needs a factory: when one element's own events are enough, a plain handler is simpler, and the gallery's [interaction recipes](/docs/examples/interactions) show hover, click, cursor and state handled that way.
