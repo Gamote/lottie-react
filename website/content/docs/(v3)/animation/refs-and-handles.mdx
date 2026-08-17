@@ -35,4 +35,5 @@ One example of the shape, playing the whole file once and then looping one part 
 
 The first pass plays whole.
 When it wraps, `loopCompleted` fires and the handler narrows the playable range once; from then on the engine's own loop repeats that range, so nothing has to re-arm.
+The queued form on [Seeking and segments](/docs/animation/seeking-and-segments) does this particular handoff in one call; the shape here is what generalizes.
 Any signal can drive any command the same way: `complete` can reset a segment, `error` can `reload()`, and `marker` can seek somewhere else.

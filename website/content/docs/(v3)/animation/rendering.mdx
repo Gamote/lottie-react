@@ -36,6 +36,10 @@ Set `autoplay` to start playback as soon as the animation is ready. It is off by
 `autoplay` is a load-time prop: change it and the animation reloads with the new setting.
 
 On a device that asks for reduced motion, `autoplay` holds instead of starting.
+
+In development the library logs a console notice when an animation starts by itself and moves for more than five seconds, because accessibility guidelines ask that such motion can be paused (WCAG 2.2.2).
+Any pause affordance answers it: your own button, or [`<LottieControls>`](/docs/player/control-bar) when a full bar fits the page.
+The notice reads the loop setting as the animation loads, so motion armed later escapes it: turning `loop` on from a subscription is yours to check.
 The animation still loads and `play()` still works, so offer a control instead of starting motion for the reader.
 
 ## Repeat it
@@ -54,4 +58,5 @@ The animation fills its element, so sizing the element is sizing the animation:
 <Example name="rendering/sizing" />
 
 There is no width or height prop.
-Use `className` or `style`, and give the element a height: an element with no height shows nothing.
+Use `className` or `style`.
+Left unsized, the default svg renderer fills the width at the animation's own aspect ratio, like an image; an element whose height resolves to zero shows nothing.

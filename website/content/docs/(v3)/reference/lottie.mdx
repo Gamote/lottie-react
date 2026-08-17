@@ -26,6 +26,9 @@ description: The three components, and every prop of their own.
 
 Plus any standard HTML attribute: `className`, `style`, `id`, `data-*`, `aria-*` and DOM events all land on the rendered element, and `ref` names that element.
 
+Without children the component renders exactly one element, the display itself, so `<Lottie lottieRef={handle} />` is the whole cost of a command-driven animation.
+Reach for [the hook](/docs/animation/the-instance) when you need a value (`state`, `error`, `playableFrames`) or a layout of your own.
+
 ## LottieSvg and LottieLight
 
 The same surface on a smaller engine, `svg` only; the types refuse the other renderers.

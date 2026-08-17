@@ -31,11 +31,18 @@ A marker resolves to the frame the designer placed it on; a marker outside the r
 <Example name="seeking/play-segments" />
 
 A range is `[first, last]`, or `{ marker: "intro" }` to use a marker's own duration; a marker without a duration is refused with a warning, because it is a point rather than a span.
+The end of a range is where playback stops rather than a frame it draws: `[0, 10]` plays frames 0 to 9.
+The engine reads a marker's name from its comment text, and a comment shaped like `key: value` lines or JSON becomes data instead of a name, so a marker called `loop: start` is unaddressable. Keep names plain.
 `playableFrames` and `playableDuration` follow the active range, as the readout above shows.
 `resetSegments()` returns playback to the whole file.
 
 Pass `{ queue: true }` as the second argument and the new range waits for the current pass to finish.
 With nothing playing there is nothing to wait for, and the range applies at once.
+Queued once from `ready`, it plays an intro and settles into a loop with no re-arming:
+
+<Example name="seeking/queue-intro-then-loop" />
+
+A queued range waits out a `stop()` and still applies at the end of the next play's first pass; `resetSegments()` discards it.
 
 ## Scrubbing
 
