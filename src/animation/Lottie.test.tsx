@@ -461,3 +461,33 @@ it("hands the element it renders to the animation as its root", () => {
   expect(root()?.className).toBe(lottieRootClass);
   expect(root()).not.toBe(only(`.${lottieDisplayClass}`));
 });
+
+/*
+ * React 18 reports a ref callback that returns a function, and the merged ref
+ * on the rendered element is where this library could. The runner does not
+ * fail on console output by itself, so silence has to be asserted for the
+ * React 18 lane to be able to go red.
+ */
+it("prints nothing to the console across a mount and unmount", () => {
+  const error = vi.spyOn(console, "error").mockImplementation(() => undefined);
+
+  const view = render(<Lottie src={ANIMATION} />);
+  flushLoad();
+  view.unmount();
+
+  expect(error).not.toHaveBeenCalled();
+});
+
+it("prints nothing when the display is placed among children", () => {
+  const error = vi.spyOn(console, "error").mockImplementation(() => undefined);
+
+  const view = render(
+    <Lottie src={ANIMATION}>
+      <LottieDisplay />
+    </Lottie>,
+  );
+  flushLoad();
+  view.unmount();
+
+  expect(error).not.toHaveBeenCalled();
+});
