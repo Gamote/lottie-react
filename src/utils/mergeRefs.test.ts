@@ -4,10 +4,10 @@ import { mergeRefs } from "./mergeRefs.js";
 
 /*
  * React 18 and React 19 tear a ref down differently, and this library promises
- * both. Only one of the two paths can be exercised by rendering, because only
- * one React is installed, so they are driven directly here instead: calling the
- * merged callback with `null` is what React 18 does, and calling the function it
- * returns is what React 19 does.
+ * both. A render exercises only the installed React's path, so both are driven
+ * directly here: calling the merged callback with `null` is what React 18
+ * always does and what React 19 does when nothing was returned; calling the
+ * function it returns is what React 19 does when one was.
  */
 
 it("writes the element to every ref it was given", () => {
@@ -24,14 +24,37 @@ it("writes the element to every ref it was given", () => {
 it("ignores the refs that are not there", () => {
   const object = createRef<HTMLDivElement>();
   const node = document.createElement("div");
+  const merged = mergeRefs(undefined, object, null);
 
-  const teardown = mergeRefs(undefined, object, null)(node);
-  teardown?.();
+  merged(node);
+  merged(null);
 
   expect(object.current).toBeNull();
 });
 
-it("clears everything when React 18 calls it with null", () => {
+it("ignores the refs that are not there on the teardown it returned", () => {
+  const object = createRef<HTMLDivElement>();
+  const cleanup = vi.fn();
+  const withCleanup = vi.fn(() => cleanup);
+  const node = document.createElement("div");
+
+  const teardown = mergeRefs(undefined, object, null, withCleanup)(node);
+  teardown?.();
+
+  expect(object.current).toBeNull();
+  expect(cleanup).toHaveBeenCalledTimes(1);
+});
+
+it("returns nothing when no ref returned a cleanup, so React 18 has nothing to report", () => {
+  const object = createRef<HTMLDivElement>();
+  const callback = vi.fn();
+
+  expect(
+    mergeRefs(object, callback)(document.createElement("div")),
+  ).toBeUndefined();
+});
+
+it("clears everything when React calls it with null", () => {
   const object = createRef<HTMLDivElement>();
   const callback = vi.fn();
   const node = document.createElement("div");
@@ -47,13 +70,16 @@ it("clears everything when React 18 calls it with null", () => {
 it("clears everything when React 19 runs the cleanup it returned", () => {
   const object = createRef<HTMLDivElement>();
   const callback = vi.fn();
+  const cleanup = vi.fn();
+  const withCleanup = vi.fn(() => cleanup);
   const node = document.createElement("div");
 
-  const teardown = mergeRefs(object, callback)(node);
+  const teardown = mergeRefs(object, callback, withCleanup)(node);
   teardown?.();
 
   expect(object.current).toBeNull();
   expect(callback).toHaveBeenLastCalledWith(null);
+  expect(cleanup).toHaveBeenCalledTimes(1);
 });
 
 it("runs a ref's own cleanup rather than calling it with null", () => {
