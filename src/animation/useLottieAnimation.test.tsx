@@ -41,6 +41,38 @@ const WITH_MARKERS = {
   ],
 };
 
+/**
+ * A font with no file to fetch, which is what asking for a family the page
+ * already has looks like. The engine marks it loaded at once, so nothing ever
+ * collects its measurement spans.
+ */
+function withSystemFont() {
+  return {
+    ...ANIMATION,
+    fonts: {
+      list: [
+        {
+          fName: "Arial-Regular",
+          fFamily: "Arial",
+          fStyle: "Regular",
+          ascent: 75,
+        },
+      ],
+    },
+  };
+}
+
+/**
+ * The same font with its outlines exported alongside it, which the engine
+ * draws from directly and never measures.
+ */
+const WITH_GLYPH_TABLE = { ...withSystemFont(), chars: [] };
+
+/** The spans lottie-web measures fonts with, which it appends to the body. */
+function measurementSpans(): NodeListOf<HTMLSpanElement> {
+  return document.body.querySelectorAll(':scope > span[aria-hidden="true"]');
+}
+
 /*
  * The clock is installed once for the whole file rather than per test, because
  * lottie-web's render loop is global to the module and remembers whether it is
@@ -69,6 +101,14 @@ afterEach(() => {
   vi.restoreAllMocks();
   /* The engine settings are module state; 150 is the engine's own quality. */
   configureLottie({ idPrefix: "lottie-react", quality: 150 });
+  /*
+   * A measurement span sits on the document rather than on the animation, so
+   * one left behind would be counted by the next test instead of by the one
+   * that produced it.
+   */
+  for (const span of measurementSpans()) {
+    span.remove();
+  }
 });
 
 interface Harness {
@@ -182,6 +222,60 @@ it("loads from a frozen source, which the engine cannot write to", () => {
 
   expect(harness.instance.state).toBe(LottieState.stopped);
   expect(harness.instance.animationItem).not.toBeNull();
+});
+
+it("leaves no font measurement spans behind", () => {
+  const harness = setup({ src: withSystemFont() });
+  flushLoad();
+
+  expect(measurementSpans()).toHaveLength(0);
+  harness.unmount();
+  expect(measurementSpans()).toHaveLength(0);
+});
+
+it("leaves none behind when two animations share one parsed object", () => {
+  const shared = withSystemFont();
+  const first = setup({ src: shared });
+  const second = setup({ src: shared });
+  flushLoad();
+
+  expect(measurementSpans()).toHaveLength(0);
+  first.unmount();
+  second.unmount();
+  expect(measurementSpans()).toHaveLength(0);
+});
+
+it("leaves none behind when the animation was fetched", () => {
+  vi.spyOn(XMLHttpRequest.prototype, "send").mockImplementation(function send(
+    this: XMLHttpRequest,
+  ) {
+    setTimeout(() => {
+      Object.defineProperties(this, {
+        readyState: { configurable: true, value: 4 },
+        status: { configurable: true, value: 200 },
+        response: { configurable: true, value: withSystemFont() },
+      });
+      this.onreadystatechange?.(new Event("readystatechange"));
+    }, 0);
+  });
+
+  const harness = setup({ src: "/animation.json" });
+  flushLoad();
+
+  /* Fonts arrive after the load returned, so the pair is still there. */
+  expect(measurementSpans()).toHaveLength(2);
+  harness.unmount();
+  expect(measurementSpans()).toHaveLength(0);
+});
+
+it("measures nothing when the glyphs are exported with the animation", () => {
+  const harness = setup({ src: WITH_GLYPH_TABLE });
+  flushLoad();
+
+  expect(harness.instance.state).toBe(LottieState.stopped);
+  expect(measurementSpans()).toHaveLength(0);
+  harness.unmount();
+  expect(measurementSpans()).toHaveLength(0);
 });
 
 /*

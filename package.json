@@ -66,7 +66,7 @@
         "lottie-web"
       ],
       "gzip": true,
-      "limit": "4.9 KB"
+      "limit": "5 KB"
     },
     {
       "name": "import { useLottie }",
@@ -78,7 +78,7 @@
         "lottie-web"
       ],
       "gzip": true,
-      "limit": "3.85 KB"
+      "limit": "3.95 KB"
     },
     {
       "name": "import { Lottie, LottieControls }",
@@ -102,7 +102,7 @@
         "lottie-web/build/player/lottie_svg.js"
       ],
       "gzip": true,
-      "limit": "4.9 KB"
+      "limit": "5 KB"
     },
     {
       "name": "import { LottieLight, useLottieLight }, only its own engine external",
@@ -114,7 +114,7 @@
         "lottie-web/build/player/lottie_light.js"
       ],
       "gzip": true,
-      "limit": "4.9 KB"
+      "limit": "5 KB"
     }
   ],
   "scripts": {

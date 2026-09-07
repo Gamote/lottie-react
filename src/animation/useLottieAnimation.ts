@@ -90,6 +90,40 @@ function toError(cause: unknown): Error {
   return cause instanceof Error ? cause : new Error(String(cause));
 }
 
+/** A font on lottie-web's font manager, narrowed to the fields cleanup reads. */
+interface MeasuredFont {
+  loaded?: boolean;
+  monoCase?: { parent: Element };
+  sansCase?: { parent: Element };
+}
+
+/**
+ * Takes back the two hidden spans lottie-web appends to `document.body` to
+ * measure a font with. The engine appends a pair per font and removes them
+ * only on the path where it watches a downloaded font arrive, so a font with
+ * nothing to download keeps its pair and every load adds another.
+ *
+ * Only a font already marked loaded may have its pair taken. A pending one is
+ * still being measured through those spans, and a span out of the document
+ * measures zero, which the engine reads as the font arriving and then fails on
+ * a parent that is no longer there. A download that never arrives therefore
+ * keeps its pair, which stays the engine's to collect.
+ *
+ * `renderer` is untyped upstream, so the path to the fonts is checked rather
+ * than trusted.
+ */
+function removeMeasurementSpans(item: AnimationItem): void {
+  const measured: unknown = item.renderer?.globalData?.fontManager?.fonts;
+  const fonts: MeasuredFont[] = Array.isArray(measured) ? measured : [];
+  for (const font of fonts) {
+    if (!font.loaded) {
+      continue;
+    }
+    font.sansCase?.parent.remove();
+    font.monoCase?.parent.remove();
+  }
+}
+
 /**
  * Everything the animation does, with no opinion about how it is rendered.
  *
@@ -770,6 +804,14 @@ export function useLottieAnimation<
       return;
     }
 
+    /*
+     * Data handed over directly is measured inside the load, so its pair is
+     * already abandoned. Collecting here as well as at teardown covers one
+     * parsed object shared by two animations, where the second load overwrites
+     * the references teardown would have followed.
+     */
+    removeMeasurementSpans(item);
+
     itemRef.current = item;
     setAnimationItem(item);
     item.setSpeed(valuesRef.current.speed);
@@ -944,6 +986,9 @@ export function useLottieAnimation<
       for (const [name, handler] of listeners) {
         item.removeEventListener(name, handler);
       }
+      /* A fetched animation has no fonts until after the load returned, so
+         teardown is the first point its pair can be taken. */
+      removeMeasurementSpans(item);
       item.destroy();
       itemRef.current = null;
       setAnimationItem(null);
