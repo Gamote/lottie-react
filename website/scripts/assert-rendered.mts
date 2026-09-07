@@ -9,7 +9,15 @@ import process from "node:process";
  * broken page into a red build.
  */
 const root = path.join(import.meta.dirname, "../.output/public");
-const all = await readdir(root, { recursive: true });
+/*
+ * `readdir` separates with the platform's own character, so on Windows every
+ * path arrives with backslashes and matches nothing in the slash-separated
+ * list below. Normalising here also keeps the reported paths the same
+ * everywhere.
+ */
+const all = (await readdir(root, { recursive: true })).map((file) =>
+  file.split(path.sep).join("/"),
+);
 const files = all.filter((file) => file.endsWith(".html"));
 if (files.length === 0) {
   console.error(`assert-rendered: no HTML files under ${root}`);
