@@ -16,6 +16,29 @@ const ANIMATION = {
   layers: [],
 };
 
+function systemFontAnimation() {
+  return {
+    ...ANIMATION,
+    fonts: {
+      list: [
+        {
+          fName: "Arial-Regular",
+          fFamily: "Arial",
+          fStyle: "Regular",
+          ascent: 75,
+        },
+      ],
+    },
+  };
+}
+
+const WITH_SYSTEM_FONT = systemFontAnimation();
+
+const WITH_GLYPH_TABLE = {
+  ...systemFontAnimation(),
+  chars: [],
+};
+
 /**
  * One null layer whose opacity carries an expression, written the way the
  * exporter writes it. `value` is the property's own value, so a build that
@@ -46,8 +69,24 @@ const WITH_EXPRESSION = {
   ],
 };
 
+interface ProbeProps {
+  src: string | object;
+}
+
+function Probe({ src }: ProbeProps) {
+  const lottie = useLottieLight({ src });
+  return <div ref={lottie.setDisplayRef} />;
+}
+
+function fontMeasurementNodes(): NodeListOf<HTMLSpanElement> {
+  return document.body.querySelectorAll(':scope > span[aria-hidden="true"]');
+}
+
 afterEach(() => {
   vi.restoreAllMocks();
+  for (const node of fontMeasurementNodes()) {
+    node.remove();
+  }
 });
 
 async function flushLoad(): Promise<void> {
@@ -77,6 +116,48 @@ it("loads with the light build, which draws only svg", async () => {
 
   expect(state).toBe(LottieState.stopped);
   expect(element?.tagName).toBe("svg");
+});
+
+it("removes system-font measurement nodes when a path unmounts", async () => {
+  vi.spyOn(XMLHttpRequest.prototype, "send").mockImplementation(function send(
+    this: XMLHttpRequest,
+  ) {
+    setTimeout(() => {
+      Object.defineProperties(this, {
+        readyState: { configurable: true, value: 4 },
+        response: { configurable: true, value: systemFontAnimation() },
+        status: { configurable: true, value: 200 },
+      });
+      this.onreadystatechange?.(new Event("readystatechange"));
+    }, 0);
+  });
+  const view = render(<Probe src="/animation.json" />);
+  await flushLoad();
+
+  expect(fontMeasurementNodes()).toHaveLength(2);
+  view.unmount();
+  expect(fontMeasurementNodes()).toHaveLength(0);
+});
+
+it("does not expect measurement rulers when glyph data is embedded", async () => {
+  const view = render(<Probe src={WITH_GLYPH_TABLE} />);
+  await flushLoad();
+
+  expect(view.container.querySelector("svg")).not.toBeNull();
+});
+
+it("removes system-font measurement nodes for shared sources", async () => {
+  const view = render(
+    <>
+      <Probe src={WITH_SYSTEM_FONT} />
+      <Probe src={WITH_SYSTEM_FONT} />
+    </>,
+  );
+  await flushLoad();
+
+  expect(fontMeasurementNodes()).toHaveLength(0);
+  view.unmount();
+  expect(fontMeasurementNodes()).toHaveLength(0);
 });
 
 /*

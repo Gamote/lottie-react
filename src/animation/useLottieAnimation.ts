@@ -770,6 +770,31 @@ export function useLottieAnimation<
       return;
     }
 
+    interface FontMeasurement {
+      parent: Element;
+    }
+
+    interface FontMeasurementData {
+      loaded?: boolean;
+      monoCase?: FontMeasurement;
+      sansCase?: FontMeasurement;
+    }
+
+    const removeFontRulers = (font: FontMeasurementData) => {
+      if (!font.loaded) {
+        return;
+      }
+      font.sansCase?.parent.remove();
+      font.monoCase?.parent.remove();
+    };
+
+    /*
+     * lottie-web leaves the rulers for fonts it marks loaded immediately.
+     * Inline data is handled before a shared source can be loaded again; a
+     * path gets its FontManager later and is handled during teardown.
+     */
+    item.renderer.globalData.fontManager?.fonts.forEach(removeFontRulers);
+
     itemRef.current = item;
     setAnimationItem(item);
     item.setSpeed(valuesRef.current.speed);
@@ -944,6 +969,7 @@ export function useLottieAnimation<
       for (const [name, handler] of listeners) {
         item.removeEventListener(name, handler);
       }
+      item.renderer.globalData.fontManager?.fonts.forEach(removeFontRulers);
       item.destroy();
       itemRef.current = null;
       setAnimationItem(null);
