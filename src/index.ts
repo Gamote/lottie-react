@@ -19,6 +19,10 @@ export {
   type LottieDisplayProps,
 } from "./animation/LottieDisplay.js";
 export { LottieLight, type LottieLightProps } from "./animation/LottieLight.js";
+export {
+  LottieNonceProvider,
+  type LottieNonceProviderProps,
+} from "./animation/LottieNonceProvider.js";
 export { LottieSvg, type LottieSvgProps } from "./animation/LottieSvg.js";
 export {
   LottieDirection,

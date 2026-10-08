@@ -43,3 +43,22 @@ A layered consumer declares `@layer lottie-react;` first, per [Installation](/do
 
 On React 19 each sheet appears once, hoisted into `<head>` however many animations render.
 On React 18 every element carries its own copy in place: the same rules, applied the same way, just not deduplicated.
+
+## Content Security Policy
+
+The sheets are inline `<style>` elements, so a `style-src` policy without `'unsafe-inline'` blocks them.
+To allow them by nonce, wrap the app once in `LottieNonceProvider`, and every sheet the library renders below it carries the nonce:
+
+```tsx
+import { LottieNonceProvider } from "lottie-react";
+
+<LottieNonceProvider nonce={nonce}>
+  <App />
+</LottieNonceProvider>;
+```
+
+Put it in place before the first animation renders.
+React inserts each sheet once per document and never updates it, so a sheet that rendered without the nonce stays without it.
+
+When rendering on the server with React 19, pass the same value to React's render option as well, as `nonce: { style: nonce }`.
+React writes every hoisted sheet under that nonce, and leaves out the rules of any sheet whose nonce differs from it.

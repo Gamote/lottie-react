@@ -1,4 +1,5 @@
-import { createElement, type ReactNode, type Ref } from "react";
+import { createElement, type ReactNode, type Ref, useContext } from "react";
+import { LottieNonceContext } from "./LottieNonceContext.js";
 import { styleLayer } from "./styleLayer.js";
 import { stylePrecedence } from "./stylePrecedence.js";
 
@@ -62,9 +63,25 @@ export function renderStyledElement({
        * below the children achieves. The shared layer changes none of this:
        * every sheet sits in the same layer, so order still decides within it.
        */}
-      <style href={styleClass} precedence={stylePrecedence}>
-        {`@layer ${styleLayer}{${styles}}`}
-      </style>
+      <StyleSheet styleClass={styleClass} styles={styles} />
     </>
+  );
+}
+
+/**
+ * The stylesheet half of a styled element. A component rather than a tag
+ * written in place, because it reads the nonce from context, and
+ * {@link renderStyledElement} is a plain function its callers reach from
+ * inside branches, where a hook cannot run.
+ */
+function StyleSheet({
+  styleClass,
+  styles,
+}: Pick<StyledElement, "styleClass" | "styles">): ReactNode {
+  const nonce = useContext(LottieNonceContext);
+  return (
+    <style href={styleClass} precedence={stylePrecedence} nonce={nonce}>
+      {`@layer ${styleLayer}{${styles}}`}
+    </style>
   );
 }
